@@ -1,11 +1,11 @@
 @font-face {
   font-family: "Capriola";
-  src: url("fonts/Capriola-Regular.ttf");
+  src: url("styles/fonts/Capriola-Regular.ttf");
 }
 
 @font-face {
   font-family: "Cairo";
-  src: url("fonts/Cairo-VariableFont_slnt,wght.ttf");
+  src: url("styles/fonts/Cairo-VariableFont_slnt,wght.ttf");
 }
 
 body {
