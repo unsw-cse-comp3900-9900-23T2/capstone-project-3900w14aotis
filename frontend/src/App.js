@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import RootLayout from "./layouts/RootLayout";
 import AuthLayout from "./layouts/AuthLayout";
+import AppLayout from "./layouts/AppLayout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,6 +20,7 @@ const router = createBrowserRouter(
         {/* <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} /> */}
       </Route>
+      <Route element={<AppLayout />}></Route>
     </Route>
   )
 );
