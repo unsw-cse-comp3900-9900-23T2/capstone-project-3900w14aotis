@@ -1,0 +1,7 @@
+# dependencies
+/node_modules
+
+# misc
+.env
+
+src/config/__pycache__

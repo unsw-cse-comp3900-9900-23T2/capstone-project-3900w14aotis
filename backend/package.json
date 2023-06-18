@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "firebase": "^9.22.2"
+  },
+  "scripts": {
+    "start": "python3 src/test.py"
+  }
+}
