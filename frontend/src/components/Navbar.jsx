@@ -1,9 +1,14 @@
 import React from "react";
+import { Box } from "@mui/material";
 
 const Navbar = () => {
+  const navbarContainerSx = {
+    height: "100%",
+    backgroundColor: "white",
+  };
   return (
     <>
-      <div>NAVBAR</div>
+      <Box sx={navbarContainerSx}>NAVBAR</Box>
     </>
   );
 };
