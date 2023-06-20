@@ -1,36 +1,31 @@
 from src.config.firestoreUtils import initialiseFirestore
 from fastapi import FastAPI
 from pydantic import BaseModel
+from src.auth.register import authRegister
 
 db = initialiseFirestore()
 app = FastAPI()
 
-
-# Change this !
-class Item(BaseModel):
+class taskMaster(BaseModel):
     firstName: str
-    description: str
+    lastName: str
+    password: str
+    email: str
 
+#Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
+#the user whilst also adding a slot in the authentication section of firebase. Returns the 
+#uid of the authentication
+@app.get("/auth/register", summary="Registers a user in the application")
+async def register(item: taskMaster):
+    uid = authRegister(item,db)
+    return uid
 
-@app.post("/auth/register", summary="Registers a user in the application")
-async def register(item: Item):
-    """
-    THIS IS AN EXAMPLE !
-    Create an item with all the information:
+# @app.get("/auth/register", summary="Registers a user in the application")
+# async def register():
+#     user = taskMaster(firstName="calvin",lastName="edaisdni",password="123453546",email=  "calvin@gmail.com")
+#     uid = authRegister(user,db)
+#     return uid
 
-    - **name**: each item must have a name
-    - **description**: a long description
-    - **price**: required
-    - **tax**: if the item doesn't have tax, you can omit this
-    - **tags**: a set of unique tag strings for this item
-    """
-
-    db.collection("taskmasters").add(
-        {"firstName": "Sophia", "lastName": "Li", "email": "sophiali@gmail.com"}
-    )
-    return {"message": "USER CREATED"}
-
-
-@app.post("/auth/login", summary="Logs a user in the application")
+@app.get("/auth/login", summary="Logs a user in the application")
 async def login():
     return {"message": "BABABBAA World"}
