@@ -1,35 +1,32 @@
-import React from "react";
-import { Box } from "@mui/material";
-import styles from './styles/Navbar.module.css'
-import ProfilePicture from "./ProfilePicture";
+import React from 'react';
+import { Box } from '@mui/material';
+import styles from './styles/Navbar.module.css';
+import ProfilePicture from './ProfilePictureDropdown';
 
 const Navbar = () => {
-  
   const navbarContainerSx = {
-    height: "70px",
-    backgroundColor: "white",
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between"
+    height: '70px',
+    backgroundColor: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   };
 
   const logoContainerSx = {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  }
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  };
   return (
     <>
       <Box sx={navbarContainerSx}>
         <Box sx={logoContainerSx}>
-          <img className={styles.logo} src="/Jira-Emblem.png" alt="Otis logo"/>
+          <img className={styles.logo} src='/Jira-Emblem.png' alt='Otis logo' />
           <h2>Otis</h2>
         </Box>
         <ProfilePicture />
-
       </Box>
-     
     </>
   );
 };
