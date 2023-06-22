@@ -3,6 +3,6 @@
     "firebase": "^9.22.2"
   },
   "scripts": {
-    "start": "uvicorn src.server:app --reload"
+    "start": "python3 -m uvicorn src.server:app --reload"
   }
 }
