@@ -59,6 +59,7 @@ h4 {
 h1 {
   font-size: max(3rem, 3vw);
   color: #454545;
+  font-weight: 600;
 }
 
 h4 {
