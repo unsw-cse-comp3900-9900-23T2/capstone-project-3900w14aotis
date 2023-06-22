@@ -2,6 +2,7 @@ import firebase_admin
 
 from firebase_admin import credentials
 from firebase_admin import firestore
+from firebase_admin import auth
 
 import os
 from dotenv import load_dotenv
@@ -31,6 +32,11 @@ serviceAccountKeyDict = {
 
 
 def initialiseFirestore():
+    """_summary_
+
+    Returns:
+        database: returns the firestore database
+    """
     cred = credentials.Certificate(serviceAccountKeyDict)
     app = firebase_admin.initialize_app(cred)
     db = firestore.client()

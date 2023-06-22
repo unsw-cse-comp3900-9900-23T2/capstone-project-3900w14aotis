@@ -8,13 +8,14 @@ const TextInput = ({
   defaultValue,
   readOnly,
   onChangeFunction,
+  boxColour,
 }) => {
   const textFieldSx = {
     width: "100%",
     "& .MuiOutlinedInput-root": {
       background: "#rgba(255, 255, 255, 0.90)",
       border: "none",
-      boxShadow: "0px 0px 0px 2px #B2B2B2",
+      boxShadow: `0px 0px 0px 2px ${boxColour ? boxColour : "#B2B2B2"}`,
       borderRadius: "10px",
       "& fieldset": {
         border: "none",
