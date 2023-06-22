@@ -11,14 +11,14 @@ import {
 import RootLayout from "./layouts/RootLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import AppLayout from "./layouts/AppLayout";
+import LoginPage from "./authentication/LoginPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<RootLayout />}>
       <Route path="/" element={<AuthLayout />}>
         <Route index element={<Navigate to="/login" />} />
-        {/* <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} /> */}
+        <Route path="login" element={<LoginPage />} />
       </Route>
       <Route element={<AppLayout />}></Route>
     </Route>

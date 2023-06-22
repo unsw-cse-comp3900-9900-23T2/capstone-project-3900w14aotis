@@ -1,0 +1,25 @@
+31-05-23
+Group formed and named. Selected Scrum Master. Created the Jira Site. Decided on the topic with other group members.
+
+14-06-23
+Meeting with Jonathan today. Cleared up queries with project proposal.
+
+15-06-23
+Group call to work on proposal together. Calvin, Edison and I finished the storyboarding.
+
+16-06-23
+I submitted our project proposal.
+
+18-06-23
+Edison set up Firebase. Winston and I will need to decide on how the database will look.
+Discussed conventions for branch names and commit messages.
+Assigned tasks for sprint 1.
+
+19-06-23
+Meeting with Winston to work on adding to the databse. Me(add task), Winston (add user).
+
+20-06-23
+Meeting with Winston to work on adding to the database. Successfully added to db.
+
+21-06-23
+Meeting with Jonathan today. Discussed how to separate Jira tickets.

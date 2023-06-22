@@ -1,11 +1,16 @@
 @font-face {
-  font-family: "Capriola";
-  src: url("styles/fonts/Capriola-Regular.ttf");
+  font-family: "capriola";
+  src: url("./fonts/capriola/Capriola-Regular.ttf");
 }
 
 @font-face {
-  font-family: "Cairo";
-  src: url("styles/fonts/Cairo-VariableFont_slnt,wght.ttf");
+  font-family: "cairo";
+  src: url("./fonts/cairo/Cairo-VariableFont_slnt,wght.ttf");
+}
+
+@font-face {
+  font-family: "raleway";
+  src: url("./fonts/raleway/Raleway-VariableFont_wght.ttf");
 }
 
 body {

@@ -1,0 +1,15 @@
+Week 1:
+We formed our group and we decided that our team name will be "otis". 
+We split our team into 1 Scrum Master (me), 2 Backend Developers, 1 Fullstack Developer 
+and 1 Frontend Developer.
+We decided on our project "Task management system".
+
+Week 2:
+I setup our group's Jira and Github Classroom Repo. We finalised our functionalities and novel functionalities.
+I started working on our high fidelity prototype on figma for our web application.
+I initialised some of our routing using react.
+
+Week 3:
+I finished adding all our user stories to the backlog on Jira and completed our storyboarding.
+We submitted our proposal and I setup our database using firestore and initialised
+our backend files.
