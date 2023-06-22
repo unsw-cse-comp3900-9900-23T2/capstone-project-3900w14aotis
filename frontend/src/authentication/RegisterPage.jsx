@@ -4,6 +4,8 @@ import TextInput from "../components/TextInput";
 import TextLink from "../components/TextLink";
 import AuthButton from "../components/AuthButton";
 import styles from "./styles/LoginPage.module.css";
+import { registerFetch } from "../api/authentication.js";
+import { useNavigate } from "react-router-dom";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -12,13 +14,25 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const navigate = useNavigate();
+
   const onChangeFirstName = (value) => setFirstName(value);
   const onChangeLastName = (value) => setLastName(value);
   const onChangeEmail = (value) => setEmail(value);
   const onChangePassword = (value) => setPassword(value);
   const onChangeConfirmPassword = (value) => setConfirmPassword(value);
 
-  const registerHandler = () => {};
+  const registerHandler = async () => {
+    const registerFetchResponse = await registerFetch(
+      firstName,
+      lastName,
+      password,
+      email
+    );
+    console.log(registerFetchResponse);
+
+    navigate("/admin/dashboard");
+  };
 
   const registerContainerSx = {
     display: "flex",
