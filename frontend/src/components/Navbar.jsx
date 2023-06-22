@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 
 const Navbar = () => {
   const navbarContainerSx = {
-    height: "100%",
+    height: "70px",
     backgroundColor: "white",
   };
   return (
