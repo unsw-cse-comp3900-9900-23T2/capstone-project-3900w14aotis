@@ -17,7 +17,7 @@ const LoginPage = () => {
     flexDirection: "column",
     alignItems: "center",
     width: "32.4375rem",
-    height: "39.0625rem",
+    height: "37.0625rem",
     borderRadius: "20px",
     background: "#FFF",
     boxShadow: "0px 0px 10px 3px rgba(0, 0, 0, 0.25)",
