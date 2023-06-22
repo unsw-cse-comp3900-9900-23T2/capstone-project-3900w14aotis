@@ -1,11 +1,31 @@
 @font-face {
-  font-family: "Capriola";
-  src: url("styles/fonts/Capriola-Regular.ttf");
+  font-family: "capriola";
+  src: url("./fonts/capriola/Capriola-Regular.ttf");
 }
 
 @font-face {
-  font-family: "Cairo";
-  src: url("styles/fonts/Cairo-VariableFont_slnt,wght.ttf");
+  font-family: "cairo";
+  src: url("./fonts/cairo/Cairo-VariableFont_slnt,wght.ttf");
+}
+
+@font-face {
+  font-family: "raleway";
+  src: url("./fonts/raleway/Raleway-VariableFont_wght.ttf");
+}
+
+@font-face {
+  font-family: "ralewaySemiBold";
+  src: url("./fonts/raleway/Raleway-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "ralewayBold";
+  src: url("./fonts/raleway/Raleway-Bold.ttf");
+}
+
+@font-face {
+  font-family: "ralewayMedium";
+  src: url("./fonts/raleway/Raleway-Medium.ttf");
 }
 
 body {
@@ -13,7 +33,7 @@ body {
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif; */
-  font-family: "Cairo";
+  font-family: "raleway", "capriola", "cairo";
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -22,4 +42,26 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* Login/Register titles etc... subtitles (doing, todo) */
+h1,
+h3 {
+  font-family: "raleway";
+}
+
+/* Otis title, buttons */
+h2,
+h4 {
+  font-family: "capriola";
+}
+
+h1 {
+  font-size: max(3rem, 3vw);
+  color: #454545;
+}
+
+h4 {
+  font-size: clamp(1.3rem, 1.4vw, 2rem);
+  font-weight: normal;
 }

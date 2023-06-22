@@ -1,0 +1,12 @@
+Week 1
+Group formed and named. Selected Scrum Master. Created the Jira Site. Decided on the topic with other group members.
+Formation of group/Scrum master. Decided on topic and set up Jira.
+
+Week 2
+Worked on project proposal and asked questions about it in tutorial.
+
+Week 3
+Finished proposal. Did storyboarding and external actors part.
+
+Week 4
+Began coding frontend for sprint 1. Worked on navbar and profile picture component. 

@@ -1,0 +1,14 @@
+.h1Text {
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+}
+
+.textLink {
+  margin-bottom: 30px;
+}
+
+.textLinkRegister {
+  color: #a4a4a4;
+  font-size: clamp(1.1rem, 0.8vw, 2rem);
+  margin-top: 30px;
+}
