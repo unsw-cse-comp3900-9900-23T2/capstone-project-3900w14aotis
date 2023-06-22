@@ -13,6 +13,7 @@ import AuthLayout from "./layouts/AuthLayout";
 import AppLayout from "./layouts/AppLayout";
 import LoginPage from "./authentication/LoginPage";
 import RegisterPage from "./authentication/RegisterPage";
+import DashboardPage from "./home/DashboardPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,7 +23,11 @@ const router = createBrowserRouter(
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
       </Route>
-      <Route element={<AppLayout />}></Route>
+      <Route element={<AppLayout />}>
+        <Route path="/otis">
+          <Route path="dashboard" element={<DashboardPage />} />
+        </Route>
+      </Route>
     </Route>
   )
 );

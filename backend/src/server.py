@@ -1,17 +1,10 @@
 from src.config.firestoreUtils import initialiseFirestore
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from src.auth.register import authRegister
+from src.auth.login import authLogin
 from fastapi.middleware.cors import CORSMiddleware
 
-# from src.config.firestoreUtils import auth
-
-# import json
-# import requests
-# import os
-# from dotenv import load_dotenv
-
-# load_dotenv()
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -45,38 +38,42 @@ class loginBody(BaseModel):
 # uid of the authentication
 @app.post("/auth/register", summary="Registers a user in the application")
 async def register(item: taskMaster):
-    uid = authRegister(item, db)
-    return uid
+    """_summary_
+
+    Args:
+        item (taskMaster): _description_
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
+    try:
+        uid = authRegister(item, db)
+        return {"detail": {"code": 200, "message": uid}}
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error registering user"}
+        )
 
 
-# @app.get("/auth/register", summary="Registers a user in the application")
-# async def register():
-#     user = taskMaster(firstName="calvin",lastName="edaisdni",password="123453546",email=  "calvin@gmail.com")
-#     uid = authRegister(user,db)
-#     return uid
+@app.post("/auth/login", summary="Logs a user in the application")
+async def login(item: loginBody):
+    """
+    This function authorises a user in firebase auth when
+    the /auth/login route is called.
 
+    Args:
+        item (loginBody): body containing an email and password
 
-# @app.post("/auth/login", summary="Logs a user in the application")
-# async def login(item: loginBody):
-#     token = sign_in_with_email_and_password(item.email, item.password)
-#     print(token)
-#     return {"message": "BABABBAA World"}
-
-
-# def sign_in_with_email_and_password(email, password, return_secure_token=True):
-#     payload = json.dumps(
-#         {
-#             "email": email,
-#             "password": password,
-#             "return_secure_token": return_secure_token,
-#         }
-#     )
-
-#     FIREBASE_WEB_API_KEY = os.getenv("PRIVATE_KEY")
-#     rest_api_url = (
-#         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword"
-#     )
-
-#     r = requests.post(rest_api_url, params={"key": FIREBASE_WEB_API_KEY}, data=payload)
-
-#     return r.json()
+    Returns:
+        (obj) : result object returned by firebase auth
+    """
+    try:
+        result = authLogin(item, db)
+        return result
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error logging in user"}
+        )

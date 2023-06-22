@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 import TextInput from "../components/TextInput";
 import TextLink from "../components/TextLink";
@@ -6,6 +6,7 @@ import AuthButton from "../components/AuthButton";
 import styles from "./styles/LoginPage.module.css";
 import { registerFetch } from "../api/authentication.js";
 import { useNavigate } from "react-router-dom";
+import { displayError, displaySuccess } from "../utils/helpers";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -13,7 +14,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [passwordColour, setPasswordColour] = useState("#B2B2B2");
   const navigate = useNavigate();
 
   const onChangeFirstName = (value) => setFirstName(value);
@@ -22,16 +23,32 @@ const RegisterPage = () => {
   const onChangePassword = (value) => setPassword(value);
   const onChangeConfirmPassword = (value) => setConfirmPassword(value);
 
-  const registerHandler = async () => {
-    const registerFetchResponse = await registerFetch(
-      firstName,
-      lastName,
-      password,
-      email
-    );
-    console.log(registerFetchResponse);
+  useEffect(() => {
+    if (password === confirmPassword) {
+      setPasswordColour("#B2B2B2");
+    } else {
+      setPasswordColour("red");
+    }
+  }, [password, confirmPassword]);
 
-    navigate("/admin/dashboard");
+  const registerHandler = async () => {
+    if (password !== confirmPassword) {
+      displayError("Passwords do not match");
+    } else {
+      const registerFetchResponse = await registerFetch(
+        firstName,
+        lastName,
+        password,
+        email
+      );
+
+      if (registerFetchResponse.detail.code === 200) {
+        navigate("/otis/dashboard");
+        displaySuccess("Work Hard!");
+      } else {
+        displayError(`${registerFetchResponse.detail.message}`);
+      }
+    }
   };
 
   const registerContainerSx = {
@@ -82,12 +99,14 @@ const RegisterPage = () => {
             type="password"
             placeholder="myPassword!3900"
             onChangeFunction={onChangePassword}
+            boxColour={passwordColour}
           />
           <TextInput
             label="Confirm Password"
             type="password"
             placeholder="myPassword!3900"
             onChangeFunction={onChangeConfirmPassword}
+            boxColour={passwordColour}
           />
         </Box>
         <AuthButton text="Create Account" onClickFunction={registerHandler} />

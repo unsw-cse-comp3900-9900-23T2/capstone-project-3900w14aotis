@@ -2,18 +2,28 @@ from src.config.firestoreUtils import initialiseFirestore
 from src.config.firestoreUtils import auth
 
 
-#authRegister takes in 2 parameters, item (representing the taskMaster class) and db(the database). It
-#creates the user in the authentication section and also adds a new document representing the user in the
-#firebase data (includes authentication uid)
+# authRegister takes in 2 parameters, item (representing the taskMaster class) and db(the database). It
+# creates the user in the authentication section and also adds a new document representing the user in the
+# firebase data (includes authentication uid)
 def authRegister(item, db):
+    """_summary_
 
-    user = auth.create_user(
-        email = item.email,
-        password = item.password      
-    )
+    Args:
+        item (_type_): _description_
+        db (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    user = auth.create_user(email=item.email, password=item.password)
 
     db.collection("taskmasters").add(
-        {"firstName": item.firstName, "lastName": item.lastName, "email": item.email, "uid": user.uid}
+        {
+            "firstName": item.firstName,
+            "lastName": item.lastName,
+            "email": item.email,
+            "uid": user.uid,
+        }
     )
 
     return user.uid
