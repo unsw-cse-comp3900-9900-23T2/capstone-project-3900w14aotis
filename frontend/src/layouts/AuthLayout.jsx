@@ -4,9 +4,15 @@ import styles from "./styles/AuthLayout.module.css";
 import { Container } from "@mui/material";
 
 const AuthLayout = () => {
+  const containerSx = {
+    height: "calc(100vh - 70px)",
+    display: "grid",
+    placeContent: "center",
+  };
+
   return (
     <div className={styles.background}>
-      <Container>
+      <Container sx={containerSx}>
         <Outlet />
       </Container>
     </div>
