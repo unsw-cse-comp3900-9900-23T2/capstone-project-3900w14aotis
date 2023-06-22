@@ -1,20 +1,35 @@
 import React from "react";
 import { Box } from "@mui/material";
 import styles from './styles/Navbar.module.css'
+import ProfilePicture from "./ProfilePicture";
+
 const Navbar = () => {
+  
   const navbarContainerSx = {
     height: "70px",
     backgroundColor: "white",
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between"
   };
+
+  const logoContainerSx = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  }
   return (
     <>
       <Box sx={navbarContainerSx}>
-        <img className={styles.logo} src="/Jira-Emblem.png" alt="Otis logo"/>
-        <h2>Otis</h2>
+        <Box sx={logoContainerSx}>
+          <img className={styles.logo} src="/Jira-Emblem.png" alt="Otis logo"/>
+          <h2>Otis</h2>
+        </Box>
+        <ProfilePicture />
+
       </Box>
-      
+     
     </>
   );
 };
