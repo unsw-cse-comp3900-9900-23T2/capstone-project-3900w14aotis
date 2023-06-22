@@ -21,6 +21,6 @@ def createNewTask(newTask, db):
         "deadline": newTask.deadline,
         "assignee": newTask.assignee
     })
-    #TODO: figure out how to return task reference number
-    # print("taskRef", taskRef)
-    return taskRef
+
+    # TODO: handle error if could not add to db
+    return taskRef[1].id

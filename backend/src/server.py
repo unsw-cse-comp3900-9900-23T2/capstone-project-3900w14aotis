@@ -48,7 +48,7 @@ async def login():
 @app.post("/task/create", summary="Create a new task")
 async def createTask(task: Task):
     taskId = createNewTask(task, db)
-    return{"message": f"NEW TASK CREATED!!! {taskId}"}
+    return{"message": f"Task {taskId} create successfully"}
 
 # @app.get("/task/create", summary="Create a new task")
 # async def createTask():
