@@ -7,15 +7,20 @@ from datetime import datetime
 # Takes in a title, description, optional deadline, and assignee to create a task.
 # Returns task id if creation was succesful and _____ if unsuccessful.
 # def createTask(title, description, deadline, assignee):
-def createNewTask(newTask, db):
+def createNewTask(newTask, projectId, db):
 
     """
     db.collection().add() returns two variables
     The reference token of the added variable is the second variable and can be
     accessed through the "id" field.
     """
+    # TODO: retrieve project name
+    parentDocId = projectId
+    subCollection = 'tasks'
+    parentDocRef = db.collection('projects').document(parentDocId)
 
-    taskRef = db.collection("tasks").add({
+
+    taskRef = parentDocRef.collection(subCollection).add({
         "title": newTask.title,
         "description": newTask.description,
         "deadline": newTask.deadline,
