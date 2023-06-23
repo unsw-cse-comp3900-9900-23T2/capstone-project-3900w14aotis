@@ -86,8 +86,24 @@ async def login(item: loginBody):
 
 @app.post("/task/create", summary="Create a new task")
 async def createTask(task: Task, projectId: str):
-    taskId = createNewTask(task, projectId, db)
-    return{"message": f"Task {taskId} created successfully"}
+    """
+    This function creates a new task for a taskmaster in the
+    given project.
+
+    Args:
+        task (Task): details of the task including a title, description,
+        deadline and assignee
+
+    Returns:
+        (obj) : result object returned by firebase auth
+    """
+    try:
+        taskId = createNewTask(task, projectId, db)
+        return {"detail": {"code": 200, "message": f"Task {taskId[1].id} created successfully"}}
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error creating a new task"}
+        )
 
 
 
