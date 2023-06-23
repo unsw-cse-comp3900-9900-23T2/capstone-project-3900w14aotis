@@ -1,7 +1,10 @@
 from src.config.firestoreUtils import initialiseFirestore
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from src.auth.register import authRegister
+from src.auth.login import authLogin
 from fastapi.middleware.cors import CORSMiddleware
+
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -18,30 +21,59 @@ app.add_middleware(
 
 
 # Change this !
-class Item(BaseModel):
+class taskMaster(BaseModel):
     firstName: str
-    description: str
+    lastName: str
+    password: str
+    email: str
 
 
+class loginBody(BaseModel):
+    email: str
+    password: str
+
+
+# Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
+# the user whilst also adding a slot in the authentication section of firebase. Returns the
+# uid of the authentication
 @app.post("/auth/register", summary="Registers a user in the application")
-async def register(item: Item):
-    """
-    THIS IS AN EXAMPLE !
-    Create an item with all the information:
+async def register(item: taskMaster):
+    """_summary_
 
-    - **name**: each item must have a name
-    - **description**: a long description
-    - **price**: required
-    - **tax**: if the item doesn't have tax, you can omit this
-    - **tags**: a set of unique tag strings for this item
-    """
+    Args:
+        item (taskMaster): _description_
 
-    db.collection("taskmasters").add(
-        {"firstName": "Sophia", "lastName": "Li", "email": "sophiali@gmail.com"}
-    )
-    return {"message": "USER CREATED"}
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
+    try:
+        uid = authRegister(item, db)
+        return {"detail": {"code": 200, "message": uid}}
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error registering user"}
+        )
 
 
 @app.post("/auth/login", summary="Logs a user in the application")
-async def login():
-    return {"message": "BABABBAA World"}
+async def login(item: loginBody):
+    """
+    This function authorises a user in firebase auth when
+    the /auth/login route is called.
+
+    Args:
+        item (loginBody): body containing an email and password
+
+    Returns:
+        (obj) : result object returned by firebase auth
+    """
+    try:
+        result = authLogin(item, db)
+        return result
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error logging in user"}
+        )
