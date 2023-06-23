@@ -3,6 +3,8 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from src.auth.register import authRegister
 from src.auth.login import authLogin
+from datetime import datetime
+from src.task.createTask import createNewTask
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -19,18 +21,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# Change this !
 class taskMaster(BaseModel):
     firstName: str
     lastName: str
     password: str
     email: str
 
-
 class loginBody(BaseModel):
     email: str
     password: str
+
+class Task(BaseModel):
+    title: str
+    description: str
+    deadline: datetime
+    assignee: str
 
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
@@ -77,3 +82,28 @@ async def login(item: loginBody):
         raise HTTPException(
             status_code=404, detail={"code": "404", "message": "Error logging in user"}
         )
+
+
+@app.post("/task/create", summary="Create a new task")
+async def createTask(task: Task, projectId: str):
+    """
+    This function creates a new task for a taskmaster in the
+    given project.
+
+    Args:
+        task (Task): details of the task including a title, description,
+        deadline and assignee
+
+    Returns:
+        (obj) : result object returned by firebase auth
+    """
+    try:
+        taskId = createNewTask(task, projectId, db)
+        return {"detail": {"code": 200, "message": f"Task {taskId[1].id} created successfully"}}
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error creating a new task"}
+        )
+
+
+
