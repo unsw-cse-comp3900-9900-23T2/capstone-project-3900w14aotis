@@ -21,15 +21,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class taskMaster(BaseModel):
+
+class TaskMaster(BaseModel):
     firstName: str
     lastName: str
     password: str
     email: str
 
-class loginBody(BaseModel):
+
+class LoginBody(BaseModel):
     email: str
     password: str
+
 
 class Task(BaseModel):
     title: str
@@ -42,7 +45,7 @@ class Task(BaseModel):
 # the user whilst also adding a slot in the authentication section of firebase. Returns the
 # uid of the authentication
 @app.post("/auth/register", summary="Registers a user in the application")
-async def register(item: taskMaster):
+async def register(item: TaskMaster):
     """_summary_
 
     Args:
@@ -64,7 +67,7 @@ async def register(item: taskMaster):
 
 
 @app.post("/auth/login", summary="Logs a user in the application")
-async def login(item: loginBody):
+async def login(item: LoginBody):
     """
     This function authorises a user in firebase auth when
     the /auth/login route is called.
@@ -84,7 +87,7 @@ async def login(item: loginBody):
         )
 
 
-@app.post("/task/create", summary="Create a new task")
+@app.post("/task/create/{projectId}", summary="Create a new task")
 async def createTask(task: Task, projectId: str):
     """
     This function creates a new task for a taskmaster in the
@@ -99,11 +102,14 @@ async def createTask(task: Task, projectId: str):
     """
     try:
         taskId = createNewTask(task, projectId, db)
-        return {"detail": {"code": 200, "message": f"Task {taskId[1].id} created successfully"}}
+        return {
+            "detail": {
+                "code": 200,
+                "message": f"Task {taskId[1].id} created successfully",
+            }
+        }
     except:
         raise HTTPException(
-            status_code=404, detail={"code": "404", "message": "Error creating a new task"}
+            status_code=404,
+            detail={"code": "404", "message": "Error creating a new task"},
         )
-
-
-
