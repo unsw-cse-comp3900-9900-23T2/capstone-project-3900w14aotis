@@ -1,3 +1,4 @@
+# from array import array
 from src.config.firestoreUtils import initialiseFirestore
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -35,7 +36,8 @@ class Task(BaseModel):
     title: str
     description: str
     deadline: datetime
-    assignee: str
+    assignee: list[str]
+
 
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
@@ -84,7 +86,7 @@ async def login(item: loginBody):
         )
 
 
-@app.post("/task/create", summary="Create a new task")
+@app.post("/task/create/{projectID}", summary="Create a new task")
 async def createTask(task: Task, projectId: str):
     """
     This function creates a new task for a taskmaster in the
@@ -92,7 +94,7 @@ async def createTask(task: Task, projectId: str):
 
     Args:
         task (Task): details of the task including a title, description,
-        deadline and assignee
+        deadline and assignees
 
     Returns:
         (obj) : result object returned by firebase auth
