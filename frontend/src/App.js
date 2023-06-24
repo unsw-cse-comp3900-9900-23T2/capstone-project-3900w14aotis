@@ -25,6 +25,7 @@ const router = createBrowserRouter(
       </Route>
       <Route element={<AppLayout />}>
         <Route path="/otis">
+          <Route index element={<Navigate to="/otis/dashboard" />} />
           <Route path="dashboard" element={<DashboardPage />} />
         </Route>
       </Route>

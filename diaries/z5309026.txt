@@ -1,0 +1,134 @@
+WORK DIARY
+8/6/2023
+
+Clearly identifies problem(s) being solved :
+To promote the importance of a task manager system, we need to delve into the problems that are often met by organizations. 
+Lack of organization
+Difficulty in prioritization
+Inefficiency in time management
+Lack of communication/collaboration
+Limited trackibility 
+Inconsistent workflows
+High levels of stress which leads to burnouts
+
+In response to that, task management systems have been implemented to enhance productivity and collaboration within organizations. Task managers provide a centralized platform for teams to prioritize and manage their tasks in an efficient manner, promoting project success. 
+
+9/6/2023
+Clear evidence of research as to existing work or systems in the same problem domain and what their drawbacks are: 
+
+ Jira: Complex and steep learning curve, users who already have high stress levels may be affected by it even further -> Gammify to motivate users to use the app, also helps relieve stress
+
+Trello: Lack the ability to rate tasks -> Happy-> sad Mood rating 
+
+10/6/2023
+Typing out the proposals background section:
+
+In today’s fast-paced and demanding work environments, organizations often struggle to manage their tasks effectively. This leads to a series of problems including difficulty in prioritization, inefficiency in time management, lack of communication, and high levels of stress, hindering teams from reaching their full potential. In response to that, task management systems have been implemented to enhance productivity and collaboration. Task managers are able to complete the following:
+Contain profiles for task masters (including name, email, contact details, and assigned task list)
+Allow connection between task masters
+Create tasks (including title, description, deadline date, and task master assignments)
+Ability to update the status of a task 
+Search for tasks 
+Show availability of task masters
+
+Current task managers, such as Jira and Trello, fail to provide a holistic, user-friendly approach to task management. Jira, due its attempt in providing a wide range of extensive features, has resulted in the manager having a complex and steep learning curve for users, adding unnecessary stress. Likewise, while Trello has a primary focus on visual organization through boards and cards, it lacks a built-in feature to directly rate tasks. 
+
+To address these pressing challenges, there is a clear need for Otis, a structured yet user-friendly task manager that provides a centralized platform for efficient priotization, collaboration and comprehensive visibility. 
+
+14/6/2023
+-Written proposal background shouldnt have dotpoints
+-  requires more information regarding jira and trello -> more research on their pros (use of kanban board)
+-references 
+
+JIRA: 
+Overview: 
+Jira is a software application developed by the Australian company Atlassian, allowing teams to manage projects in an efficient manner. In particular, Jira’s Scrumboard and Kanban are methodologies used by Jira to assist taskmasters to complete their projects at hand. 
+
+Kanban: Work tasks, represented by cards- are organized on a kanban board where they can flow from one column to the next. Each column represents a workflow stage, where users can either use the provided columns (“To Do, In Progress, In Review, Blocked, Done”. Or can create their own custom columns.
+
+FLEXIBILITY
+Based on the philosophy of “start with what you’re  doing now”. While this allows teams to start from where they are, consequently, rules and responsibilities of each team are not clearly defined
+Helps to visualise the task
+Changes can be made at anytime during the project. Present work cards can get blocked/removed, 
+Updates are released whenever they are ready, excluding predetermined due dates. No fixed time to deliver tasks. 
+It focuses on the collective, disregarding the idea of a “kanban master” that keeps things running smoothly, stressing on the idea that its the collective responsibility to collaborate on and deliver tasks on the board.
+
+
+
+Scrumboard: Manages, plans and tracks tasks across sprints. Unlike the Kanban, the scrumboard provides structure to the team through a set of values, principles, and practices. The Scrumboard starts with a backlog, a list of tasks that need to be completed that are represented by cards on the board. The scrumboard is divided into columns that represent different stages of workflow, similar to the Kanban.
+Commits to completing increments of work, through set intervals/sprints. 
+Quickly gathers customer feedback.
+Provides structure to the team and the project through a set of values, principles, and practices
+While each individual has different responsibilities, theres no one who manages the scrum team -> self orgranizing.
+Breaks down large projects into manageable tasks and milestones
+
+
+
+
+
+Pros: -Jira comes with two interactive and visually appealing -Jira has an extensive marketplace with thousands of plugins and add-ons, offering a wide variety of additional features and functionality. 
+
+Cons: 
+-Give that team collaboration isnt Jira’s top priority in project management, the Kanban and Scrum boards actually limit the team collaboration capabilities. The kanban, japanese word for “visual signal”. 
+-Jira is geared toward tech users. Consequentially, non-technical users often struggle with how challenging and complex the user interface is. 
+
+15/6/2023
+Further research on Trello
+
+TRELLO: 
+Trello, also developed by Atlassian, is a project management tool that provides a visual way to organize and track tasks/projects. Similar to the Kanban, it uses a system of boards and cards to help teams manage their work efficiently. Trello does not enforce explicit work in progress limits as it focuses on providing flexibility for users to manage their individual workloads and adapt it to their specific needs. The key differentiator between Trello and Kanban boards is that Trello is a tool used to implement project management methodologies, that includes Kanban. On the otherhand, Kanban only provides the framework for managing workflows. 
+
+
+Pros:
+Cons:
+
+
+JIRA and Trello references: 
+https://www.turing.com/resources/what-is-jira-tool
+https://www.atlassian.com/software/jira/guides/more/jira-family#what-is-the-jira-family
+https://www.atlassian.com/software/jira/templates/kanban
+https://www.atlassian.com/software/jira/templates/scrum
+https://www.atlassian.com/agile/kanban/boards
+https://www.atlassian.com/agile/kanban/kanban-vs-scrum#:~:text=Summary%3A%20Kanban%20is%20a%20project,values%2C%20principles%2C%20and%20practices.
+https://www.wrike.com/kanban-guide/faq/role-and-responsibilities-of-kanban-service-delivery-manager/
+https://zapier.com/blog/trello-vs-jira/
+https://friday.app/p/trello-overview
+
+
+16/6/2023
+Describes how some of the defined user stories provide novel functionality compared to existing systems:
+
+
+As a taskmaster, I want to be able to hide my achievements from the public, so that other taskmasters do judge me based off my achievements
+As a taskmaster, I want to be able to earn achievements, so that my competitive nature is piqued and I have more enjoyment when using the application
+As a taskmaster, I want to be able to see other taskmaster's achievements, so that I can compare them with my own achievements which will support my personal growth
+As a taskmaster, I want to be able to monitor the progress of an achievement, so that I can set goals to work towards
+
+
+
+
+Achievements board: 
+
+Considering the drawbacks of Jira; containing extensive features and functionality that results in a steep learning curve; Otis aims to incorporate game-like elements. By presenting an achievement system, we can capture the attention of taskmaster’s and keep them actively involved. These achievements can be viewed on a task master’s profile page, with the option to toggle the visibility off and on. Gamification can make learning more enjoyable and immersive, leading to increased productivity and improved user experiences. An achievement board also allows taskmasters to set individual goals, fostering a sense of accomplishment to drive users to push themselves further.
+For example, the achievement “Task Fledgling” is awarded to a task master when they complete their first task and “Task Wizard” is awarded once they have completed 100 tasks.
+The achievement system would be defined by the following user stories:
+As a taskmaster, I want to be able to earn achievements, so that my competitive nature is piqued and I have more enjoyment when using the application
+As a taskmaster, I want to be able to hide my achievements from the public, so that other taskmasters don’t judge me based off my achievements
+As a taskmaster, I want to be able to see other taskmaster's achievements, so that I can compare them with my own achievements which will support my personal growth
+As a taskmaster, I want to be able to monitor the progress of an achievement, so that I can set goals to work towards
+
+
+	
+	
+
+
+Emotion Rating System:
+
+The emotion rating system would be represented by a bar graph, with the x axis and y axis containing the following
+x axis: list of distinct emotions (Very sad, sad, angry, tired, happy, very happy)
+y axis: percentage based bars that would add up to 100%
+After completion of each task, task masters would be able to give those respective tasks a rating. Rating provides feedback on the quality and satisfaction level of tasks, allowing users to identify strengths and weaknesses of other task masters along with their own preferences. So far, Jira has the option of giving higher priority to certain tasks while Trello can assign different labels to represent rating levels. Now, the emotion aspect of the rating system carries Otis beyond the scope of the two existing systems. By reflecting and rating their emotional states, task masters may develop a deeper understanding of their feelings towards certain tasks. It may also support users to articulate and convey their emotional expereinces to others, enabling others to provide support and feedback when necessary. 
+The Emotion Rating System would be defined by the following user stories:
+
+
+As a taskmaster, I want to be able to see a summary of the ratings of each task, so that others and I can see what areas I enjoy and what I may struggle with.
