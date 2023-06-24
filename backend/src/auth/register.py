@@ -1,5 +1,6 @@
 from src.config.firestoreUtils import initialiseFirestore
 from src.config.firestoreUtils import auth
+from src.auth.login import signInWithEmailAndPassword
 
 
 # authRegister takes in 2 parameters, item (representing the taskMaster class) and db(the database). It
@@ -25,5 +26,6 @@ def authRegister(item, db):
             "uid": user.uid,
         }
     )
+    token = signInWithEmailAndPassword(email=item.email, password=item.password)
 
-    return user.uid
+    return token
