@@ -6,6 +6,7 @@ from src.auth.register import authRegister
 from src.auth.login import authLogin
 from datetime import datetime
 from src.task.createTask import createNewTask
+from src.task.createProject import createNewProject
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -110,6 +111,25 @@ async def createTask(task: Task, projectId: str):
             status_code=404, detail={"code": "404", "message": "Error creating a new task"}
         )
 
+@app.post("/project/create", summary="Create a new project")
+async def createTask(projectTitle: str):
+    """
+    This function creates a new project so that taskmasters have a collaborative space
+    to add tasks to.
+    Args:
+        project (str): title of the project
+
+    Returns:
+        (obj) : result object returned by firebase auth
+    """
+    try:
+        projectId = createNewProject(projectTitle, db)
+        return {"detail": {"code": 200, "message": f"Project {projectTitle} with ID {projectId[1].id} created successfully"}}
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error creating a new project"}
+        )
+
 @app.get("/task/getDetails/{projectID}", summary="Get details of a task")
 async def getTaskDetails(taskId: str, projectId: str):
     """
@@ -118,7 +138,6 @@ async def getTaskDetails(taskId: str, projectId: str):
     Args:
         projectId (str): reference id of the project the task is in
         taskId (str): reference id of desired task
-
     Returns:
         doc (dict): dictionary containing the details of the doc
     """
