@@ -14,6 +14,7 @@ import AppLayout from "./layouts/AppLayout";
 import LoginPage from "./authentication/LoginPage";
 import RegisterPage from "./authentication/RegisterPage";
 import DashboardPage from "./home/DashboardPage";
+import ProjectPage from "./home/ProjectPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,7 @@ const router = createBrowserRouter(
         <Route path="/otis">
           <Route index element={<Navigate to="/otis/dashboard" />} />
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="project" element={<ProjectPage />} />
         </Route>
       </Route>
     </Route>
