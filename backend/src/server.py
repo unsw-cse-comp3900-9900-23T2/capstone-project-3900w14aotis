@@ -26,6 +26,9 @@ class taskMaster(BaseModel):
     lastName: str
     password: str
     email: str
+    tasks: list[str]
+    projects: list[str]
+
 
 class loginBody(BaseModel):
     email: str
