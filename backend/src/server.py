@@ -1,3 +1,4 @@
+# from array import array
 from src.config.firestoreUtils import initialiseFirestore
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -5,6 +6,7 @@ from src.auth.register import authRegister
 from src.auth.login import authLogin
 from datetime import datetime
 from src.task.createTask import createNewTask
+from src.task.createProject import createNewProject
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -27,6 +29,8 @@ class TaskMaster(BaseModel):
     lastName: str
     password: str
     email: str
+    tasks: list[str]
+    projects: list[str]
 
 
 class LoginBody(BaseModel):
@@ -38,7 +42,7 @@ class Task(BaseModel):
     title: str
     description: str
     deadline: datetime
-    assignee: str
+    assignee: list[str]
 
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
@@ -58,8 +62,8 @@ async def register(item: TaskMaster):
         _type_: _description_
     """
     try:
-        uid = authRegister(item, db)
-        return {"detail": {"code": 200, "message": uid}}
+        token = authRegister(item, db)
+        return {"detail": {"code": 200, "message": token}}
     except:
         raise HTTPException(
             status_code=404, detail={"code": "404", "message": "Error registering user"}
@@ -95,7 +99,7 @@ async def createTask(task: Task, projectId: str):
 
     Args:
         task (Task): details of the task including a title, description,
-        deadline and assignee
+        deadline and assignees
 
     Returns:
         (obj) : result object returned by firebase auth
@@ -112,4 +116,30 @@ async def createTask(task: Task, projectId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error creating a new task"},
+        )
+
+
+@app.post("/project/create", summary="Create a new project")
+async def createTask(projectTitle: str):
+    """
+    This function creates a new project so that taskmasters have a collaborative space
+    to add tasks to.
+    Args:
+        project (str): title of the project
+
+    Returns:
+        (obj) : result object returned by firebase auth
+    """
+    try:
+        projectId = createNewProject(projectTitle, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": f"Project {projectTitle} with ID {projectId[1].id} created successfully",
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error creating a new project"},
         )
