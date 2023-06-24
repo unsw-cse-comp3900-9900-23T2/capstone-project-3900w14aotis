@@ -27,6 +27,9 @@ class taskMaster(BaseModel):
     lastName: str
     password: str
     email: str
+    tasks: list[str]
+    projects: list[str]
+
 
 class loginBody(BaseModel):
     email: str
@@ -57,8 +60,8 @@ async def register(item: taskMaster):
         _type_: _description_
     """
     try:
-        uid = authRegister(item, db)
-        return {"detail": {"code": 200, "message": uid}}
+        token = authRegister(item, db)
+        return {"detail": {"code": 200, "message": token}}
     except:
         raise HTTPException(
             status_code=404, detail={"code": "404", "message": "Error registering user"}
