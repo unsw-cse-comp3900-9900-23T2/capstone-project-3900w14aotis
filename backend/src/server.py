@@ -110,5 +110,24 @@ async def createTask(task: Task, projectId: str):
             status_code=404, detail={"code": "404", "message": "Error creating a new task"}
         )
 
+@app.get("/task/getDetails/{projectID}", summary="Get details of a task")
+async def getTaskDetails(taskId: str, projectId: str):
+    """
+    This function gets the details of a task in a project.
 
+    Args:
+        projectId (str): reference id of the project the task is in
+        taskId (str): reference id of desired task
+
+    Returns:
+        doc (dict): dictionary containing the details of the doc
+    """
+
+    try:
+        task_details = getTaskDetails(taskId, projectId, db)
+        return {"detail": {"code": 200, "message": f"Details of task: {task_details}"}}
+    except: 
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error retrieving data from this task"}
+        )
 
