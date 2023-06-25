@@ -6,12 +6,22 @@ import { Box } from "@mui/material";
 const AppLayout = () => {
   const boxSx = {
     display: "flex",
-    height: "calc(100vh - 70px)",
+    minHeight: "calc(100vh - 70px)",
   };
   return (
     <Box sx={boxSx}>
       <Sidebar />
-      <Outlet />
+      <Box
+        sx={{
+          display: "flex",
+          flex: "5",
+          background:
+            "linear-gradient(0deg, rgba(171, 207, 255, 0.86) 0%, #0c65b8 100%)",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        <Outlet />
+      </Box>
     </Box>
   );
 };
