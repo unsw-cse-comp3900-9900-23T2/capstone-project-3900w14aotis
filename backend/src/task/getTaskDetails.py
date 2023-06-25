@@ -14,7 +14,10 @@ def getTaskDetails(projectId, taskId, db):
     Returns:
         doc (dict): dictionary containing the details of the doc
     """
-    doc_ref = db.collection(projectId).document(taskId)
-    doc = doc_ref.get()
+    projectDocRef = db.collection('projects').document(projectId)
+    taskDocRef = projectDocRef.collection('tasks').document(taskId)
 
-    return doc.to_dict()
+    doc = taskDocRef.get()
+    
+    return doc
+    
