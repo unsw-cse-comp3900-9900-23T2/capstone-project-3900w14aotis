@@ -1,10 +1,17 @@
 const API_URL = `http://localhost:${8000}`;
 const API_MEDIA_TYPE = "application/json";
 
-export const registerFetch = async (firstName, lastName, password, email) => {
+export const registerFetch = async (
+  uid,
+  firstName,
+  lastName,
+  password,
+  email
+) => {
   const tasks = [];
   const projects = [];
   const jsonData = JSON.stringify({
+    uid,
     firstName,
     lastName,
     password,

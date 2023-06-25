@@ -25,6 +25,7 @@ app.add_middleware(
 
 
 class TaskMaster(BaseModel):
+    uid: str
     firstName: str
     lastName: str
     password: str
