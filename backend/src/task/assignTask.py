@@ -18,7 +18,7 @@ def addAssignee(projectId, taskId, userId, db):
     projectRef = db.collection('projects').document(projectId)
     taskRef = projectRef.collection('tasks').document(taskId)
 
-    # above this is fine
+    # above this is fine 
 
     taskRef.update({"assignee(s)": firestore.ArrayUnion(["john"])})
 
