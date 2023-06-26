@@ -16,14 +16,13 @@ def authRegister(item, db):
     Returns:
         _type_: _description_
     """
-    user = auth.create_user(email=item.email, password=item.password)
 
     db.collection("taskmasters").add(
         {
             "firstName": item.firstName,
             "lastName": item.lastName,
             "email": item.email,
-            "uid": user.uid,
+            "uid": item.uid,
             "tasks": item.tasks,
             "projects": item.projects,
         }

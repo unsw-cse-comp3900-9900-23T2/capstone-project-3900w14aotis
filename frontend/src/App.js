@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import "./index.css";
 import {
@@ -15,6 +14,7 @@ import LoginPage from "./authentication/LoginPage";
 import RegisterPage from "./authentication/RegisterPage";
 import DashboardPage from "./home/DashboardPage";
 import ProjectPage from "./home/ProjectPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,7 +27,14 @@ const router = createBrowserRouter(
       <Route element={<AppLayout />}>
         <Route path="/otis">
           <Route index element={<Navigate to="/otis/dashboard" />} />
-          <Route path="dashboard" element={<DashboardPage />} />
+          <Route
+            path="dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="project" element={<ProjectPage />} />
         </Route>
       </Route>
