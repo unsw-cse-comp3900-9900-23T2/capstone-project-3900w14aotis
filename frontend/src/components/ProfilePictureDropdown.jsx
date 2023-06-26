@@ -6,6 +6,8 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import { useNavigate } from 'react-router-dom';
+import { getAuth, signOut } from 'firebase/auth';
 
 import Tooltip from '@mui/material/Tooltip';
 
@@ -17,9 +19,20 @@ function ProfilePictureDropdown() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    handleClose();
+    const auth = getAuth();
+    signOut(auth);
+    navigate('/login');
+  };
+
   return (
     <Box sx={{ marginRight: '30px' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -77,7 +90,7 @@ function ProfilePictureDropdown() {
           <Avatar /> Profile
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={logoutHandler}>
           <ListItemIcon>
             <Logout fontSize='small' />
           </ListItemIcon>
