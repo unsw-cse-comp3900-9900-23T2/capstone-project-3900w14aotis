@@ -8,6 +8,7 @@ from datetime import datetime
 from src.task.createTask import createNewTask
 from src.task.createProject import createNewProject
 from fastapi.middleware.cors import CORSMiddleware
+from src.task.assignTask import addAssignee
 
 
 db = initialiseFirestore()
@@ -145,3 +146,23 @@ async def createTask(projectTitle: str):
             detail={"code": "404", "message": "Error creating a new project"},
         )
 
+@app.post("/task/addTaskAssignee", summary="Adds an assignee to a task")
+async def addTaskAssignee(projectId: str, taskId: str, userId: str):
+    """
+    This function adds an assignee to the given task.
+
+    Args:
+        projectId (str): ID for the project that the task is in 
+        taskId (str): ID for the task that you want to assign someone to
+        userId (str): uID of the person you want to assign
+
+    Returns: 
+        assign_list (array): the list of assignees for the task
+    """
+    try:
+        assigned = addAssignee(projectId, taskId, userId, db)
+        return {"detail": {"code": 200, "message": f"User: {assigned} successfully added"}}
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error assigning taskmaster"},
+        )
