@@ -2,7 +2,7 @@
 This files contains helper functions to help retrieve details of a task
 """
 
-def getTaskDetails(projectId, taskId, db):
+def getDetails(projectId, taskId, db):
     """
     Get all the details of a task.
 
@@ -18,6 +18,9 @@ def getTaskDetails(projectId, taskId, db):
     taskDocRef = projectDocRef.collection('tasks').document(taskId)
 
     doc = taskDocRef.get()
-    
-    return doc
+    if doc.exists:
+        return doc.to_dict()
+    else:
+        return "No document found!"
+
     
