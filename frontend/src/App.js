@@ -35,7 +35,14 @@ const router = createBrowserRouter(
               </ProtectedRoute>
             }
           />
-          <Route path="project" element={<ProjectPage />} />
+          <Route
+            path="project"
+            element={
+              <ProtectedRoute>
+                <ProjectPage />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Route>
     </Route>
