@@ -144,3 +144,4 @@ async def createTask(projectTitle: str):
             status_code=404,
             detail={"code": "404", "message": "Error creating a new project"},
         )
+
