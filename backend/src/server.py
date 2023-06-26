@@ -43,7 +43,8 @@ class Task(BaseModel):
     title: str
     description: str
     deadline: datetime
-    assignee: list[str]
+    assignees: list[str]
+    priority: str
 
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
