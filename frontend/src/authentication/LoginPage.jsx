@@ -3,10 +3,11 @@ import { Box } from "@mui/material";
 import styles from "./styles/LoginPage.module.css";
 import TextInput from "../components/TextInput";
 import TextLink from "../components/TextLink";
-import AuthButton from "../components/AuthButton";
+import CustomButton from "../components/CustomButton";
 import { loginFetch } from "../api/authentication.js";
 import { useNavigate } from "react-router-dom";
 import { displayError, displaySuccess } from "../utils/helpers";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -18,13 +19,13 @@ const LoginPage = () => {
   const onChangePassword = (value) => setPassword(value);
 
   const loginHandler = async () => {
-    const loginFetchResponse = await loginFetch(email, password);
-    console.log(loginFetchResponse);
-    if (!loginFetchResponse.error) {
+    try {
+      const auth = getAuth();
+      await signInWithEmailAndPassword(auth, email, password);
       navigate("/otis/dashboard");
-      displaySuccess("Work Hard!");
-    } else {
-      displayError(`${loginFetchResponse.error.message}`);
+      displaySuccess("Welcome to Otis!");
+    } catch (error) {
+      displayError(`${error.message}`);
     }
   };
 
@@ -77,7 +78,7 @@ const LoginPage = () => {
             <TextLink linkTo="/register" text="Forgot your password?" />
           </div>
         </Box>
-        <AuthButton text="Log In" onClickFunction={loginHandler} />
+        <CustomButton text="Log In" onClickFunction={loginHandler} />
         <div className={styles.textLinkRegister}>
           Don&apos;t have an account?{" "}
           <TextLink linkTo="/register" text="Register" />

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import TextInput from '../components/TextInput';
 import TextLink from '../components/TextLink';
-import AuthButton from '../components/AuthButton';
+import CustomButton from '../components/CustomButton';
 import styles from './styles/LoginPage.module.css';
 import { registerFetch } from '../api/authentication.js';
 import { useNavigate } from 'react-router-dom';
 import { displayError, displaySuccess } from '../utils/helpers';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState('');
@@ -15,6 +16,7 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordColour, setPasswordColour] = useState('#B2B2B2');
+
   const navigate = useNavigate();
 
   const onChangeFirstName = (value) => setFirstName(value);
@@ -35,18 +37,24 @@ const RegisterPage = () => {
     if (password !== confirmPassword) {
       displayError('Passwords do not match');
     } else {
-      const registerFetchResponse = await registerFetch(
-        firstName,
-        lastName,
-        password,
-        email
-      );
+      try {
+        const auth = getAuth();
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+        const user = res.user;
+        const uid = user.uid;
+        const registerFetchResponse = await registerFetch(
+          uid,
+          firstName,
+          lastName,
+          password,
+          email
+        );
 
-      if (registerFetchResponse.detail.code === 200) {
         navigate('/otis/dashboard');
-        displaySuccess('Work Hard!');
-      } else {
-        displayError(`${registerFetchResponse.detail.message}`);
+        displaySuccess('Welcome to Otis!');
+      } catch (error) {
+        const errorMessage = error.message;
+        displayError(`${errorMessage}`);
       }
     }
   };
@@ -109,7 +117,7 @@ const RegisterPage = () => {
             boxColour={passwordColour}
           />
         </Box>
-        <AuthButton text='Create Account' onClickFunction={registerHandler} />
+        <CustomButton text='Create Account' onClickFunction={registerHandler} />
         <div className={styles.textLinkRegister}>
           Already have an account? <TextLink linkTo='/login' text='Login' />
         </div>

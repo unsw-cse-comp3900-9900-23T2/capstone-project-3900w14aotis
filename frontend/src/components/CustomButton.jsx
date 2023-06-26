@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@mui/material";
 
-const AuthButton = ({ text, onClickFunction }) => {
+const CustomButton = ({ text, onClickFunction }) => {
   const buttonSx = {
     width: "75%",
     height: "60px",
@@ -24,4 +24,4 @@ const AuthButton = ({ text, onClickFunction }) => {
   );
 };
 
-export default AuthButton;
+export default CustomButton;
