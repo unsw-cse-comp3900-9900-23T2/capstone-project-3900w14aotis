@@ -2,3 +2,10 @@
     margin-top: 4rem;
     margin-bottom: 3.3rem;
   }
+
+
+.divider {
+  width: 80%;
+  font-size: 20pt;
+  border-bottom-width: 55px;
+}
