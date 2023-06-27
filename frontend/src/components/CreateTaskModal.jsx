@@ -55,7 +55,7 @@ const createButtonBox = {
 const CreateTaskModal = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [dueDate, setDueDate] = useState('');
+  const [deadline, setDeadline] = useState('');
   const [email, setEmail] = useState('');
   const [assignees, setAssignees] = useState([]);
 
@@ -66,6 +66,7 @@ const CreateTaskModal = () => {
   const onChangeTitle = (value) => setDescription(value);
   const onChangeDescription = (value) => setDescription(value);
   const onChangeEmail = (value) => setEmail(value);
+
   const onEnter = (key) => {
     if (key === 'Enter') {
       const input = email.trim();
@@ -79,6 +80,8 @@ const CreateTaskModal = () => {
   };
   const handleDelete = (deleteEmail) => {
     setAssignees(assignees.filter((email) => email !== deleteEmail));
+    // const time = new Date(deadline);
+    // console.log(deadline.toISOString());
   };
 
   const emailValid = (email) => {
@@ -105,7 +108,12 @@ const CreateTaskModal = () => {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
+      <Icon
+        onClick={handleOpen}
+        icon='ic:round-add'
+        style={{ fontSize: '50px' }}
+        className={styles.clickButton}
+      />
       <Modal
         aria-labelledby='transition-modal-title'
         aria-describedby='transition-modal-description'
@@ -121,7 +129,7 @@ const CreateTaskModal = () => {
                 icon='iconamoon:close-bold'
                 onClick={handleClose}
                 style={{ fontSize: '36px' }}
-                className={styles.closeButton}
+                className={styles.clickButton}
               />
             </Box>
             <Box sx={inputBoxStyle}>
@@ -162,6 +170,7 @@ const CreateTaskModal = () => {
                 />
                 {assignees.map((email) => (
                   <Chip
+                    key={email}
                     style={{ margin: '10px 10px 0 0' }}
                     label={email}
                     onDelete={() => handleDelete(email)}
@@ -193,7 +202,11 @@ const CreateTaskModal = () => {
               <Icon icon='mdi:calendar-outline' style={{ fontSize: '50px' }} />
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker />
+                <DatePicker
+                  label={'Deadline'}
+                  value={deadline}
+                  onChange={(deadline) => setDeadline(deadline)}
+                />
               </LocalizationProvider>
             </Box>
             <Box sx={createButtonBox}>
