@@ -10,7 +10,13 @@ const AppLayout = () => {
   };
   return (
     <Box sx={boxSx}>
-      <Sidebar />
+      <Box
+        sx={{
+          width: "15%",
+        }}
+      >
+        <Sidebar />
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -18,6 +24,7 @@ const AppLayout = () => {
           background:
             "linear-gradient(0deg, rgba(171, 207, 255, 0.86) 0%, #0c65b8 100%)",
           backgroundAttachment: "fixed",
+          marginTop: "70px",
         }}
       >
         <Outlet />

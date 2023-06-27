@@ -13,6 +13,7 @@ import AppLayout from "./layouts/AppLayout";
 import LoginPage from "./authentication/LoginPage";
 import RegisterPage from "./authentication/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
+import TasksPage from "./tasks/TasksPage";
 import DashboardPage from "./home/DashboardPage";
 import ProjectPage from "./home/ProjectPage";
 import CreateProject from "./home/CreateProjectPage";
@@ -34,6 +35,14 @@ const router = createBrowserRouter(
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path=":projectId/tasks"
+            element={
+              <ProtectedRoute>
+                <TasksPage />
               </ProtectedRoute>
             }
           />
