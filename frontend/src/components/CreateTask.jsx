@@ -50,16 +50,20 @@ export default function TransitionsModal() {
               onClick={handleClose}
               style={{ fontSize: '36px' }}
             />
-            <Icon icon='bi:card-heading' />
+            <Icon icon='bi:card-heading' style={{ fontSize: '36px' }} />
             <Typography id='transition-modal-title' variant='h6' component='h2'>
               Text in a modal
             </Typography>
-            <Icon icon='fluent:text-description-24-filled' />
-            <Icon icon='mdi:calendar-outline' />
-            <Icon icon='fa-solid:users' />
-            <Typography id='transition-modal-description' sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+            <Icon
+              icon='fluent:text-description-24-filled'
+              style={{ fontSize: '36px' }}
+            />
+            <Icon icon='mdi:calendar-outline' style={{ fontSize: '36px' }} />
+            <Icon icon='fa-solid:users' style={{ fontSize: '36px' }} />
+            <Icon
+              icon='zondicons:exclamation-solid'
+              style={{ fontSize: '36px' }}
+            />
             <Button>Create</Button>
           </Box>
         </Fade>

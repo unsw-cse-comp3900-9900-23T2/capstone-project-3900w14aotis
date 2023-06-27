@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { Box } from "@mui/material";
-import styles from "./styles/Navbar.module.css";
-import ProfilePicture from "./ProfilePictureDropdown";
-import CreateTask from "./CreateTask";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { stringToObject } from "../utils/helpers";
+import React, { useState } from 'react';
+import { Box } from '@mui/material';
+import styles from './styles/Navbar.module.css';
+import ProfilePicture from './ProfilePictureDropdown';
+import CreateTask from './CreateTask';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { stringToObject } from '../utils/helpers';
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(
-    stringToObject(localStorage.getItem("loggedIn"))
+    stringToObject(localStorage.getItem('loggedIn'))
   );
 
   const auth = getAuth();
@@ -23,25 +23,26 @@ const Navbar = () => {
   });
 
   const navbarContainerSx = {
-    height: "70px",
-    backgroundColor: "white",
-    display: "flex",
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
+    height: '70px',
+    backgroundColor: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    boxShadow: '0px 7px 7px 0px rgba(0, 0, 0, 0.25)',
   };
 
   const logoContainerSx = {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   };
 
   return (
     <>
       <Box sx={navbarContainerSx}>
         <Box sx={logoContainerSx}>
-          <img className={styles.logo} src="/Jira-Emblem.png" alt="Otis logo" />
+          <img className={styles.logo} src='/Jira-Emblem.png' alt='Otis logo' />
           <h2>Otis</h2>
         </Box>
         {loggedIn && <ProfilePicture />}
