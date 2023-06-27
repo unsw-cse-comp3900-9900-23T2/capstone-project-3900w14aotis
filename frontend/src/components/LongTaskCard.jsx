@@ -4,6 +4,7 @@ import styles from './styles/LongTaskCard.module.css';
 import ProfilePicture from './ProfilePicture';
 import DeadlineBox from './DeadlineBox';
 import ViewTaskModal from './ViewTaskModal';
+import { taskDetailFetch } from '../api/task';
 
 const LongTaskCard = ({
   id,
@@ -12,8 +13,12 @@ const LongTaskCard = ({
   deadline,
   assignees,
   isModalOpen,
+  projectId,
+  updateModalFunction,
 }) => {
-  const TaskCardClick = () => {
+  const TaskCardClick = async () => {
+    const taskDetailResponse = await taskDetailFetch(projectId, id);
+    updateModalFunction(taskDetailResponse, id);
     isModalOpen(true);
   };
   return (

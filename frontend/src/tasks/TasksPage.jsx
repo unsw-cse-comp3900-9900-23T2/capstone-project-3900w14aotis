@@ -9,6 +9,8 @@ import { sortTasks } from '../utils/helpers';
 
 const TasksPage = () => {
   const [allTasks, setAllTasks] = useState([]);
+  const [currTaskDetails, setCurrTaskDetails] = useState({});
+
   const { projectId } = useParams();
 
   const getAllTasks = async () => {
@@ -28,6 +30,11 @@ const TasksPage = () => {
   const modalOpen = () => setOpen(true);
   const modalClose = () => setOpen(false);
 
+  const updateModalDetails = (response, id) => {
+    const taskDetails = { ...response.detail.message, ...{ id: id } };
+    setCurrTaskDetails(taskDetails);
+  };
+
   return (
     <Box
       sx={{
@@ -38,7 +45,11 @@ const TasksPage = () => {
       }}
     >
       <Headerbar text='Tasks' />
-      <ViewTaskModal isOpen={open} onClose={modalClose} />
+      <ViewTaskModal
+        isOpen={open}
+        onClose={modalClose}
+        details={currTaskDetails}
+      />
       <Box
         sx={{
           display: 'flex',
@@ -60,6 +71,8 @@ const TasksPage = () => {
               deadline={task.Deadline}
               assignees={['Eddy', 'MrCow']}
               isModalOpen={modalOpen}
+              projectId={projectId}
+              updateModalFunction={updateModalDetails}
             />
           );
         })}

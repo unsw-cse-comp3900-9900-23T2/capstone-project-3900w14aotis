@@ -5,6 +5,8 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import { Icon } from '@iconify/react';
 import styles from './styles/TaskModal.module.css';
+import ProfilePicture from './ProfilePicture';
+import DeadlineBox from './DeadlineBox';
 
 const modalStyle = {
   display: 'flex',
@@ -25,6 +27,7 @@ const titleStyle = {
   display: 'flex',
   flexDirection: 'row',
   gap: '78%',
+  justifyContent: 'flex-end',
 };
 
 const displayBoxStyle = {
@@ -38,8 +41,13 @@ const faceStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  '&:hover': {
+    color: '#2578e6',
+    cursor: 'pointer',
+  },
 };
-const ViewTaskModal = ({ isOpen, onClose }) => {
+const ViewTaskModal = ({ isOpen, onClose, details }) => {
+  console.log(details);
   return (
     <div>
       <Modal
@@ -52,7 +60,6 @@ const ViewTaskModal = ({ isOpen, onClose }) => {
         <Fade in={isOpen}>
           <Box sx={modalStyle}>
             <Box sx={titleStyle}>
-              <h2>View Task</h2>
               <Icon
                 icon='iconamoon:close-bold'
                 onClick={onClose}
@@ -63,11 +70,30 @@ const ViewTaskModal = ({ isOpen, onClose }) => {
             <Box sx={displayBoxStyle}>
               <Icon icon='bi:card-heading' style={{ fontSize: '50px' }} />
               <Box>
-                <h2>Deliverable 3 Submission</h2>
-                <p>ID: 3900</p>
+                <h2>{details.Title}</h2>
+                <p>ID: {details.id}</p>
               </Box>
-              <Box>
-                <h2>Severe</h2>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: '20px',
+                  width: '120px',
+                  height: '50px',
+                  background:
+                    details.Priority === 'Low'
+                      ? '#3CE800'
+                      : details.Priority === 'Medium'
+                      ? '#FDFF89'
+                      : details.Priority === 'High'
+                      ? '#FF9534'
+                      : details.Priority === 'Severe'
+                      ? '#FF2121'
+                      : '#FFFFFF',
+                }}
+              >
+                <h3>{details.Priority}</h3>
               </Box>
             </Box>
             <Box sx={displayBoxStyle}>
@@ -77,7 +103,7 @@ const ViewTaskModal = ({ isOpen, onClose }) => {
               />
               <Box>
                 <h2>Description</h2>
-                <p>loream ipsum</p>
+                <p>{details.Description}</p>
               </Box>
             </Box>
             <Box sx={displayBoxStyle}>
@@ -87,35 +113,52 @@ const ViewTaskModal = ({ isOpen, onClose }) => {
                 <p>Very Happy</p>
               </Box>
               <Box sx={faceStyle}>
-                <Icon icon='tabler:mood-happy' style={{ fontSize: '50px' }} />
+                <Icon
+                  icon='akar-icons:face-happy'
+                  style={{ fontSize: '50px' }}
+                />
                 <p>Happy</p>
               </Box>
               <Box sx={faceStyle}>
-                <Icon icon='tabler:mood-happy' style={{ fontSize: '50px' }} />
+                <Icon
+                  icon='fa6-regular:face-tired'
+                  style={{ fontSize: '50px' }}
+                />
                 <p>Tiring</p>
               </Box>
               <Box sx={faceStyle}>
-                <Icon icon='tabler:mood-happy' style={{ fontSize: '50px' }} />
+                <Icon
+                  icon='uil:angry'
+                  style={{
+                    fontSize: '50px',
+                  }}
+                  className='emotion'
+                />
                 <p>Angry</p>
               </Box>
               <Box sx={faceStyle}>
-                <Icon icon='tabler:mood-happy' style={{ fontSize: '50px' }} />
+                <Icon icon='akar-icons:face-sad' style={{ fontSize: '50px' }} />
                 <p>Sad</p>
               </Box>
               <Box sx={faceStyle}>
-                <Icon icon='tabler:mood-happy' style={{ fontSize: '50px' }} />
+                <Icon icon='fa-regular:sad-cry' style={{ fontSize: '50px' }} />
                 <p>Very sad</p>
               </Box>
             </Box>
             <Box sx={displayBoxStyle}>
               <Icon icon='octicon:people-16' style={{ fontSize: '50px' }} />
+              {details.Assignees &&
+                details.Assignees.map((assignee, idx) => {
+                  return (
+                    <ProfilePicture key={idx} imgWidth={35} imgHeight={35} />
+                  );
+                })}
             </Box>
             <Box sx={displayBoxStyle}>
-              <Icon
-                icon='zondicons:exclamation-outline'
-                style={{ fontSize: '50px' }}
-              />
+              <Icon icon='la:tasks' style={{ fontSize: '50px' }} />
+              <h2>{details.Status}</h2>
             </Box>
+            <DeadlineBox deadline={details.Deadline} />
           </Box>
         </Fade>
       </Modal>
