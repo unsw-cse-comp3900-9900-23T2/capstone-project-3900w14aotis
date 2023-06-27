@@ -23,7 +23,11 @@ def addAssignee(projectId, taskId, userId, db):
     taskRef.update({"Assignees": firestore.ArrayUnion([userId])})
 
     # ref for the taskmaster's details document
-    taskmasterRef = db.collection('taskmasters').document(userId)
+    docs = db.collection("taskmasters").where("uid", "==", userId).limit(1).stream()
+    docId = ""
+    for doc in docs:
+        docId = doc.id
+    taskmasterRef = db.collection('taskmasters').document(docId)
 
     # adds task in taskmaster's task list
     taskmasterRef.update({"tasks": firestore.ArrayUnion([taskId])})
@@ -43,13 +47,21 @@ def deleteAssignee(projectId, taskId, userId, db):
     Returns: 
         userId (str): uID if the user is successfully added
     """
+    # reference to task 
     projectRef = db.collection('projects').document(projectId)
     taskRef = projectRef.collection('tasks').document(taskId)
 
+    # remove assignee from task assignee list
     taskRef.update({"Assignees": firestore.ArrayRemove([userId])})
 
-    taskmasterRef = db.collection('taskmasters').document(userId)
+    # ref for the taskmaster's details document
+    docs = db.collection("taskmasters").where("uid", "==", userId).limit(1).stream()
+    docId = ""
+    for doc in docs:
+        docId = doc.id
+    taskmasterRef = db.collection('taskmasters').document(docId)
     
+    # remove task from taskmaster's task list
     taskmasterRef.update({"tasks": firestore.ArrayRemove([taskId])})
 
     return userId
