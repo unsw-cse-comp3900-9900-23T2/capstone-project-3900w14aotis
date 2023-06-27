@@ -46,7 +46,7 @@ class Task(BaseModel):
     title: str
     description: str
     deadline: datetime
-    assigneess: list[str]
+    assignees: list[str]
     priority: str
     priority: str
 
@@ -58,6 +58,7 @@ class Assignee(BaseModel):
     projectId: str
     taskId: str
     userId: str
+    
 class JoinProject(BaseModel):
     user: str
 
