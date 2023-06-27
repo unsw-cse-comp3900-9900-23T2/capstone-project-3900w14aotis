@@ -49,7 +49,7 @@ const RegisterPage = () => {
           password,
           email
         );
-
+        console.log(res);
         navigate("/otis/dashboard");
         displaySuccess("Welcome to Otis!");
       } catch (error) {

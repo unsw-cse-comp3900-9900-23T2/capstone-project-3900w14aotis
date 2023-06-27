@@ -1,8 +1,10 @@
 import React from "react";
 import { Box } from "@mui/material";
 import Headerbar from "../components/Headerbar";
+import { getAuth } from "firebase/auth";
 
 const DashboardPage = () => {
+  console.log(getAuth());
   return (
     <Box
       sx={{
@@ -12,7 +14,7 @@ const DashboardPage = () => {
         minHeight: "calc(100vh - 70px)",
       }}
     >
-      <Headerbar />
+      <Headerbar text="Header" />
       <Box
         sx={{
           display: "flex",
@@ -24,7 +26,7 @@ const DashboardPage = () => {
             flexDirection: "column",
           }}
         >
-          <Box>DOING:</Box>
+          <Box>IN PROGRESS:</Box>
           <Box>TO DO:</Box>
         </Box>
         <Box>Achievements</Box>
