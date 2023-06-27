@@ -15,6 +15,9 @@ import { displayError, displaySuccess } from '../utils/helpers';
 import DropDown from './Dropdown';
 import styles from './styles/TaskModal.module.css';
 import CustomButton from './CustomButton';
+import { getAuth } from 'firebase/auth';
+import { createTaskFetch } from '../api/task.js';
+import { useParams } from 'react-router-dom';
 
 const modalStyle = {
   display: 'flex',
@@ -58,14 +61,20 @@ const CreateTaskModal = () => {
   const [deadline, setDeadline] = useState('');
   const [email, setEmail] = useState('');
   const [assignees, setAssignees] = useState([]);
+  const [priority, setPriority] = useState('');
+  const [status, setStatus] = useState('');
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const onChangeTitle = (value) => setDescription(value);
+  const onChangeTitle = (value) => setTitle(value);
   const onChangeDescription = (value) => setDescription(value);
   const onChangeEmail = (value) => setEmail(value);
+  const onChangePriority = (value) => setPriority(value);
+  const onChangeStatus = (value) => setStatus(value);
+
+  const { projectId } = useParams();
 
   const onEnter = (key) => {
     if (key === 'Enter') {
@@ -80,8 +89,6 @@ const CreateTaskModal = () => {
   };
   const handleDelete = (deleteEmail) => {
     setAssignees(assignees.filter((email) => email !== deleteEmail));
-    // const time = new Date(deadline);
-    // console.log(deadline.toISOString());
   };
 
   const emailValid = (email) => {
@@ -104,6 +111,29 @@ const CreateTaskModal = () => {
     }
 
     return true;
+  };
+
+  const createTaskButtonHandler = async () => {
+    const date = new Date(deadline);
+    const convertedDeadline = date.toISOString();
+
+    try {
+      const createTaskFetchResponse = await createTaskFetch(
+        projectId,
+        title,
+        description,
+        convertedDeadline,
+        assignees,
+        priority,
+        status
+      );
+      displaySuccess('Successfully created task!');
+      handleClose();
+      setAssignees([]);
+      setDeadline('');
+    } catch (error) {
+      displayError(`${error.message}`);
+    }
   };
 
   return (
@@ -187,6 +217,7 @@ const CreateTaskModal = () => {
               <DropDown
                 label='Priority'
                 options={['Low', 'Medium', 'High', 'Severe']}
+                onChangeFunction={onChangePriority}
               ></DropDown>
             </Box>
 
@@ -195,6 +226,7 @@ const CreateTaskModal = () => {
               <DropDown
                 label='Status'
                 options={['To Do', 'In Progress', 'Done']}
+                onChangeFunction={onChangeStatus}
               ></DropDown>
             </Box>
 
@@ -210,7 +242,10 @@ const CreateTaskModal = () => {
               </LocalizationProvider>
             </Box>
             <Box sx={createButtonBox}>
-              <CustomButton text='Create' onClickFunction={''} />
+              <CustomButton
+                text='Create'
+                onClickFunction={createTaskButtonHandler}
+              />
             </Box>
           </Box>
         </Fade>

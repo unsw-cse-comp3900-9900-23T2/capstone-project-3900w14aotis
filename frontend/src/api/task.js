@@ -42,10 +42,22 @@ export const joinProjectFetch = async (id, user) => {
   return joinProjectResponse;
 };
 
-export const createTaskFetch = async (title, user) => {
+export const createTaskFetch = async (
+  projectId,
+  title,
+  description,
+  deadline,
+  assignees,
+  priority,
+  status
+) => {
   const jsonData = JSON.stringify({
     title,
-    user,
+    description,
+    deadline,
+    assignees,
+    priority,
+    status,
   });
 
   const requestOption = {
@@ -54,13 +66,13 @@ export const createTaskFetch = async (title, user) => {
     body: jsonData,
   };
 
-  const createProjectPromise = await fetch(
-    `${API_URL}/project/create`,
+  const createTaskPromise = await fetch(
+    `${API_URL}/task/create/${projectId}`,
     requestOption
   );
 
-  const createProjectResponse = await createProjectPromise.json();
-  return createProjectResponse;
+  const createTaskResponse = await createTaskPromise.json();
+  return createTaskResponse;
 };
 
 export const allTasksFetch = async (projectId) => {

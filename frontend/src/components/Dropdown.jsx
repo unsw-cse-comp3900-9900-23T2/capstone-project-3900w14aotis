@@ -5,11 +5,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-const DropDown = ({ label, options }) => {
+const DropDown = ({ label, options, onChangeFunction }) => {
   const [value, setValue] = React.useState('');
 
   const handleChange = (event) => {
     setValue(event.target.value);
+    onChangeFunction(event.target.value);
   };
 
   const dropdownSx = {
