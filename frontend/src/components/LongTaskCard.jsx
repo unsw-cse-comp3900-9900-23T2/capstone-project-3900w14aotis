@@ -1,28 +1,28 @@
-import React from "react";
-import { Box } from "@mui/material";
-import styles from "./styles/LongTaskCard.module.css";
-import ProfilePicture from "./ProfilePicture";
-import DeadlineBox from "./DeadlineBox";
+import React from 'react';
+import { Box } from '@mui/material';
+import styles from './styles/LongTaskCard.module.css';
+import ProfilePicture from './ProfilePicture';
+import DeadlineBox from './DeadlineBox';
 
-const LongTaskCard = ({ id, title, status, deadline, asignees }) => {
+const LongTaskCard = ({ id, title, status, deadline, assignees }) => {
   return (
     <Box
       sx={{
-        display: "flex",
-        width: "80%",
-        height: "6.6875rem",
-        borderRadius: "10px",
-        background: "#FFF",
-        boxShadow: "0px 0px 10px 3px rgba(0, 0, 0, 0.25)",
-        justifyContent: "space-between",
+        display: 'flex',
+        width: '80%',
+        height: '6.6875rem',
+        borderRadius: '10px',
+        background: '#FFF',
+        boxShadow: '0px 0px 10px 3px rgba(0, 0, 0, 0.25)',
+        justifyContent: 'space-between',
       }}
     >
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          padding: "20px",
-          justifyContent: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          padding: '20px',
+          justifyContent: 'center',
         }}
       >
         <Box>
@@ -32,18 +32,18 @@ const LongTaskCard = ({ id, title, status, deadline, asignees }) => {
       </Box>
       <Box
         sx={{
-          display: "flex",
-          padding: "20px",
-          alignItems: "center",
+          display: 'flex',
+          padding: '20px',
+          alignItems: 'center',
         }}
       >
         <DeadlineBox deadline={deadline} />
         <Box
           sx={{
-            display: "flex",
+            display: 'flex',
           }}
         >
-          {asignees.map((user, idx) => {
+          {assignees.map((user, idx) => {
             return <ProfilePicture imgWidth={35} imgHeight={35} />;
           })}
         </Box>
