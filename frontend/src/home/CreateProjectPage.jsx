@@ -18,7 +18,7 @@ const CreateProject = () => {
     } catch (error) {
       displayError(`${error.message}`);
     }
-  }
+  };
 
   const [project, setProject] = useState("");
 
@@ -36,18 +36,18 @@ const CreateProject = () => {
     } catch (error) {
       displayError(`${error.message}`);
     }
-  }
+  };
 
   const projectPageContainerSx = {
-    width: "100%",   
-  }
+    width: "100%",
+  };
 
   const projectContainerSx = {
     width: "100%",
     height: "calc(100vh - 70px)",
     display: "grid",
     placeContent: "center",
-  }
+  };
 
   const projectOptionSx = {
     display: "flex",
@@ -58,45 +58,46 @@ const CreateProject = () => {
     borderRadius: "20px",
     background: "#FFF",
     boxShadow: "0px 0px 10px 3px rgba(0, 0, 0, 0.25)",
-  }
+  };
 
   const createProjectContainerSx = {
     width: "75%",
     marginTop: "10%",
     marginBottom: "8%",
-  }
+  };
 
   const buttonContainerSx = {
     display: "flex",
     flexDirection: "row",
     width: "75%",
     gap: "6%",
-  }
+  };
 
-  return <>
-    
-    <Box sx={projectPageContainerSx}>
-      <Headerbar text="Create a Project"/>
-      <Box sx={projectContainerSx}>
-        <Box sx={projectOptionSx}>
-          <Box sx={createProjectContainerSx}>
-            <TextInput
-              label="Project Name"
-              type="text"
-              placeholder="Project Name"
-              onChangeFunction={onChangeProject}
-            />
-          </Box>
-          <Box sx={buttonContainerSx}>
-            <BackButton text="Back" onClickFunction={backButtonHandler}/>
-            <CustomButton text="Create Project" onClickFunction={createProjectButtonHandler}/>
+  return (
+    <>
+      <Box sx={projectPageContainerSx}>
+        <Headerbar text="Create a Project" />
+        <Box sx={projectContainerSx}>
+          <Box sx={projectOptionSx}>
+            <Box sx={createProjectContainerSx}>
+              <TextInput
+                label="Project Name"
+                type="text"
+                placeholder="Project Name"
+                onChangeFunction={onChangeProject}
+              />
+            </Box>
+            <Box sx={buttonContainerSx}>
+              <BackButton text="Back" onClickFunction={backButtonHandler} />
+              <CustomButton
+                text="Create Project"
+                onClickFunction={createProjectButtonHandler}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>
-
-    </Box>
-  
-  
-  </>
+    </>
+  );
 };
 export default CreateProject;

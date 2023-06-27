@@ -30,6 +30,7 @@ const LoginPage = () => {
   };
 
   const loginContainerSx = {
+    marginTop: "70px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
