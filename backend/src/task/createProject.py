@@ -19,7 +19,14 @@ def createNewProject(project, db):
             project.user
         ]
     })
-    #TODO: add to taskmasters database too
+    # Add project to taskmaster database
+    docs = db.collection("taskmasters").where("uid", "==", project.user).limit(1).stream()
+    docId = ""
+    for doc in docs:
+        docId = doc.id
+    db.collection("taskmasters").document(docId).update({
+        "projects": firestore.ArrayUnion([projectRef[1].id])
+    })
 
 
     return projectRef
@@ -33,13 +40,18 @@ def joinExistingProject(project, projectId, db):
     """
     parentDocRef = db.collection("projects").document(projectId)
 
+    # Update members in projects database
     resp = parentDocRef.update({
         "members": firestore.ArrayUnion([project.user])
     })
 
-    db.collection("taskmasters").document(project.user).update({
+    # Add project to taskmaster database
+    docs = db.collection("taskmasters").where("uid", "==", project.user).limit(1).stream()
+    docId = ""
+    for doc in docs:
+        docId = doc.id
+    db.collection("taskmasters").document(docId).update({
         "projects": firestore.ArrayUnion([projectId])
     })
 
-    #TODO: add to taskmasters database too
     return resp
