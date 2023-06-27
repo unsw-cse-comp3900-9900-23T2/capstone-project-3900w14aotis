@@ -7,6 +7,8 @@ const Headerbar = () => {
       sx={{
         height: "5rem",
         background: "rgba(49, 49, 49, 0.20)",
+        position: "sticky",
+        top: "70px",
       }}
     >
       HEADER
