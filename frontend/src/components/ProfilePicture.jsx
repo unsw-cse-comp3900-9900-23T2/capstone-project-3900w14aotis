@@ -12,7 +12,14 @@ function ProfilePicture({ userId, imgWidth, imgHeight }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        textAlign: 'center',
+        // padding: "0px",
+      }}
+    >
       <Tooltip title='Taskmaster Profile'>
         <IconButton onClick={handleClick}>
           <Avatar sx={{ width: imgWidth, height: imgHeight }}>

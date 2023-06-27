@@ -5,6 +5,7 @@ import LongTaskCard from '../components/LongTaskCard';
 import { useParams } from 'react-router-dom';
 import { allTasksFetch } from '../api/task';
 import ViewTaskModal from '../components/ViewTaskModal';
+import { sortTasks } from '../utils/helpers';
 
 const TasksPage = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -13,7 +14,9 @@ const TasksPage = () => {
   const getAllTasks = async () => {
     const allTasksResponse = await allTasksFetch(projectId);
     if (allTasksResponse.detail.code === 200) {
-      setAllTasks(allTasksResponse.detail.message);
+      const sortedAllTasks = sortTasks(allTasksResponse.detail.message);
+      setAllTasks(sortedAllTasks);
+      console.log(sortedAllTasks);
     }
   };
 
