@@ -7,6 +7,7 @@ from src.auth.login import authLogin
 from datetime import datetime
 from src.task.createTask import createNewTask
 from src.task.createProject import createNewProject
+from src.task.getTasks import listTasks
 from fastapi.middleware.cors import CORSMiddleware
 from src.task.getTaskDetails import getDetails
 
@@ -123,7 +124,7 @@ async def createTask(task: Task, projectId: str):
 
 
 @app.post("/project/create", summary="Create a new project")
-async def createTask(projectTitle: str):
+async def createProject(projectTitle: str):
     """
     This function creates a new project so that taskmasters have a collaborative space
     to add tasks to.
@@ -167,3 +168,20 @@ async def getTaskDetails(projectId: str, taskId: str):
         )
 
 
+
+@app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
+async def getTasks(projectId: str):
+    try:
+        taskList = listTasks(projectId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": taskList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting tasks"},
+        )
+    

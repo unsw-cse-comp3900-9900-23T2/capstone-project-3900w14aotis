@@ -26,7 +26,7 @@ def createNewTask(newTask, projectId, db):
             "Title": newTask.title,
             "Description": newTask.description,
             "Deadline": newTask.deadline,
-            "Assignees": newTask.assignee,
+            "Assignees": newTask.assignees,
             "Priority": newTask.priority,
             "Rating": {
                 "Very Happy": [],
@@ -34,7 +34,7 @@ def createNewTask(newTask, projectId, db):
                 "Tiring": [],
                 "Angry": [],
                 "Sad": [],
-                "Very Sad": [],
+                "Very Sad": []
             }
         }
     )

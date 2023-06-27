@@ -13,6 +13,7 @@ import AppLayout from "./layouts/AppLayout";
 import LoginPage from "./authentication/LoginPage";
 import RegisterPage from "./authentication/RegisterPage";
 import DashboardPage from "./home/DashboardPage";
+import ProjectPage from "./home/ProjectPage";
 import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter(
@@ -31,6 +32,14 @@ const router = createBrowserRouter(
             element={
               <ProtectedRoute>
                 <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="project"
+            element={
+              <ProtectedRoute>
+                <ProjectPage />
               </ProtectedRoute>
             }
           />
