@@ -1,24 +1,22 @@
 import React from "react";
 import { Box } from "@mui/material";
+import Headerbar from "../components/Headerbar";
+import LongTaskCard from "../components/LongTaskCard";
 
-const Sidebar = () => {
+const TasksPage = () => {
   return (
     <Box
       sx={{
-        background: "red",
-        position: "sticky",
-        top: "70px",
         display: "flex",
-        flex: "1",
         flexDirection: "column",
+        width: "100%",
         minHeight: "calc(100vh - 70px)",
-        marginTop: "70px",
       }}
     >
-      <Box>SIDEBAR</Box>
-      <Box>SIDEBAR</Box>
+      <Headerbar />
+      <LongTaskCard />
     </Box>
   );
 };
 
-export default Sidebar;
+export default TasksPage;
