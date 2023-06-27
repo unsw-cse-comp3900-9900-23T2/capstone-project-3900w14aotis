@@ -62,7 +62,10 @@ const Sidebar = () => {
               color={"#454545"}
             />
           }
-          visiting={location.pathname.includes("tasks")}
+          visiting={
+            location.pathname.includes("tasks") ||
+            location.pathname.includes("project")
+          }
         />
         <SidebarLink
           text={!matches && "Board"}

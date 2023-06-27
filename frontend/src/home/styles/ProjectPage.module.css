@@ -1,0 +1,14 @@
+.h1Text {
+    margin-top: 4rem;
+    margin-bottom: 3.3rem;
+  }
+
+
+.divider {
+  width: 70%;
+  font-family: "raleway";
+  font-size: 20pt;
+  font-weight: 500;
+  border-bottom-width: 55px;
+  /* margin-top: 10rem; */
+}
