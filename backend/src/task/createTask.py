@@ -28,14 +28,15 @@ def createNewTask(newTask, projectId, db):
             "Deadline": newTask.deadline,
             "Assignees": newTask.assignees,
             "Priority": newTask.priority,
+            "Status": newTask.status,
             "Rating": {
                 "Very Happy": [],
                 "Happy": [],
                 "Tiring": [],
                 "Angry": [],
                 "Sad": [],
-                "Very Sad": []
-            }
+                "Very Sad": [],
+            },
         }
     )
 
