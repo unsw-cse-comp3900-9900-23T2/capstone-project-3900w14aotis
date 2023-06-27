@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 
-const Headerbar = () => {
+const Headerbar = ({ text }) => {
   return (
     <Box
       sx={{
@@ -9,7 +9,7 @@ const Headerbar = () => {
         background: "rgba(49, 49, 49, 0.20)",
       }}
     >
-      HEADER
+      {text}
     </Box>
   );
 };
