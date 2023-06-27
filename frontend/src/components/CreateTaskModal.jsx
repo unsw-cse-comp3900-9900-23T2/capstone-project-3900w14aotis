@@ -6,6 +6,9 @@ import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Icon } from '@iconify/react';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const style = {
   position: 'absolute',
@@ -19,7 +22,7 @@ const style = {
   borderRadius: '15px',
 };
 
-export default function TransitionsModal() {
+const CreateTaskModal = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -59,9 +62,12 @@ export default function TransitionsModal() {
               style={{ fontSize: '36px' }}
             />
             <Icon icon='mdi:calendar-outline' style={{ fontSize: '36px' }} />
-            <Icon icon='fa-solid:users' style={{ fontSize: '36px' }} />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker />
+            </LocalizationProvider>
+            <Icon icon='octicon:people-16' style={{ fontSize: '36px' }} />
             <Icon
-              icon='zondicons:exclamation-solid'
+              icon='zondicons:exclamation-outline'
               style={{ fontSize: '36px' }}
             />
             <Button>Create</Button>
@@ -70,4 +76,6 @@ export default function TransitionsModal() {
       </Modal>
     </div>
   );
-}
+};
+
+export default CreateTaskModal;

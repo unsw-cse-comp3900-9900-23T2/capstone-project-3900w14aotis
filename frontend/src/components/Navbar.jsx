@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import styles from './styles/Navbar.module.css';
 import ProfilePicture from './ProfilePictureDropdown';
-import CreateTask from './CreateTask';
+import CreateTaskModal from './CreateTaskModal';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { stringToObject } from '../utils/helpers';
 
@@ -47,7 +47,7 @@ const Navbar = () => {
         </Box>
         {loggedIn && <ProfilePicture />}
 
-        <CreateTask />
+        <CreateTaskModal />
       </Box>
     </>
   );
