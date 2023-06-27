@@ -1,8 +1,10 @@
 import React from "react";
 import { Box } from "@mui/material";
 import Headerbar from "../components/Headerbar";
+import { getAuth } from "firebase/auth";
 
 const DashboardPage = () => {
+  console.log(getAuth());
   return (
     <Box
       sx={{

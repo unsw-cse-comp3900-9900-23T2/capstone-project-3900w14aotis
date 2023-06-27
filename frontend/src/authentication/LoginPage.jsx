@@ -21,9 +21,10 @@ const LoginPage = () => {
   const loginHandler = async () => {
     try {
       const auth = getAuth();
-      await signInWithEmailAndPassword(auth, email, password);
+      const res = await signInWithEmailAndPassword(auth, email, password);
       navigate("/otis/dashboard");
       displaySuccess("Welcome to Otis!");
+      console.log(res);
     } catch (error) {
       displayError(`${error.message}`);
     }
