@@ -12,9 +12,11 @@ import AuthLayout from "./layouts/AuthLayout";
 import AppLayout from "./layouts/AppLayout";
 import LoginPage from "./authentication/LoginPage";
 import RegisterPage from "./authentication/RegisterPage";
+import ProtectedRoute from "./ProtectedRoute";
 import DashboardPage from "./home/DashboardPage";
 import ProjectPage from "./home/ProjectPage";
-import ProtectedRoute from "./ProtectedRoute";
+import CreateProject from "./home/CreateProjectPage";
+import JoinProject from "./home/JoinProjectPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,6 +42,22 @@ const router = createBrowserRouter(
             element={
               <ProtectedRoute>
                 <ProjectPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="project/create"
+            element={
+              <ProtectedRoute>
+                <CreateProject />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="project/join/:projectId"
+            element={
+              <ProtectedRoute>
+                <JoinProject />
               </ProtectedRoute>
             }
           />
