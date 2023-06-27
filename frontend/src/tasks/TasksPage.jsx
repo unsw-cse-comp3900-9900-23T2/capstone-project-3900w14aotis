@@ -4,6 +4,7 @@ import Headerbar from '../components/Headerbar';
 import LongTaskCard from '../components/LongTaskCard';
 import { useParams } from 'react-router-dom';
 import { allTasksFetch } from '../api/task';
+import ViewTaskModal from '../components/ViewTaskModal';
 
 const TasksPage = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -20,6 +21,10 @@ const TasksPage = () => {
     getAllTasks();
   }, []);
 
+  const [open, setOpen] = useState(false);
+  const modalOpen = () => setOpen(true);
+  const modalClose = () => setOpen(false);
+
   return (
     <Box
       sx={{
@@ -30,6 +35,7 @@ const TasksPage = () => {
       }}
     >
       <Headerbar text='Tasks' />
+      <ViewTaskModal isOpen={open} onClose={modalClose} />
       <Box
         sx={{
           display: 'flex',
@@ -50,6 +56,7 @@ const TasksPage = () => {
               status={task.Status}
               deadline={task.Deadline}
               assignees={['Eddy', 'MrCow']}
+              isModalOpen={modalOpen}
             />
           );
         })}

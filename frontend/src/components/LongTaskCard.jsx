@@ -1,10 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import styles from './styles/LongTaskCard.module.css';
 import ProfilePicture from './ProfilePicture';
 import DeadlineBox from './DeadlineBox';
+import ViewTaskModal from './ViewTaskModal';
 
-const LongTaskCard = ({ id, title, status, deadline, assignees }) => {
+const LongTaskCard = ({
+  id,
+  title,
+  status,
+  deadline,
+  assignees,
+  isModalOpen,
+}) => {
+  const TaskCardClick = () => {
+    isModalOpen(true);
+  };
   return (
     <Box
       sx={{
@@ -15,7 +26,12 @@ const LongTaskCard = ({ id, title, status, deadline, assignees }) => {
         background: '#FFF',
         boxShadow: '0px 0px 10px 3px rgba(0, 0, 0, 0.25)',
         justifyContent: 'space-between',
+        '&:hover': {
+          background: '#adcffb',
+          cursor: 'pointer',
+        },
       }}
+      onClick={TaskCardClick}
     >
       <Box
         sx={{
