@@ -33,14 +33,13 @@ def joinExistingProject(project, projectId, db):
     """
     parentDocRef = db.collection("projects").document(projectId)
 
-    # TODO: append to members list instead of replace
     resp = parentDocRef.update({
-        "members": [
-            project.user
-        ]
+        "members": firestore.ArrayUnion([project.user])
     })
 
-
+    db.collection("taskmasters").document(project.user).update({
+        "projects": firestore.ArrayUnion([projectId])
+    })
 
     #TODO: add to taskmasters database too
     return resp

@@ -15,7 +15,6 @@ const CreateProject = () => {
   const backButtonHandler = () => {
     try {
       navigate("/otis/project");
-      displaySuccess("Successfully created project!");
     } catch (error) {
       displayError(`${error.message}`);
     }
@@ -33,7 +32,7 @@ const CreateProject = () => {
         user.currentUser.uid
       );
       navigate(`/otis/${createProjectFetchResponse.detail.message}/tasks`);
-
+      displaySuccess("Successfully created project!");
     } catch (error) {
       displayError(`${error.message}`);
     }
