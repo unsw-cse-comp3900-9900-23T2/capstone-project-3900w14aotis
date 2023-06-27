@@ -89,3 +89,18 @@ export const allTasksFetch = async (projectId) => {
   const allTasksResponse = await allTasksPromise.json();
   return allTasksResponse;
 };
+
+export const taskDetailFetch = async (projectId, taskId) => {
+  const requestOption = {
+    method: 'GET',
+    headers: { 'Content-Type': API_MEDIA_TYPE },
+  };
+
+  const allTasksPromise = await fetch(
+    `${API_URL}/task/${projectId}/${taskId}/get`,
+    requestOption
+  );
+
+  const allTasksResponse = await allTasksPromise.json();
+  return allTasksResponse;
+};

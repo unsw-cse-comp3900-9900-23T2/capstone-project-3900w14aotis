@@ -166,7 +166,7 @@ async def createProject(item: NewProject):
         )
 
 
-@app.get("/task/getDetails", summary="Get details of a task")
+@app.get("/task/{projectId}/{taskId}/get", summary="Get details of a task")
 async def getTaskDetails(projectId: str, taskId: str):
     """
     This function adds an assignee to the given task.
