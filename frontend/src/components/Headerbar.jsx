@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 
-const Headerbar = () => {
+const Headerbar = ({ text }) => {
   return (
     <Box
       sx={{
@@ -11,7 +11,7 @@ const Headerbar = () => {
         top: "70px",
       }}
     >
-      HEADER
+      {text}
     </Box>
   );
 };

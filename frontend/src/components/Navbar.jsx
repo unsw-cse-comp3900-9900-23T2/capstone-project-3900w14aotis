@@ -23,15 +23,15 @@ const Navbar = () => {
   });
 
   const navbarContainerSx = {
-    position: 'fixed',
-    height: '70px',
-    backgroundColor: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    boxShadow: '0px 7px 7px 0px rgba(0, 0, 0, 0.25)',
+    position: "fixed",
+    height: "70px",
+    backgroundColor: "white",
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
   };
 
   const logoContainerSx = {
