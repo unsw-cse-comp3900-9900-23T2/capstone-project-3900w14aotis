@@ -23,10 +23,19 @@ def createNewTask(newTask, projectId, db):
 
     taskRef = parentDocRef.collection(subCollection).add(
         {
-            "title": newTask.title,
-            "description": newTask.description,
-            "deadline": newTask.deadline,
-            "assignee(s)": newTask.assignee,
+            "Title": newTask.title,
+            "Description": newTask.description,
+            "Deadline": newTask.deadline,
+            "Assignees": newTask.assignee,
+            "Priority": newTask.priority,
+            "Rating": {
+                "Very Happy": [],
+                "Happy": [],
+                "Tiring": [],
+                "Angry": [],
+                "Sad": [],
+                "Very Sad": [],
+            }
         }
     )
 
