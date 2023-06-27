@@ -47,6 +47,10 @@ class Task(BaseModel):
     assignees: list[str]
     priority: str
 
+class Assignee(BaseModel):
+    projectId: str
+    taskId: str
+    userId: str
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
 # the user whilst also adding a slot in the authentication section of firebase. Returns the
@@ -148,7 +152,7 @@ async def createTask(projectTitle: str):
         )
 
 @app.post("/task/addTaskAssignee", summary="Adds an assignee to a task")
-async def addTaskAssignee(projectId: str, taskId: str, userId: str):
+async def addTaskAssignee(assignee: Assignee):
     """
     This function adds an assignee to the given task.
 
@@ -161,7 +165,7 @@ async def addTaskAssignee(projectId: str, taskId: str, userId: str):
         assign_list (array): the list of assignees for the task
     """
     try:
-        assigned = addAssignee(projectId, taskId, userId, db)
+        assigned = addAssignee(assignee.projectId, assignee.taskId, assignee.userId, db)
         return {"detail": {"code": 200, "message": f"User: {assigned} successfully added"}}
     except:
         raise HTTPException(
