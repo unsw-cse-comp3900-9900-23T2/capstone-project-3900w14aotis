@@ -32,21 +32,24 @@ def addAssignee(projectId, taskId, userId, db):
 
 def deleteAssignee(projectId, taskId, userId, db):
     """
-    This function deletes an assignee from a task
+    This function removes an assignee from a task.
 
     Args:
         projectId (str): ID for the project that the task is in 
         taskId (str): ID for the task that you want to remove someone from
-        userId (str): ID for the person you want to remove
+        userId (str): uID of the person you want to remove
         db: database connection
-    
-    
+
+    Returns: 
+        userId (str): uID if the user is successfully added
     """
     projectRef = db.collection('projects').document(projectId)
     taskRef = projectRef.collection('tasks').document(taskId)
 
     taskRef.update({"Assignees": firestore.ArrayRemove([userId])})
 
-    # note: update taskmaster's task list too
+    taskmasterRef = db.collection('taskmasters').document(userId)
+    
+    taskmasterRef.update({"tasks": firestore.ArrayRemove([taskId])})
 
     return userId

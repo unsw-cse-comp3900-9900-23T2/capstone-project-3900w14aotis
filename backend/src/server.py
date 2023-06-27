@@ -9,6 +9,7 @@ from src.task.createTask import createNewTask
 from src.task.createProject import createNewProject
 from fastapi.middleware.cors import CORSMiddleware
 from src.task.assignTask import addAssignee
+from src.task.assignTask import deleteAssignee
 
 
 db = initialiseFirestore()
@@ -162,7 +163,7 @@ async def addTaskAssignee(assignee: Assignee):
         userId (str): uID of the person you want to assign
 
     Returns: 
-        assign_list (array): the list of assignees for the task
+        userId (str): uID if the user is successfully added
     """
     try:
         assigned = addAssignee(assignee.projectId, assignee.taskId, assignee.userId, db)
@@ -170,4 +171,26 @@ async def addTaskAssignee(assignee: Assignee):
     except:
         raise HTTPException(
             status_code=404, detail={"code": "404", "message": "Error assigning taskmaster"},
+        )
+    
+
+@app.delete("/task/deleteTaskAssignee", summary="Removes an assignee from a task")
+async def deleteTaskAssignee(assignee: Assignee):
+    """
+    This function removes an assignee from a task.
+
+    Args:
+        projectId (str): ID for the project that the task is in 
+        taskId (str): ID for the task that you want to remove someone from
+        userId (str): uID of the person you want to remove
+
+    Returns: 
+        userId (str): uID if the user is successfully added
+    """
+    try:
+        deleted = deleteAssignee(assignee.projectId, assignee.taskId, assignee.userId, db)
+        return {"detail": {"code": 200, "message": f"User: {deleted} successfully removed"}}
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error removing taskmaster"},
         )
