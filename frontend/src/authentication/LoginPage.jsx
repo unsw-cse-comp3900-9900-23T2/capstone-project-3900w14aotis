@@ -24,7 +24,6 @@ const LoginPage = () => {
       const res = await signInWithEmailAndPassword(auth, email, password);
       navigate("/otis/dashboard");
       displaySuccess("Welcome to Otis!");
-      console.log(res);
     } catch (error) {
       displayError(`${error.message}`);
     }

@@ -2,16 +2,18 @@ import React from "react";
 import { Box, List } from "@mui/material";
 import SidebarLink from "./SidebarLink";
 import { Icon } from "@iconify/react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Sidebar = () => {
+  const location = useLocation();
+
   const dashboardHandler = () => {};
-
   const tasksHandler = () => {};
-
   const boardHandler = () => {};
-
   const connectionsHandler = () => {};
+
+  const matches = useMediaQuery("(max-width:1000px)");
 
   return (
     <Box
@@ -30,37 +32,68 @@ const Sidebar = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: "10px",
+          gap: "15px",
           marginTop: "50px",
         }}
       >
         <SidebarLink
-          text="Dashboard"
+          text={!matches && "Dashboard"}
           linkTo={"/otis/dashboard"}
           onClickFunction={dashboardHandler}
-        />
-        <SidebarLink
-          text="Tasks"
-          linkTo={"/otis/project"}
-          onClickFunction={tasksHandler}
-        />
-        <SidebarLink
-          text="Board"
           icon={
             <Icon
               aria-label=""
-              // className={styles.logoutIcon}
-              icon="mingcute:exit-line"
-              height="16%"
+              icon="ic:baseline-space-dashboard"
+              height="1.9375rem"
               color={"#454545"}
             />
           }
-          onClickFunction={boardHandler}
+          visiting={location.pathname.includes("dashboard")}
         />
         <SidebarLink
-          text="Connections"
+          text={!matches && "Tasks"}
+          linkTo={"/otis/project"}
+          onClickFunction={tasksHandler}
+          icon={
+            <Icon
+              aria-label=""
+              icon="fluent:task-list-square-ltr-20-filled"
+              height="1.9375rem"
+              color={"#454545"}
+            />
+          }
+          visiting={location.pathname.includes("tasks")}
+        />
+        <SidebarLink
+          text={!matches && "Board"}
+          icon={
+            <Icon
+              aria-label=""
+              icon="material-symbols:view-kanban-rounded"
+              height="1.9375rem"
+              color={"#454545"}
+            />
+          }
+          visiting={
+            !location.pathname.includes("dashboard") &&
+            location.pathname.includes("board")
+          }
+          onClickFunction={boardHandler}
+          linkTo={"/otis/project"}
+        />
+        <SidebarLink
+          text={!matches && "Connections"}
           linkTo={"/otis/connections"}
           onClickFunction={connectionsHandler}
+          icon={
+            <Icon
+              aria-label=""
+              icon="fa-solid:user-friends"
+              height="1.9375rem"
+              color={"#454545"}
+            />
+          }
+          visiting={location.pathname.includes("connections")}
         />
       </List>
     </Box>
