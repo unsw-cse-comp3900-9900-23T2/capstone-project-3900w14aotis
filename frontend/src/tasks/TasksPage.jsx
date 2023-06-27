@@ -32,7 +32,7 @@ const TasksPage = () => {
         minHeight: "calc(100vh - 70px)",
       }}
     >
-      <Headerbar />
+      <Headerbar text="Tasks" />
       <Box
         sx={{
           display: "flex",
@@ -52,7 +52,7 @@ const TasksPage = () => {
               title={task.Title}
               status={task.Status}
               deadline={task.Deadline}
-              asignees={["Eddy", "MrCow"]}
+              assignees={["Eddy", "MrCow"]}
             />
           );
         })}

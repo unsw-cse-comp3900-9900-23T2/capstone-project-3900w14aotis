@@ -4,7 +4,7 @@ import styles from "./styles/LongTaskCard.module.css";
 import ProfilePicture from "./ProfilePicture";
 import DeadlineBox from "./DeadlineBox";
 
-const LongTaskCard = ({ id, title, status, deadline, asignees }) => {
+const LongTaskCard = ({ id, title, status, deadline, assignees }) => {
   return (
     <Box
       sx={{
@@ -44,7 +44,7 @@ const LongTaskCard = ({ id, title, status, deadline, asignees }) => {
             display: "flex",
           }}
         >
-          {asignees.map((user, idx) => {
+          {assignees.map((user, idx) => {
             return <ProfilePicture imgWidth={35} imgHeight={35} />;
           })}
         </Box>
