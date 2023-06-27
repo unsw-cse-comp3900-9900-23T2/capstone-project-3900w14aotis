@@ -4,13 +4,17 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import { Icon } from '@iconify/react';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextInput from './TextInput';
 import TextBox from './TextBox';
+import Chip from '@mui/material/Chip';
+import { displayError, displaySuccess } from '../utils/helpers';
+import DropDown from './Dropdown';
+import styles from './styles/TaskModal.module.css';
+import CustomButton from './CustomButton';
 
 const modalStyle = {
   display: 'flex',
@@ -40,6 +44,14 @@ const titleStyle = {
   gap: '78%',
 };
 
+const emailBoxStyle = {
+  width: '100%',
+};
+
+const createButtonBox = {
+  display: 'flex',
+  justifyContent: 'center',
+};
 const CreateTaskModal = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -57,17 +69,40 @@ const CreateTaskModal = () => {
   const onEnter = (key) => {
     if (key === 'Enter') {
       const input = email.trim();
-      console.log('wefaw');
       if (input) {
-        console.log('awefawef');
-        setAssignees([...assignees, input]);
-        setEmail('');
+        if (emailValid(input)) {
+          setAssignees([...assignees, input]);
+          setEmail('');
+        }
       }
     }
   };
   const handleDelete = (deleteEmail) => {
     setAssignees(assignees.filter((email) => email !== deleteEmail));
   };
+
+  const emailValid = (email) => {
+    let error = null;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = !emailPattern.test(email);
+
+    if (isValid) {
+      error = `${email} is not a valid email address.`;
+    }
+
+    if (assignees.includes(email)) {
+      error = `${email} has already been added.`;
+    }
+
+    if (error) {
+      displayError(`${error}`);
+
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <div>
       <Button onClick={handleOpen}>Open modal</Button>
@@ -86,6 +121,7 @@ const CreateTaskModal = () => {
                 icon='iconamoon:close-bold'
                 onClick={handleClose}
                 style={{ fontSize: '36px' }}
+                className={styles.closeButton}
               />
             </Box>
             <Box sx={inputBoxStyle}>
@@ -114,23 +150,43 @@ const CreateTaskModal = () => {
 
             <Box sx={inputBoxStyle}>
               <Icon icon='octicon:people-16' style={{ fontSize: '50px' }} />
-              {assignees.map((email) => (
-                <Box key={email}>
-                  {email}
+              <Box sx={emailBoxStyle}>
+                <TextInput
+                  label='Assignees'
+                  type='assignees'
+                  defaultValue={email}
+                  placeholder='Type An Email And Press "Enter"'
+                  onChangeFunction={onChangeEmail}
+                  onKeyDownFunction={onEnter}
+                  emailInput={true}
+                />
+                {assignees.map((email) => (
+                  <Chip
+                    style={{ margin: '10px 10px 0 0' }}
+                    label={email}
+                    onDelete={() => handleDelete(email)}
+                  />
+                ))}
+              </Box>
+            </Box>
 
-                  <button type='button' onClick={() => handleDelete(email)}>
-                    &times;
-                  </button>
-                </Box>
-              ))}
-              <TextInput
-                label='Assignees'
-                type='assignees'
-                defaultValue={email}
-                placeholder='Type An Email And Press "Enter"'
-                onChangeFunction={onChangeEmail}
-                onKeyDownFunction={onEnter}
+            <Box sx={inputBoxStyle}>
+              <Icon
+                icon='zondicons:exclamation-outline'
+                style={{ fontSize: '50px' }}
               />
+              <DropDown
+                label='Priority'
+                options={['Low', 'Medium', 'High', 'Severe']}
+              ></DropDown>
+            </Box>
+
+            <Box sx={inputBoxStyle}>
+              <Icon icon='la:tasks' style={{ fontSize: '50px' }} />
+              <DropDown
+                label='Status'
+                options={['To Do', 'In Progress', 'Done']}
+              ></DropDown>
             </Box>
 
             <Box sx={inputBoxStyle}>
@@ -140,19 +196,9 @@ const CreateTaskModal = () => {
                 <DatePicker />
               </LocalizationProvider>
             </Box>
-
-            <Box sx={inputBoxStyle}>
-              <Icon
-                icon='zondicons:exclamation-outline'
-                style={{ fontSize: '50px' }}
-              />
+            <Box sx={createButtonBox}>
+              <CustomButton text='Create' onClickFunction={''} />
             </Box>
-
-            <Box>
-              <Icon icon='la:tasks' style={{ fontSize: '50px' }} />
-            </Box>
-
-            <Button>Create</Button>
           </Box>
         </Fade>
       </Modal>

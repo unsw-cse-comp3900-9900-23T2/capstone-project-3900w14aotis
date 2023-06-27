@@ -10,6 +10,7 @@ const TextInput = ({
   onChangeFunction,
   boxColour,
   onKeyDownFunction,
+  emailInput,
 }) => {
   const textFieldSx = {
     width: '100%',
@@ -45,8 +46,8 @@ const TextInput = ({
   return (
     <TextField
       onKeyDown={(event) => {
-        onKeyDownFunction(event.key);
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && emailInput) {
+          onKeyDownFunction(event.key);
           event.target.value = '';
         }
       }}
