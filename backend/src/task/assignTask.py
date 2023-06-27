@@ -15,13 +15,18 @@ def addAssignee(projectId, taskId, userId, db):
     
     
     """
+    # ref for the task details document
     projectRef = db.collection('projects').document(projectId)
     taskRef = projectRef.collection('tasks').document(taskId)
 
-    # updates assignees array in task details
+    # adds user in assignees array for the task
     taskRef.update({"Assignees": firestore.ArrayUnion([userId])})
 
-    # note: update taskmaster's task list too
+    # ref for the taskmaster's details document
+    taskmasterRef = db.collection('taskmasters').document(userId)
+
+    # adds task in taskmaster's task list
+    taskmasterRef.update({"tasks": firestore.ArrayUnion([taskId])})
 
     return userId
 
