@@ -35,6 +35,7 @@ const LongTaskCard = ({ id, title, status, deadline, asignees }) => {
           display: "flex",
           padding: "20px",
           alignItems: "center",
+          gap: "10px",
         }}
       >
         <DeadlineBox deadline={deadline} />
