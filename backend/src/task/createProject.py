@@ -18,6 +18,7 @@ def createNewProject(project, db):
         ]
     })
     #TODO: add to taskmasters database too
+    
 
     return projectRef
 
