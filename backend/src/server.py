@@ -6,8 +6,10 @@ from src.auth.login import authLogin
 from datetime import datetime
 from src.task.createTask import createNewTask
 from src.task.createProject import createNewProject
+from src.task.getTasks import listTasks
 from src.task.createProject import joinExistingProject
 from fastapi.middleware.cors import CORSMiddleware
+from src.task.getTaskDetails import getDetails
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -150,6 +152,44 @@ async def createProject(item: NewProject):
             status_code=404,
             detail={"code": "404", "message": "Error creating a new project"},
         )
+
+@app.get("/task/getDetails", summary="Get details of a task")
+async def getTaskDetails(projectId: str, taskId: str):
+    """
+    This function gets the details of a task in a project.
+
+    Args:
+        projectId (str): reference id of the project the task is in
+        taskId (str): reference id of desired task
+    Returns:
+        doc (dict): dictionary containing the details of the doc
+    """
+    try:
+        task_details = getDetails(projectId, taskId, db)
+        return {"detail": {"code": 200, "message": task_details}}
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error retrieving data from this task"}
+        )
+
+
+
+@app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
+async def getTasks(projectId: str):
+    try:
+        taskList = listTasks(projectId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": taskList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting tasks"},
+        )
+    
 
 @app.post("/project/join/{projectId}", summary="Join a project")
 async def joinProject(item: JoinProject, projectId: str):
