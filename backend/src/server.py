@@ -9,6 +9,8 @@ from src.task.createProject import createNewProject
 from src.task.getTasks import listTasks
 from src.task.createProject import joinExistingProject
 from fastapi.middleware.cors import CORSMiddleware
+from src.task.assignTask import addAssignee
+from src.task.assignTask import deleteAssignee
 from src.task.getTaskDetails import getDetails
 
 db = initialiseFirestore()
@@ -46,13 +48,23 @@ class Task(BaseModel):
     deadline: datetime
     assignees: list[str]
     priority: str
+    status: str
+
 
 class NewProject(BaseModel):
     title: str
     user: str
 
+
+class Assignee(BaseModel):
+    projectId: str
+    taskId: str
+    userId: str
+
+
 class JoinProject(BaseModel):
     user: str
+
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
 # the user whilst also adding a slot in the authentication section of firebase. Returns the
@@ -153,25 +165,28 @@ async def createProject(item: NewProject):
             detail={"code": "404", "message": "Error creating a new project"},
         )
 
+
 @app.get("/task/getDetails", summary="Get details of a task")
 async def getTaskDetails(projectId: str, taskId: str):
     """
-    This function gets the details of a task in a project.
+    This function adds an assignee to the given task.
 
     Args:
-        projectId (str): reference id of the project the task is in
-        taskId (str): reference id of desired task
+        projectId (str): ID for the project that the task is in
+        taskId (str): ID for the task that you want to assign someone to
+        userId (str): uID of the person you want to assign
+
     Returns:
-        doc (dict): dictionary containing the details of the doc
+        userId (str): uID if the user is successfully added
     """
     try:
         task_details = getDetails(projectId, taskId, db)
         return {"detail": {"code": 200, "message": task_details}}
     except:
         raise HTTPException(
-            status_code=404, detail={"code": "404", "message": "Error retrieving data from this task"}
+            status_code=404,
+            detail={"code": "404", "message": "Error retrieving data from this task"},
         )
-
 
 
 @app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
@@ -189,7 +204,7 @@ async def getTasks(projectId: str):
             status_code=404,
             detail={"code": "404", "message": "Error getting tasks"},
         )
-    
+
 
 @app.post("/project/join/{projectId}", summary="Join a project")
 async def joinProject(item: JoinProject, projectId: str):
@@ -209,5 +224,57 @@ async def joinProject(item: JoinProject, projectId: str):
     except:
         raise HTTPException(
             status_code=404,
-            detail={"code": "404", "message": "Error creating a new project"},
+            detail={"code": "404", "message": "Error joining project"},
+        )
+
+
+@app.post("/task/addTaskAssignee", summary="Adds an assignee to a task")
+async def addTaskAssignee(assignee: Assignee):
+    """
+    This function adds an assignee to the given task.
+
+    Args:
+        projectId (str): ID for the project that the task is in
+        taskId (str): ID for the task that you want to assign someone to
+        userId (str): uID of the person you want to assign
+
+    Returns:
+        userId (str): uID if the user is successfully added
+    """
+    try:
+        assigned = addAssignee(assignee.projectId, assignee.taskId, assignee.userId, db)
+        return {
+            "detail": {"code": 200, "message": f"User: {assigned} successfully added"}
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error assigning taskmaster"},
+        )
+
+
+@app.delete("/task/deleteTaskAssignee", summary="Removes an assignee from a task")
+async def deleteTaskAssignee(assignee: Assignee):
+    """
+    This function removes an assignee from a task.
+
+    Args:
+        projectId (str): ID for the project that the task is in
+        taskId (str): ID for the task that you want to remove someone from
+        userId (str): uID of the person you want to remove
+
+    Returns:
+        userId (str): uID if the user is successfully added
+    """
+    try:
+        deleted = deleteAssignee(
+            assignee.projectId, assignee.taskId, assignee.userId, db
+        )
+        return {
+            "detail": {"code": 200, "message": f"User: {deleted} successfully removed"}
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error removing taskmaster"},
         )

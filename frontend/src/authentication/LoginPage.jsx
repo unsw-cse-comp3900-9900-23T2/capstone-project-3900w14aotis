@@ -22,14 +22,15 @@ const LoginPage = () => {
     try {
       const auth = getAuth();
       const res = await signInWithEmailAndPassword(auth, email, password);
-      navigate("/otis/dashboard");
-      displaySuccess("Welcome to Otis!");
+      navigate('/otis/dashboard');
+      displaySuccess('Welcome to Otis!');
     } catch (error) {
       displayError(`${error.message}`);
     }
   };
 
   const loginContainerSx = {
+    marginTop: '70px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

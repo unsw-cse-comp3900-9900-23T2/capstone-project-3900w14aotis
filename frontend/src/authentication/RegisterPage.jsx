@@ -60,6 +60,7 @@ const RegisterPage = () => {
   };
 
   const registerContainerSx = {
+    marginTop: "70px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",

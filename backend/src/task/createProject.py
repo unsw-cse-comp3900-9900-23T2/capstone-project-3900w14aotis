@@ -4,6 +4,7 @@ from google.cloud import firestore
 This creates a new project for the user to add tasks to.
 """
 
+
 def createNewProject(project, db):
     """
     The user that creates the project is automatically added to the project.
@@ -13,16 +14,22 @@ def createNewProject(project, db):
     Returns:
 
     """
-    projectRef = db.collection('projects').add({
-        "title": project.title,
-        "members": [
-            project.user
-        ]
-    })
-    #TODO: add to taskmasters database too
-
+    projectRef = db.collection("projects").add(
+        {"title": project.title, "members": [project.user]}
+    )
+    # Add project to taskmaster database
+    docs = (
+        db.collection("taskmasters").where("uid", "==", project.user).limit(1).stream()
+    )
+    docId = ""
+    for doc in docs:
+        docId = doc.id
+    db.collection("taskmasters").document(docId).update(
+        {"projects": firestore.ArrayUnion([projectRef[1].id])}
+    )
 
     return projectRef
+
 
 def joinExistingProject(project, projectId, db):
     """Joins an existing project with the given ID.
@@ -33,14 +40,18 @@ def joinExistingProject(project, projectId, db):
     """
     parentDocRef = db.collection("projects").document(projectId)
 
-    # TODO: append to members list instead of replace
-    resp = parentDocRef.update({
-        "members": [
-            project.user
-        ]
-    })
+    # Update members in projects database
+    resp = parentDocRef.update({"members": firestore.ArrayUnion([project.user])})
 
+    # Add project to taskmaster database
+    docs = (
+        db.collection("taskmasters").where("uid", "==", project.user).limit(1).stream()
+    )
+    docId = ""
+    for doc in docs:
+        docId = doc.id
+    db.collection("taskmasters").document(docId).update(
+        {"projects": firestore.ArrayUnion([projectId])}
+    )
 
-
-    #TODO: add to taskmasters database too
     return resp

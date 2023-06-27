@@ -62,3 +62,18 @@ export const createTaskFetch = async (title, user) => {
   const createProjectResponse = await createProjectPromise.json();
   return createProjectResponse;
 };
+
+export const allTasksFetch = async (projectId) => {
+  const requestOption = {
+    method: 'GET',
+    headers: { 'Content-Type': API_MEDIA_TYPE },
+  };
+
+  const allTasksPromise = await fetch(
+    `${API_URL}/tasks/${projectId}`,
+    requestOption
+  );
+
+  const allTasksResponse = await allTasksPromise.json();
+  return allTasksResponse;
+};
