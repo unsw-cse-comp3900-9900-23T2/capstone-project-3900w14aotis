@@ -54,3 +54,7 @@ export const displaySuccess = (message) => {
     position: toast.POSITION.TOP_CENTER,
   });
 };
+
+export const sortTasks = (tasksList) => {
+  return tasksList.sort((a, b) => b.Deadline - a.Deadline);
+};
