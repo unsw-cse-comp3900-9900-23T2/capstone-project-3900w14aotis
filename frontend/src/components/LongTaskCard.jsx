@@ -2,6 +2,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/LongTaskCard.module.css";
 import ProfilePicture from "./ProfilePicture";
+import DeadlineBox from "./DeadlineBox";
 
 const LongTaskCard = ({ id, title, status, deadline, asignees }) => {
   return (
@@ -36,9 +37,15 @@ const LongTaskCard = ({ id, title, status, deadline, asignees }) => {
           alignItems: "center",
         }}
       >
-        <Box>{deadline}</Box>
-        <Box>
-          <ProfilePicture imgWidth={35} imgHeight={35} />
+        <DeadlineBox deadline={deadline} />
+        <Box
+          sx={{
+            display: "flex",
+          }}
+        >
+          {asignees.map((user, idx) => {
+            return <ProfilePicture imgWidth={35} imgHeight={35} />;
+          })}
         </Box>
       </Box>
     </Box>

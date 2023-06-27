@@ -46,13 +46,17 @@ class Task(BaseModel):
     deadline: datetime
     assignees: list[str]
     priority: str
+    status: str
+
 
 class NewProject(BaseModel):
     title: str
     user: str
 
+
 class JoinProject(BaseModel):
     user: str
+
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
 # the user whilst also adding a slot in the authentication section of firebase. Returns the
@@ -153,6 +157,7 @@ async def createProject(item: NewProject):
             detail={"code": "404", "message": "Error creating a new project"},
         )
 
+
 @app.get("/task/getDetails", summary="Get details of a task")
 async def getTaskDetails(projectId: str, taskId: str):
     """
@@ -169,9 +174,9 @@ async def getTaskDetails(projectId: str, taskId: str):
         return {"detail": {"code": 200, "message": task_details}}
     except:
         raise HTTPException(
-            status_code=404, detail={"code": "404", "message": "Error retrieving data from this task"}
+            status_code=404,
+            detail={"code": "404", "message": "Error retrieving data from this task"},
         )
-
 
 
 @app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
@@ -189,7 +194,7 @@ async def getTasks(projectId: str):
             status_code=404,
             detail={"code": "404", "message": "Error getting tasks"},
         )
-    
+
 
 @app.post("/project/join/{projectId}", summary="Join a project")
 async def joinProject(item: JoinProject, projectId: str):
