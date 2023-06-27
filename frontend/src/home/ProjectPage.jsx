@@ -7,7 +7,6 @@ import CustomButton from "../components/CustomButton";
 import { displayError } from "../utils/helpers";
 
 const ProjectPage = () => {
-
   const navigate = useNavigate();
 
   const newProjectHandler = () => {
@@ -16,7 +15,7 @@ const ProjectPage = () => {
     } catch (error) {
       displayError(`${error.message}`);
     }
-  }
+  };
 
   const joinProjectHandler = () => {
     try {
@@ -24,19 +23,18 @@ const ProjectPage = () => {
     } catch (error) {
       displayError(`${error.message}`);
     }
-  }
-
+  };
 
   const projectPageContainerSx = {
-    width: "100%",   
-  }
+    width: "100%",
+  };
 
   const projectContainerSx = {
     width: "100%",
     height: "calc(100vh - 70px)",
     display: "grid",
     placeContent: "center",
-  }
+  };
 
   const projectOptionSx = {
     display: "flex",
@@ -47,7 +45,7 @@ const ProjectPage = () => {
     borderRadius: "20px",
     background: "#FFF",
     boxShadow: "0px 0px 10px 3px rgba(0, 0, 0, 0.25)",
-  }
+  };
 
   const buttonsContainerSx = {
     width: "100%",
@@ -55,23 +53,29 @@ const ProjectPage = () => {
     flexDirection: "column",
     alignItems: "center",
     marginTop: "10%",
-  }
+  };
 
-  return <>
-    
-    <Box sx={projectPageContainerSx}>
-      <Headerbar text="Start a Project"/>
-      <Box sx={projectContainerSx}>
-        <Box sx={projectOptionSx}>
-          <Box sx={buttonsContainerSx}>
-            <CustomButton text="New Project" onClickFunction={newProjectHandler}/>
-            <Divider className={styles.divider}>or</Divider>
-            <CustomButton text="Join Project" onClickFunction={joinProjectHandler}/>
+  return (
+    <>
+      <Box sx={projectPageContainerSx}>
+        <Headerbar text="Start a Project" />
+        <Box sx={projectContainerSx}>
+          <Box sx={projectOptionSx}>
+            <Box sx={buttonsContainerSx}>
+              <CustomButton
+                text="New Project"
+                onClickFunction={newProjectHandler}
+              />
+              <Divider className={styles.divider}>or</Divider>
+              <CustomButton
+                text="Join Project"
+                onClickFunction={joinProjectHandler}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>
-    </Box>
-  </>
-  
+    </>
+  );
 };
 export default ProjectPage;
