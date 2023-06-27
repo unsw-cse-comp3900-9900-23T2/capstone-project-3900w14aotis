@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { displayError } from "../utils/helpers";
+import { displayError, displaySuccess } from "../utils/helpers";
 import { joinProjectFetch } from "../api/task.js";
 import CustomButton from "../components/CustomButton";
 import Headerbar from "../components/Headerbar";
@@ -33,7 +33,7 @@ const JoinProject = () => {
         );
       console.log(joinProjectFetchResponse)
       navigate(`/otis/${joinProjectFetchResponse.detail.message}/tasks`);
-
+      displaySuccess(`Successfully joined project ${projectId}`);
     } catch (error) {
       displayError(`${error.message}`);
     }

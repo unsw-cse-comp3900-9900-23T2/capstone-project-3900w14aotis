@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { displayError } from "../utils/helpers";
+import { displayError, displaySuccess } from "../utils/helpers";
 import { createProjectFetch } from "../api/task.js";
 import { getAuth } from "firebase/auth";
 import CustomButton from "../components/CustomButton";
@@ -15,6 +15,7 @@ const CreateProject = () => {
   const backButtonHandler = () => {
     try {
       navigate("/otis/project");
+      displaySuccess("Successfully created project!");
     } catch (error) {
       displayError(`${error.message}`);
     }

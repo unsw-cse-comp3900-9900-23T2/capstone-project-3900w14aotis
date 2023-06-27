@@ -1,3 +1,5 @@
+from google.cloud import firestore
+
 """
 This creates a new project for the user to add tasks to.
 """
@@ -18,7 +20,7 @@ def createNewProject(project, db):
         ]
     })
     #TODO: add to taskmasters database too
-    
+
 
     return projectRef
 
@@ -37,6 +39,8 @@ def joinExistingProject(project, projectId, db):
             project.user
         ]
     })
+
+
 
     #TODO: add to taskmasters database too
     return resp
