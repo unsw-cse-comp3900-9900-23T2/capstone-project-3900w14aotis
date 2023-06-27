@@ -5,7 +5,10 @@
 
 
 .divider {
-  width: 80%;
+  width: 70%;
+  font-family: "raleway";
   font-size: 20pt;
+  font-weight: 500;
   border-bottom-width: 55px;
+  /* margin-top: 10rem; */
 }

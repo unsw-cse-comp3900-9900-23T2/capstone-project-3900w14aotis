@@ -1,6 +1,5 @@
-# from array import array
 from src.config.firestoreUtils import initialiseFirestore
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, Header
 from pydantic import BaseModel
 from src.auth.register import authRegister
 from src.auth.login import authLogin
@@ -8,9 +7,9 @@ from datetime import datetime
 from src.task.createTask import createNewTask
 from src.task.createProject import createNewProject
 from src.task.getTasks import listTasks
+from src.task.createProject import joinExistingProject
 from fastapi.middleware.cors import CORSMiddleware
 from src.task.getTaskDetails import getDetails
-
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -48,6 +47,12 @@ class Task(BaseModel):
     assignees: list[str]
     priority: str
 
+class NewProject(BaseModel):
+    title: str
+    user: str
+
+class JoinProject(BaseModel):
+    user: str
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
 # the user whilst also adding a slot in the authentication section of firebase. Returns the
@@ -124,7 +129,7 @@ async def createTask(task: Task, projectId: str):
 
 
 @app.post("/project/create", summary="Create a new project")
-async def createProject(projectTitle: str):
+async def createProject(item: NewProject):
     """
     This function creates a new project so that taskmasters have a collaborative space
     to add tasks to.
@@ -135,11 +140,11 @@ async def createProject(projectTitle: str):
         (obj) : result object returned by firebase auth
     """
     try:
-        projectId = createNewProject(projectTitle, db)
+        projectId = createNewProject(item, db)
         return {
             "detail": {
                 "code": 200,
-                "message": f"Project {projectTitle} with ID {projectId[1].id} created successfully",
+                "message": f"{projectId[1].id}",
             }
         }
     except:
@@ -185,3 +190,24 @@ async def getTasks(projectId: str):
             detail={"code": "404", "message": "Error getting tasks"},
         )
     
+
+@app.post("/project/join/{projectId}", summary="Join a project")
+async def joinProject(item: JoinProject, projectId: str):
+    """_summary_
+
+    Args:
+        item (JoinProject): _description_
+    """
+    try:
+        response = joinExistingProject(item, projectId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": projectId,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error creating a new project"},
+        )
