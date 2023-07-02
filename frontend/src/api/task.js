@@ -1,5 +1,5 @@
 const API_URL = `http://localhost:${8000}`;
-const API_MEDIA_TYPE = 'application/json';
+const API_MEDIA_TYPE = "application/json";
 
 export const createProjectFetch = async (title, user) => {
   const jsonData = JSON.stringify({
@@ -8,8 +8,8 @@ export const createProjectFetch = async (title, user) => {
   });
 
   const requestOption = {
-    method: 'POST',
-    headers: { 'Content-Type': API_MEDIA_TYPE },
+    method: "POST",
+    headers: { "Content-Type": API_MEDIA_TYPE },
     body: jsonData,
   };
 
@@ -28,8 +28,8 @@ export const joinProjectFetch = async (id, user) => {
   });
 
   const requestOption = {
-    method: 'POST',
-    headers: { 'Content-Type': API_MEDIA_TYPE },
+    method: "POST",
+    headers: { "Content-Type": API_MEDIA_TYPE },
     body: jsonData,
   };
 
@@ -61,8 +61,8 @@ export const createTaskFetch = async (
   });
 
   const requestOption = {
-    method: 'POST',
-    headers: { 'Content-Type': API_MEDIA_TYPE },
+    method: "POST",
+    headers: { "Content-Type": API_MEDIA_TYPE },
     body: jsonData,
   };
 
@@ -77,8 +77,8 @@ export const createTaskFetch = async (
 
 export const allTasksFetch = async (projectId) => {
   const requestOption = {
-    method: 'GET',
-    headers: { 'Content-Type': API_MEDIA_TYPE },
+    method: "GET",
+    headers: { "Content-Type": API_MEDIA_TYPE },
   };
 
   const allTasksPromise = await fetch(
@@ -92,8 +92,8 @@ export const allTasksFetch = async (projectId) => {
 
 export const taskDetailFetch = async (projectId, taskId) => {
   const requestOption = {
-    method: 'GET',
-    headers: { 'Content-Type': API_MEDIA_TYPE },
+    method: "GET",
+    headers: { "Content-Type": API_MEDIA_TYPE },
   };
 
   const allTasksPromise = await fetch(

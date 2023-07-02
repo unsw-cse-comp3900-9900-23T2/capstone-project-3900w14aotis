@@ -18,6 +18,8 @@ import CustomButton from "./CustomButton";
 import { getAuth } from "firebase/auth";
 import { createTaskFetch } from "../api/task.js";
 import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addTaskAction } from "../tasks/state/addTaskAction";
 
 const modalStyle = {
   display: "flex",
@@ -75,6 +77,7 @@ const CreateTaskModal = () => {
   const onChangeStatus = (value) => setStatus(value);
 
   const { projectId } = useParams();
+  const dispatch = useDispatch();
 
   const onEnter = (key) => {
     if (key === "Enter") {
@@ -128,6 +131,7 @@ const CreateTaskModal = () => {
         status
       );
       displaySuccess("Successfully created task!");
+      dispatch(addTaskAction());
       handleClose();
       setAssignees([]);
       setDeadline("");

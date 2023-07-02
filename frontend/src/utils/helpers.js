@@ -55,6 +55,43 @@ export const displaySuccess = (message) => {
   });
 };
 
-export const sortTasks = (tasksList) => {
-  return tasksList.sort((a, b) => b.Deadline - a.Deadline);
+export const sortTasksAscending = (tasksList) => {
+  return tasksList.sort((a, b) => (a.Title > b.Title ? 1 : -1));
+};
+
+export const sortTasksDescending = (tasksList) => {
+  console.log(tasksList);
+  return tasksList.sort((a, b) => b.Title.localeCompare(a.Title));
+};
+
+export const sortTasksSoonest = (tasksList) => {
+  return tasksList.sort((a, b) => new Date(a.Title) - new Date(b.Title));
+};
+
+export const sortTasksLatest = (tasksList) => {
+  return tasksList.sort((a, b) => new Date(b.Title) - new Date(a.Title));
+};
+
+export const sortTasksImportant = (tasksList) => {
+  const priorityMapping = {
+    Low: 0,
+    Medium: 1,
+    High: 2,
+    Severe: 3,
+  };
+  return tasksList.sort(
+    (a, b) => priorityMapping[b.Priority] - priorityMapping[a.Priority]
+  );
+};
+
+export const sortTasksLeastImportant = (tasksList) => {
+  const priorityMapping = {
+    Low: 0,
+    Medium: 1,
+    High: 2,
+    Severe: 3,
+  };
+  return tasksList.sort(
+    (a, b) => priorityMapping[a.Priority] - priorityMapping[b.Priority]
+  );
 };

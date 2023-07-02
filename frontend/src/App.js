@@ -15,9 +15,10 @@ import RegisterPage from "./authentication/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
 import TasksPage from "./tasks/TasksPage";
 import DashboardPage from "./home/DashboardPage";
-import ProjectPage from "./home/ProjectPage";
-import CreateProject from "./home/CreateProjectPage";
-import JoinProject from "./home/JoinProjectPage";
+import ProjectPage from "./projects/ProjectPage";
+import CreateProject from "./projects/CreateProjectPage";
+import JoinProject from "./projects/JoinProjectPage";
+import BoardPage from "./board/BoardPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -39,10 +40,34 @@ const router = createBrowserRouter(
             }
           />
           <Route
+            path="project/tasks"
+            element={
+              <ProtectedRoute>
+                <ProjectPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="project/board"
+            element={
+              <ProtectedRoute>
+                <ProjectPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path=":projectId/tasks"
             element={
               <ProtectedRoute>
                 <TasksPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path=":projectId/board"
+            element={
+              <ProtectedRoute>
+                <BoardPage />
               </ProtectedRoute>
             }
           />
@@ -55,7 +80,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path="project/create"
+            path="project/create/board"
             element={
               <ProtectedRoute>
                 <CreateProject />
@@ -63,7 +88,23 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path="project/join/:projectId"
+            path="project/create/tasks"
+            element={
+              <ProtectedRoute>
+                <CreateProject />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="project/join/board"
+            element={
+              <ProtectedRoute>
+                <JoinProject />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="project/join/tasks"
             element={
               <ProtectedRoute>
                 <JoinProject />

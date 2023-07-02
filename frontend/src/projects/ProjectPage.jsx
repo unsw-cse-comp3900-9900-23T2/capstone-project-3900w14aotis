@@ -5,13 +5,19 @@ import styles from "./styles/ProjectPage.module.css";
 import Headerbar from "../components/Headerbar";
 import CustomButton from "../components/CustomButton";
 import { displayError } from "../utils/helpers";
+import { useLocation } from "react-router-dom";
 
 const ProjectPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const newProjectHandler = () => {
     try {
-      navigate("/otis/project/create");
+      if (location.pathname === "/otis/project/tasks") {
+        navigate("/otis/project/create/tasks");
+      } else if (location.pathname === "/otis/project/board") {
+        navigate("/otis/project/create/board");
+      }
     } catch (error) {
       displayError(`${error.message}`);
     }
@@ -19,27 +25,35 @@ const ProjectPage = () => {
 
   const joinProjectHandler = () => {
     try {
-      navigate("/otis/project/join/:projectId");
+      if (location.pathname === "/otis/project/tasks") {
+        navigate("/otis/project/join/tasks");
+      } else if (location.pathname === "/otis/project/board") {
+        navigate("/otis/project/join/board");
+      }
     } catch (error) {
       displayError(`${error.message}`);
     }
   };
 
   const projectPageContainerSx = {
+    display: "flex",
+    flexDirection: "column",
     width: "100%",
+    minHeight: "calc(100vh - 70px)",
   };
 
   const projectContainerSx = {
-    width: "100%",
-    height: "calc(100vh - 70px)",
-    display: "grid",
-    placeContent: "center",
+    display: "flex",
+    height: "calc(100vh - 70px - 5rem)",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const projectOptionSx = {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
     width: "31.125rem",
     height: "16.75rem",
     borderRadius: "20px",
@@ -52,7 +66,7 @@ const ProjectPage = () => {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: "10%",
+    rowGap: "10px",
   };
 
   return (
@@ -66,7 +80,19 @@ const ProjectPage = () => {
                 text="New Project"
                 onClickFunction={newProjectHandler}
               />
-              <Divider className={styles.divider}>or</Divider>
+              <Divider
+                sx={{
+                  "&.MuiDivider-root::before": {
+                    borderTop: "5px solid #004CB0",
+                  },
+                  "&.MuiDivider-root::after": {
+                    borderTop: "5px solid #004CB0",
+                  },
+                }}
+                className={styles.divider}
+              >
+                or
+              </Divider>
               <CustomButton
                 text="Join Project"
                 onClickFunction={joinProjectHandler}

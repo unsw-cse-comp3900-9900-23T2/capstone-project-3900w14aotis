@@ -52,7 +52,7 @@ const Sidebar = () => {
         />
         <SidebarLink
           text={!matches && "Tasks"}
-          linkTo={"/otis/project"}
+          linkTo={"/otis/project/tasks"}
           onClickFunction={tasksHandler}
           icon={
             <Icon
@@ -62,10 +62,7 @@ const Sidebar = () => {
               color={"#454545"}
             />
           }
-          visiting={
-            location.pathname.includes("tasks") ||
-            location.pathname.includes("project")
-          }
+          visiting={location.pathname.includes("tasks")}
         />
         <SidebarLink
           text={!matches && "Board"}
@@ -82,7 +79,7 @@ const Sidebar = () => {
             location.pathname.includes("board")
           }
           onClickFunction={boardHandler}
-          linkTo={"/otis/project"}
+          linkTo={"/otis/project/board"}
         />
         <SidebarLink
           text={!matches && "Connections"}

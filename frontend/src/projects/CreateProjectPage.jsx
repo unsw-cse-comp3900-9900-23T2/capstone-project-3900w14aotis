@@ -14,7 +14,7 @@ const CreateProject = () => {
 
   const backButtonHandler = () => {
     try {
-      navigate("/otis/project");
+      navigate(-1);
     } catch (error) {
       displayError(`${error.message}`);
     }
@@ -39,14 +39,17 @@ const CreateProject = () => {
   };
 
   const projectPageContainerSx = {
+    display: "flex",
+    flexDirection: "column",
     width: "100%",
+    minHeight: "calc(100vh - 70px)",
   };
 
   const projectContainerSx = {
-    width: "100%",
-    height: "calc(100vh - 70px)",
-    display: "grid",
-    placeContent: "center",
+    display: "flex",
+    height: "calc(100vh - 70px - 5rem)",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const projectOptionSx = {
