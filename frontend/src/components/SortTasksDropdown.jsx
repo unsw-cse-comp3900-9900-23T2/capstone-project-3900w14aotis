@@ -28,6 +28,9 @@ const SortTasksDropdown = ({ sortTasksFunction }) => {
       sx={{
         display: "flex",
         alignItems: "center",
+        "&:hover": {
+          cursor: "pointer",
+        },
       }}
     >
       <Icon
