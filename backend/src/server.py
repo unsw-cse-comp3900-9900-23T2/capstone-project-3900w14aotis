@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.task.assignTask import addAssignee
 from src.task.assignTask import deleteAssignee
 from src.task.getTaskDetails import getDetails
+from src.profile.update import updateProfile
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -64,6 +65,14 @@ class Assignee(BaseModel):
 
 class JoinProject(BaseModel):
     user: str
+
+class UpdateBody(BaseModel):
+    firstName: str
+    lastName: str
+    email: str
+    profileImage: str
+    coverProfileImage: str
+
 
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
@@ -277,4 +286,16 @@ async def deleteTaskAssignee(assignee: Assignee):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error removing taskmaster"},
+        )
+
+@app.post("/profile/update", summary="Updates a user's profile details")
+async def updateProfileDetails(item:UpdateBody,  uid:str):
+
+    try:
+        uid = updateProfile(uid, db, item)
+        return {"detail": {"code": 200, "message": f"User {uid} profile updated successfully"}}
+    
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error updating user profile"}
         )
