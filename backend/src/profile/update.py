@@ -10,7 +10,7 @@ def updateProfile(uid,db, item):
         uid (str): user ID
         db (): database
         item (body): item containing details of the taskMaster including
-        firstName,lastName, password, email, tasks, and projects
+            firstName,lastName, email, profileImage, coverProfileImage
 
     Returns:
         (str): user ID

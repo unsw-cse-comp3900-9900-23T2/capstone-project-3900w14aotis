@@ -290,6 +290,21 @@ async def deleteTaskAssignee(assignee: Assignee):
 
 @app.post("/profile/update", summary="Updates a user's profile details")
 async def updateProfileDetails(item:UpdateBody,  uid:str):
+    """_summary_
+
+    Args:
+        firstName(str)
+        lastName(str)
+        email(str)
+        profileImage(str): str for profile picture
+        coverProfileImage(str): str for cover photo
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        userId (str): uID if the profile is successfully added
+    """
 
     try:
         uid = updateProfile(uid, db, item)
