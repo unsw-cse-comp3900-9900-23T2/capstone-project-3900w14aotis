@@ -342,3 +342,7 @@ async def getAchievements(userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error getting achievements"},
         )
+    
+@app.get("/profile/tasks", summary="gets all tasks assigned to the user")
+async def getUserTasks(userId: str,db):   
+    return 
