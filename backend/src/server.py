@@ -13,6 +13,7 @@ from src.task.assignTask import addAssignee
 from src.task.assignTask import deleteAssignee
 from src.task.getTaskDetails import getDetails
 from src.profile.update import updateProfile
+from src.achievement.getAchievements import listAchievements
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -313,4 +314,31 @@ async def updateProfileDetails(item:UpdateBody,  uid:str):
     except:
         raise HTTPException(
             status_code=404, detail={"code": "404", "message": "Error updating user profile"}
+        )
+    
+@app.get("/profile/achievements", summary="gets all achievements of a user")
+async def getAchievements(userId: str):
+    """Gets all achievements of a user given a user id
+
+    Args:
+        userId (str): user's id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        achievementList: dictionary containing all achievements
+    """
+    try:
+        achievementList = listAchievements(userId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": achievementList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting achievements"},
         )
