@@ -59,7 +59,11 @@ const LongTaskCard = ({
           gap: "10px",
         }}
       >
-        <DeadlineBox deadline={deadline} />
+        <DeadlineBox
+          deadline={deadline}
+          width={"7.4375rem"}
+          height={"2.49rem"}
+        />
         <Box
           sx={{
             display: "flex",

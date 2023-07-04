@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
-const DeadlineBox = ({ deadline, status }) => {
+
+const DeadlineBox = ({ deadline, status, width, height }) => {
   const [color, setColor] = useState("#E5E5E5");
   const [deadlineString, setDeadlineString] = useState("");
   const [borderColor, setBorderColor] = useState("#8A8A8A");
@@ -30,15 +31,14 @@ const DeadlineBox = ({ deadline, status }) => {
         setBorderColor("#FF3333");
       }
     }
-    console.log(days);
   }, []);
 
   return (
     <Box
       sx={{
         backgroundColor: color,
-        width: "7.125rem",
-        height: "2.1875rem",
+        width: width,
+        height: height,
         display: "grid",
         placeContent: "center",
         borderRadius: "10px",

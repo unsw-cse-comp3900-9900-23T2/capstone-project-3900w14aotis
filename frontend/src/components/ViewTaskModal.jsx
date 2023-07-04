@@ -157,7 +157,11 @@ const ViewTaskModal = ({ isOpen, onClose, details }) => {
               <Icon icon="la:tasks" style={{ fontSize: "50px" }} />
               <h2>{details.Status}</h2>
             </Box>
-            <DeadlineBox deadline={details.Deadline} />
+            <DeadlineBox
+              deadline={details.Deadline}
+              width={"7.4375rem"}
+              height={"2.49rem"}
+            />
           </Box>
         </Fade>
       </Modal>
