@@ -17,6 +17,7 @@ from src.profile.update import updateProfile
 from src.profile.getTasks import userTasks
 from src.profile.getProjects import userProjects
 from src.achievement.getAchievements import listAchievements
+from src.connections.sendConnection import sendConnection
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -40,6 +41,8 @@ class TaskMaster(BaseModel):
     email: str
     tasks: list[str]
     projects: list[str]
+    connectedTo: list[str]
+    pendingConnections: list[str]
 
 
 class LoginBody(BaseModel):
@@ -432,5 +435,24 @@ async def getUserProjects(userId: str):
             detail={"code": "404", "message": "Error getting user's projects"},
         )
 
+@app.post("/connections/send/{userId}", summary="sends a connection request to user")
+async def sendConnectionRequest(userEmail: str, userId: str):
+    """
+    Sends a connection request to user given their email. This will add it to their 
+    "pending connections".
 
+    Args:
+        userId (str): ID of user that is sending the request
+        userEmail (str): email of the user that you're sending a request to
     
+    Returns: 
+
+    """
+    try:
+        sendConnection(userEmail, userId, db)
+        return {"detail": {"code": 200, "message": f"Connection request successfully sent!"}}
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error sending connection request"},
+        )
