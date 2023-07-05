@@ -69,13 +69,13 @@ class Assignee(BaseModel):
 class JoinProject(BaseModel):
     user: str
 
+
 class UpdateBody(BaseModel):
     firstName: str
     lastName: str
     email: str
     profileImage: str
     coverProfileImage: str
-
 
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
@@ -291,8 +291,9 @@ async def deleteTaskAssignee(assignee: Assignee):
             detail={"code": "404", "message": "Error removing taskmaster"},
         )
 
+
 @app.post("/profile/update", summary="Updates a user's profile details")
-async def updateProfileDetails(item:UpdateBody,  uid:str):
+async def updateProfileDetails(item: UpdateBody, uid: str):
     """_summary_
 
     Args:
@@ -311,14 +312,21 @@ async def updateProfileDetails(item:UpdateBody,  uid:str):
 
     try:
         uid = updateProfile(uid, db, item)
-        return {"detail": {"code": 200, "message": f"User {uid} profile updated successfully"}}
-    
+        return {
+            "detail": {
+                "code": 200,
+                "message": f"User {uid} profile updated successfully",
+            }
+        }
+
     except:
         raise HTTPException(
-            status_code=404, detail={"code": "404", "message": "Error updating user profile"}
+            status_code=404,
+            detail={"code": "404", "message": "Error updating user profile"},
         )
-    
-@app.get("/profile/achievements", summary="gets all achievements of a user")
+
+
+@app.get("/profile/achievements/{userId}", summary="gets all achievements of a user")
 async def getAchievements(userId: str):
     """Gets all achievements of a user given a user id
 
@@ -344,9 +352,10 @@ async def getAchievements(userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error getting achievements"},
         )
-    
-@app.get("/profile/tasks", summary="gets all tasks assigned to the user")
-async def getUserTasks(userId: str):  
+
+
+@app.get("/profile/tasks/{userId}", summary="gets all tasks assigned to the user")
+async def getUserTasks(userId: str):
     """Gets all task details of a user given user id
 
     Args:
@@ -359,7 +368,7 @@ async def getUserTasks(userId: str):
         taskList: all details of tasks assigned to the user
     """
     try:
-        taskListDoc = userTasks(userId,db)
+        taskListDoc = userTasks(userId, db)
         return {
             "detail": {
                 "code": 200,
@@ -372,8 +381,9 @@ async def getUserTasks(userId: str):
             detail={"code": "404", "message": "Error getting user's tasks"},
         )
 
-@app.get("/profile/projects", summary="gets all projects assigned to the user")
-async def getUserProjects(userId: str):  
+
+@app.get("/profile/projects/{userId}", summary="gets all projects assigned to the user")
+async def getUserProjects(userId: str):
     """Gets all project ids of a user given user id
 
     Args:
@@ -386,7 +396,7 @@ async def getUserProjects(userId: str):
         projectList: list of project Ids
     """
     try:
-        projectList = userProjects(userId,db)
+        projectList = userProjects(userId, db)
         return {
             "detail": {
                 "code": 200,
