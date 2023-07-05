@@ -324,7 +324,7 @@ async def updateTaskDetails(item:UpdateTask, projectId:str, taskId:str):
             status_code=404, detail={"code": "404", "message": "Error updating task"}
         )
     
-@app.post("/profile/update", summary="Updates a user's profile details")
+@app.post("/profile/update/{uid}", summary="Updates a user's profile details")
 async def updateProfileDetails(item:UpdateBody,  uid:str):
     """_summary_
 
@@ -351,7 +351,7 @@ async def updateProfileDetails(item:UpdateBody,  uid:str):
             status_code=404, detail={"code": "404", "message": "Error updating user profile"}
         )
     
-@app.get("/profile/achievements", summary="gets all achievements of a user")
+@app.get("/profile/achievements/{userId}", summary="gets all achievements of a user")
 async def getAchievements(userId: str):
     """Gets all achievements of a user given a user id
 
@@ -378,7 +378,7 @@ async def getAchievements(userId: str):
             detail={"code": "404", "message": "Error getting achievements"},
         )
     
-@app.get("/profile/tasks", summary="gets all tasks assigned to the user")
+@app.get("/profile/tasks/{userId}", summary="gets all tasks assigned to the user")
 async def getUserTasks(userId: str):  
     """Gets all task details of a user given user id
 
