@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.task.assignTask import addAssignee
 from src.task.assignTask import deleteAssignee
 from src.task.getTaskDetails import getDetails
+from src.task.update import updateTask
 from src.profile.update import updateProfile
 from src.profile.getTasks import userTasks
 from src.profile.getProjects import userProjects
@@ -75,6 +76,13 @@ class UpdateBody(BaseModel):
     email: str
     profileImage: str
     coverProfileImage: str
+
+class UpdateTask(BaseModel):
+    title: str
+    description: str
+    deadline: datetime
+    priority: str
+    status: str
 
 
 
@@ -290,7 +298,32 @@ async def deleteTaskAssignee(assignee: Assignee):
             status_code=404,
             detail={"code": "404", "message": "Error removing taskmaster"},
         )
+    
+@app.post("/task/update/{projectId}/{taskId}", summary="Updates a tasks details")
+async def updateTaskDetails(item:UpdateTask, projectId:str, taskId:str):
+    """Update task details given project and task Id
 
+    Args:
+        item (UpdateTask): update body
+        projectId (str): project ID
+        taskId (str): task ID
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        taskId (str): taskId if the task id successfully updated
+    """
+
+    try:
+        taskId = updateTask(projectId, taskId, db, item)
+        return {"detail": {"code": 200, "message": f"Task {taskId} updated successfully"}}
+    
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error updating task"}
+        )
+    
 @app.post("/profile/update", summary="Updates a user's profile details")
 async def updateProfileDetails(item:UpdateBody,  uid:str):
     """_summary_
