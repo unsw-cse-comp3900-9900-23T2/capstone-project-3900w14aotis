@@ -14,6 +14,7 @@ from src.task.assignTask import deleteAssignee
 from src.task.getTaskDetails import getDetails
 from src.profile.update import updateProfile
 from src.profile.getTasks import userTasks
+from src.profile.getProjects import userProjects
 from src.achievement.getAchievements import listAchievements
 
 db = initialiseFirestore()
@@ -371,3 +372,29 @@ async def getUserTasks(userId: str):
             detail={"code": "404", "message": "Error getting user's tasks"},
         )
 
+@app.get("/profile/projects", summary="gets all projects assigned to the user")
+async def getUserProjects(userId: str):  
+    """Gets all project ids of a user given user id
+
+    Args:
+        userId (str): user's id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        projectList: list of project Ids
+    """
+    try:
+        projectList = userProjects(userId,db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": projectList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting user's projects"},
+        )
