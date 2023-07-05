@@ -405,7 +405,7 @@ async def getUserTasks(userId: str):
             detail={"code": "404", "message": "Error getting user's tasks"},
         )
 
-@app.get("/profile/projects", summary="gets all projects assigned to the user")
+@app.get("/profile/projects/{userId}", summary="gets all projects assigned to the user")
 async def getUserProjects(userId: str):  
     """Gets all project ids of a user given user id
 
@@ -431,3 +431,6 @@ async def getUserProjects(userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error getting user's projects"},
         )
+
+
+    
