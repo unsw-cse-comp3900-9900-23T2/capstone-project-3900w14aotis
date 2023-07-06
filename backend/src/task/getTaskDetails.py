@@ -37,14 +37,14 @@ def getDetails(projectId, taskId, db):
 
 
 def getProfDetails(email,db):
-    """gets user details given a user id (email, firstname, lastname,uid, tasks, projects)
+    """gets user details given a email (email, firstname, lastname,uid, tasks, projects)
 
     Args:
-        uid (str): user id
+        email (str): _description_
         db (_type_): database
 
     Returns:
-        profDetails(dict): dictionary containing user details
+        profDetails(dict): dictionary of the profiles details
     """
     profDetails = {}
     docs = db.collection("taskmasters").where("email", "==",email).limit(1).stream()
