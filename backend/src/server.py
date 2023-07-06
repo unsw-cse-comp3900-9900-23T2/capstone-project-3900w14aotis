@@ -193,16 +193,17 @@ async def createProject(item: NewProject):
 
 @app.get("/task/{projectId}/{taskId}/get", summary="Get details of a task")
 async def getTaskDetails(projectId: str, taskId: str):
-    """
-    This function adds an assignee to the given task.
+    """gets the details of a task 
 
     Args:
-        projectId (str): ID for the project that the task is in
-        taskId (str): ID for the task that you want to assign someone to
-        userId (str): uID of the person you want to assign
+        projectId (str): project id 
+        taskId (str): task id 
+
+    Raises:
+        HTTPException: _description_
 
     Returns:
-        userId (str): uID if the user is successfully added
+        taskDetails(dict): dictionary of task details
     """
     try:
         taskDetails = getDetails(projectId, taskId, db)
@@ -216,6 +217,17 @@ async def getTaskDetails(projectId: str, taskId: str):
 
 @app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
 async def getTasks(projectId: str):
+    """get tasks of a project
+
+    Args:
+        projectId (str): project Id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        taskList: list of tasks including assignee details
+    """
     try:
         taskList = listTasks(projectId, db)
         return {
@@ -303,7 +315,7 @@ async def deleteTaskAssignee(assignee: Assignee):
             status_code=404,
             detail={"code": "404", "message": "Error removing taskmaster"},
         )
-    
+
 @app.post("/task/update/{projectId}/{taskId}", summary="Updates a tasks details")
 async def updateTaskDetails(item:UpdateTask, projectId:str, taskId:str):
     """Update task details given project and task Id
