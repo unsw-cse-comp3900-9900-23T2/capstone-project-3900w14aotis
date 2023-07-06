@@ -17,6 +17,7 @@ from src.profile.update import updateProfile
 from src.profile.getTasks import userTasks
 from src.profile.getProjects import userProjects
 from src.profile.getRatings import userRatings
+from src.profile.getDetails import getProfDetails
 from src.achievement.getAchievements import listAchievements
 
 db = initialiseFirestore()
@@ -435,6 +436,17 @@ async def getUserProjects(userId: str):
 
 @app.get("/profile/ratings/{userId}", summary="gets all ratings of a user")
 async def getUserRating(userId: str):  
+    """Gets a users ratings given user Id
+
+    Args:
+        userId (str): user id 
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        ratingsList(dict): dictionary containing users ratings
+    """
 
     try:
         ratingsList = userRatings(userId,db)
@@ -450,5 +462,27 @@ async def getUserRating(userId: str):
             detail={"code": "404", "message": "Error getting user's ratings"},
         )
 
+@app.get("/profile/{userId}/get", summary="Get details of a user")
+async def getProfileDetails(userId: str):
+    """get user details given a user Id
+
+    Args:
+        userId (str): user id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        profDetails(dict): dictionary containing user details
+    """
+
+    try:
+        profDetails = getProfDetails(userId, db)
+        return {"detail": {"code": 200, "message": profDetails}}
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error retrieving data from this user"},
+        )
 
     
