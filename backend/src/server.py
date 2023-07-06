@@ -489,20 +489,20 @@ async def getProfileDetails(userId: str):
         )
 
 @app.post("/connections/send/{userId}", summary="sends a connection request to user")
-async def sendConnectionRequest(userEmail: str, userId: str):
+async def sendConnectionRequest(userEmail: str, currUser: str):
     """
     Sends a connection request to user given their email. This will add it to their 
     "pending connections".
     
     Args:
-        userId (str): ID of user that is sending the request
+        currUser (str): ID of user that is sending the request
         userEmail (str): email of the user that you're sending a request to
     
     Returns: 
 
     """
     try:
-        sendConnection(userEmail, userId, db)
+        sendConnection(userEmail, currUser, db)
         return {"detail": {"code": 200, "message": f"Connection request successfully sent!"}}
     except:
         raise HTTPException(
