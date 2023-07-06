@@ -16,6 +16,8 @@ from src.task.update import updateTask
 from src.profile.update import updateProfile
 from src.profile.getTasks import userTasks
 from src.profile.getProjects import userProjects
+from src.profile.getRatings import userRatings
+from src.profile.getDetails import getProfDetails
 from src.achievement.getAchievements import listAchievements
 
 db = initialiseFirestore()
@@ -189,20 +191,21 @@ async def createProject(item: NewProject):
 
 @app.get("/task/{projectId}/{taskId}/get", summary="Get details of a task")
 async def getTaskDetails(projectId: str, taskId: str):
-    """
-    This function adds an assignee to the given task.
+    """gets the details of a task
 
     Args:
-        projectId (str): ID for the project that the task is in
-        taskId (str): ID for the task that you want to assign someone to
-        userId (str): uID of the person you want to assign
+        projectId (str): project id
+        taskId (str): task id
+
+    Raises:
+        HTTPException: _description_
 
     Returns:
-        userId (str): uID if the user is successfully added
+        taskDetails(dict): dictionary of task details
     """
     try:
-        task_details = getDetails(projectId, taskId, db)
-        return {"detail": {"code": 200, "message": task_details}}
+        taskDetails = getDetails(projectId, taskId, db)
+        return {"detail": {"code": 200, "message": taskDetails}}
     except:
         raise HTTPException(
             status_code=404,
@@ -444,4 +447,57 @@ async def getUserProjects(userId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error getting user's projects"},
+        )
+
+
+@app.get("/profile/ratings/{userId}", summary="gets all ratings of a user")
+async def getUserRating(userId: str):
+    """Gets a users ratings given user Id
+
+    Args:
+        userId (str): user id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        ratingsList(dict): dictionary containing users ratings
+    """
+
+    try:
+        ratingsList = userRatings(userId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": ratingsList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting user's ratings"},
+        )
+
+
+@app.get("/profile/{userId}/get", summary="Get details of a user")
+async def getProfileDetails(userId: str):
+    """get user details given a user Id
+
+    Args:
+        userId (str): user id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        profDetails(dict): dictionary containing user details
+    """
+
+    try:
+        profDetails = getProfDetails(userId, db)
+        return {"detail": {"code": 200, "message": profDetails}}
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error retrieving data from this user"},
         )
