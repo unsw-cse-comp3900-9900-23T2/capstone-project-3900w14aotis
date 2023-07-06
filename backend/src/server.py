@@ -203,8 +203,8 @@ async def getTaskDetails(projectId: str, taskId: str):
         userId (str): uID if the user is successfully added
     """
     try:
-        task_details = getDetails(projectId, taskId, db)
-        return {"detail": {"code": 200, "message": task_details}}
+        taskDetails = getDetails(projectId, taskId, db)
+        return {"detail": {"code": 200, "message": taskDetails}}
     except:
         raise HTTPException(
             status_code=404,
