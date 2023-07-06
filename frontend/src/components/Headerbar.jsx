@@ -49,7 +49,7 @@ const Headerbar = ({ text, updateQueryFunction, tasksSortFunction }) => {
         sx={{
           display: "flex",
           alignItems: "center",
-          flex: 2,
+          flex: "2",
         }}
       >
         {!location.pathname.includes("project") &&

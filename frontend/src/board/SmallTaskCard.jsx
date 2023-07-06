@@ -3,6 +3,7 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import DeadlineBox from "../components/DeadlineBox";
 import ProfilePicture from "../components/ProfilePicture";
+import styles from "./styles/SmallTaskCard.module.css";
 
 const SmallTaskCard = ({ task, index }) => {
   return (
@@ -17,23 +18,28 @@ const SmallTaskCard = ({ task, index }) => {
               display: "flex",
               flexDirection: "column",
               borderRadius: "1.25rem",
-              width: "90%",
-              height: "6.1875rem",
+              width: "100%",
+              height: "7.1875rem",
               background: "#FFF",
               boxShadow: "0px 0px 6px 0px rgba(0, 0, 0, 0.8)",
+              justifyContent: "space-between",
             }}
           >
-            <h5>{task.Title}</h5>
+            <h5 className={styles.taskCardTitle}>{task.Title}</h5>
             <Box
               sx={{
                 display: "flex",
+                alignItems: "center",
                 justifyContent: "space-between",
+                marginLeft: "15px",
+                marginBottom: "10px",
+                marginRight: "15px",
               }}
             >
               <DeadlineBox
                 deadline={task.Deadline}
                 status={task.Status}
-                width={"35%"}
+                width={"8rem"}
                 height={"1.6rem"}
               />
               <Box

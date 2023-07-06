@@ -3,6 +3,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { Box } from "@mui/material";
 import SmallTaskCard from "./SmallTaskCard";
 import { Icon } from "@iconify/react";
+import styles from "./styles/ColumnStatus.module.css";
 
 const ColumnStatus = ({ columnId, title, tasks }) => {
   return (
@@ -14,8 +15,8 @@ const ColumnStatus = ({ columnId, title, tasks }) => {
         background: "#FFF",
         boxShadow: "0px 0px 10px 3px rgba(0, 0, 0, 0.25)",
         height: "100%",
-        width: "20%",
-        padding: "15px",
+        width: "25%",
+        padding: "25px",
       }}
     >
       <Box
@@ -23,7 +24,7 @@ const ColumnStatus = ({ columnId, title, tasks }) => {
           marginBottom: "20px",
         }}
       >
-        <h3>{title}</h3>
+        <h3 className={styles.statusHeading}>{title}</h3>
       </Box>
 
       <Droppable droppableId={columnId}>

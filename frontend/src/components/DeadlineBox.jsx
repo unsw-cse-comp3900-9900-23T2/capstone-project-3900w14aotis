@@ -43,6 +43,7 @@ const DeadlineBox = ({ deadline, status, width, height }) => {
         placeContent: "center",
         borderRadius: "10px",
         border: `solid ${borderColor} 3px`,
+        color: borderColor,
       }}
     >
       {deadlineString}

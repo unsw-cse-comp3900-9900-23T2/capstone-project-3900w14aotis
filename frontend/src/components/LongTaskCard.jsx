@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/LongTaskCard.module.css";
-import ProfilePicture from "./ProfilePicture";
 import DeadlineBox from "./DeadlineBox";
 import ViewTaskModal from "./ViewTaskModal";
 import { taskDetailFetch } from "../api/task";
+import TaskUsers from "./TaskUsers";
 
 const LongTaskCard = ({
   id,
@@ -64,15 +64,7 @@ const LongTaskCard = ({
           width={"7.4375rem"}
           height={"2.49rem"}
         />
-        <Box
-          sx={{
-            display: "flex",
-          }}
-        >
-          {assignees.map((user, idx) => {
-            return <ProfilePicture imgWidth={35} imgHeight={35} />;
-          })}
-        </Box>
+        <TaskUsers assignees={assignees} />
       </Box>
     </Box>
   );

@@ -13,15 +13,13 @@ function ProfilePicture({ userId, imgWidth, imgHeight }) {
         display: "flex",
         alignItems: "center",
         textAlign: "center",
-        padding: "0px",
+        // padding: "0px",
       }}
     >
       <Tooltip title="Taskmaster Profile">
-        <IconButton onClick={handleClick}>
-          <Avatar sx={{ width: imgWidth, height: imgHeight }}>
-            <img height={100} src="/Jira-Emblem.png" alt="Otis logo" />
-          </Avatar>
-        </IconButton>
+        <Avatar sx={{ width: imgWidth, height: imgHeight }}>
+          <img height={100} src="/Jira-Emblem.png" alt="Otis logo" />
+        </Avatar>
       </Tooltip>
     </Box>
   );

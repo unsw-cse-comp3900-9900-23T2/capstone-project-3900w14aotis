@@ -104,3 +104,35 @@ export const taskDetailFetch = async (projectId, taskId) => {
   const allTasksResponse = await allTasksPromise.json();
   return allTasksResponse;
 };
+
+export const updateTaskFetch = async (
+  projectId,
+  taskId,
+  title,
+  description,
+  deadline,
+  priority,
+  status
+) => {
+  const jsonData = JSON.stringify({
+    title,
+    description,
+    deadline,
+    priority,
+    status,
+  });
+
+  const requestOption = {
+    method: "POST",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+    body: jsonData,
+  };
+
+  const updateTaskPromise = await fetch(
+    `${API_URL}/task/update/${projectId}/${taskId}`,
+    requestOption
+  );
+
+  const updateTaskResponse = await updateTaskPromise.json();
+  return updateTaskResponse;
+};

@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ColumnStatus from "./ColumnStatus";
 import { columns } from "./ColumnData";
+import { updateTaskFetch } from "../api/task";
 
 const KanbanBoard = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -40,8 +41,28 @@ const KanbanBoard = () => {
     getAllTasks();
   }, [taskAdded]);
 
+  const updateTaskDetails = async (draggableId, task, newStatus) => {
+    const status =
+      newStatus === "TO DO"
+        ? "To Do"
+        : newStatus === "IN PROGRESS"
+        ? "In Progress"
+        : newStatus === "DONE"
+        ? "Done"
+        : "To Do";
+    const updateTaskPromise = await updateTaskFetch(
+      projectId,
+      draggableId,
+      task.Title,
+      task.Description,
+      task.Deadline,
+      task.Priority,
+      status
+    );
+  };
+
   const onDragEndHandler = (result) => {
-    const { destination, source } = result;
+    const { destination, source, draggableId } = result;
     if (!destination) {
       return;
     }
@@ -77,20 +98,33 @@ const KanbanBoard = () => {
       ...board[boardDestinationIndex],
       tasks: newDestinationTasks,
     };
+
     setBoard(newBoard);
+
+    const currTask = newDestinationTasks.filter(
+      (task) => task.taskID === draggableId
+    );
+
+    updateTaskDetails(
+      draggableId,
+      currTask[0],
+      board[boardDestinationIndex].title
+    );
   };
+
   return (
     <DragDropContext onDragEnd={onDragEndHandler}>
       <Box
         sx={{
           display: "flex",
           width: "100%",
-          gap: "50px",
-          justifyContent: "center",
+          // gap: "50px",
+          justifyContent: "space-evenly",
           paddingTop: "50px",
+          // paddingLeft: "50px",
+          // paddingRight: "50px",
         }}
       >
-        {console.log(board)}
         {columns.map((column, idx) => {
           return (
             <ColumnStatus
@@ -100,7 +134,7 @@ const KanbanBoard = () => {
               tasks={
                 column.title === "TO DO"
                   ? board[0].tasks
-                  : column.title === "DOING"
+                  : column.title === "IN PROGRESS"
                   ? board[1].tasks
                   : column.title === "DONE"
                   ? board[2].tasks

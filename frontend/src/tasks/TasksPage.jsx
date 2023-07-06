@@ -140,7 +140,7 @@ const TasksPage = () => {
               title={task.Title}
               status={task.Status}
               deadline={task.Deadline}
-              assignees={["Eddy", "MrCow"]}
+              assignees={task.Assignees}
               isModalOpen={modalOpen}
               projectId={projectId}
               updateModalFunction={updateModalDetails}

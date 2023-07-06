@@ -8,7 +8,7 @@ export const columns = [
   },
   {
     columnId: uuidv4(),
-    title: "DOING",
+    title: "IN PROGRESS",
     tasks: [],
   },
   {
