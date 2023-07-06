@@ -16,6 +16,7 @@ from src.task.update import updateTask
 from src.profile.update import updateProfile
 from src.profile.getTasks import userTasks
 from src.profile.getProjects import userProjects
+from src.profile.getRatings import userRatings
 from src.achievement.getAchievements import listAchievements
 
 db = initialiseFirestore()
@@ -430,6 +431,23 @@ async def getUserProjects(userId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error getting user's projects"},
+        )
+
+@app.get("/profile/ratings/{userId}", summary="gets all ratings of a user")
+async def getUserRating(userId: str):  
+
+    try:
+        ratingsList = userRatings(userId,db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": ratingsList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting user's ratings"},
         )
 
 
