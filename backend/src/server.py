@@ -21,6 +21,7 @@ from src.profile.getDetails import getProfDetails
 from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
 from src.connections.connectionRespond import acceptConnection
+from src.connections.connectionRespond import declineConnection
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -539,4 +540,22 @@ async def acceptConnectionRequest(currUser: str, userId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error accepting connection request"},
+        )
+    
+@app.post("/connections/decline/{currUser}", summary="declines a connection from given userId")
+async def declineConnectionRequest(currUser: str, userId: str):
+    """
+    Declines a connection from given user id.
+
+    Args:
+        currUser (str): id of current active user
+        userId (str): id of user you want to decline
+    """
+    try:
+        declineConnection(currUser, userId, db)
+        return {"detail": {"code": 200, "message": f"Connection request successfully declined"}}
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error declining connection request"},
         )
