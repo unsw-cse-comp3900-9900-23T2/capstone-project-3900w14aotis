@@ -10,3 +10,4 @@ def sendConnection(userEmail, userId, db):
     taskmasterRef.update(
         {"pendingConnections": firestore.ArrayUnion([userId])}
     )
+    return

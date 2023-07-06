@@ -20,6 +20,7 @@ from src.profile.getRatings import userRatings
 from src.profile.getDetails import getProfDetails
 from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
+from src.connections.connectionRespond import acceptConnection
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -493,7 +494,7 @@ async def sendConnectionRequest(userEmail: str, userId: str):
     """
     Sends a connection request to user given their email. This will add it to their 
     "pending connections".
-    
+
     Args:
         userId (str): ID of user that is sending the request
         userEmail (str): email of the user that you're sending a request to
@@ -508,4 +509,22 @@ async def sendConnectionRequest(userEmail: str, userId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error sending connection request"},
+        )
+    
+@app.post("/connections/accept/{currUser}", summary="accepts a connection from given userId")
+async def acceptConnectionRequest(currUser: str, userId: str):
+    """
+    Accepts a connection from given user id.
+
+    Args:
+        currUser (str): id of current active user
+        userId (str): id of user you want to accept
+    """
+    try:
+        acceptConnection(currUser, userId, db)
+        return {"detail": {"code": 200, "message": f"Connection request successfully accepted!"}}
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error accepting connection request"},
         )
