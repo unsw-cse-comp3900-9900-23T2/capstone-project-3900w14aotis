@@ -12,9 +12,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.task.assignTask import addAssignee
 from src.task.assignTask import deleteAssignee
 from src.task.getTaskDetails import getDetails
+from src.task.update import updateTask
 from src.profile.update import updateProfile
 from src.profile.getTasks import userTasks
 from src.profile.getProjects import userProjects
+from src.profile.getRatings import userRatings
+from src.profile.getDetails import getProfDetails
 from src.achievement.getAchievements import listAchievements
 
 db = initialiseFirestore()
@@ -75,6 +78,13 @@ class UpdateBody(BaseModel):
     email: str
     profileImage: str
     coverProfileImage: str
+
+class UpdateTask(BaseModel):
+    title: str
+    description: str
+    deadline: datetime
+    priority: str
+    status: str
 
 
 
@@ -290,8 +300,33 @@ async def deleteTaskAssignee(assignee: Assignee):
             status_code=404,
             detail={"code": "404", "message": "Error removing taskmaster"},
         )
+    
+@app.post("/task/update/{projectId}/{taskId}", summary="Updates a tasks details")
+async def updateTaskDetails(item:UpdateTask, projectId:str, taskId:str):
+    """Update task details given project and task Id
 
-@app.post("/profile/update", summary="Updates a user's profile details")
+    Args:
+        item (UpdateTask): update body
+        projectId (str): project ID
+        taskId (str): task ID
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        taskId (str): taskId if the task id successfully updated
+    """
+
+    try:
+        taskId = updateTask(projectId, taskId, db, item)
+        return {"detail": {"code": 200, "message": f"Task {taskId} updated successfully"}}
+    
+    except:
+        raise HTTPException(
+            status_code=404, detail={"code": "404", "message": "Error updating task"}
+        )
+    
+@app.post("/profile/update/{uid}", summary="Updates a user's profile details")
 async def updateProfileDetails(item:UpdateBody,  uid:str):
     """_summary_
 
@@ -318,7 +353,7 @@ async def updateProfileDetails(item:UpdateBody,  uid:str):
             status_code=404, detail={"code": "404", "message": "Error updating user profile"}
         )
     
-@app.get("/profile/achievements", summary="gets all achievements of a user")
+@app.get("/profile/achievements/{userId}", summary="gets all achievements of a user")
 async def getAchievements(userId: str):
     """Gets all achievements of a user given a user id
 
@@ -345,7 +380,7 @@ async def getAchievements(userId: str):
             detail={"code": "404", "message": "Error getting achievements"},
         )
     
-@app.get("/profile/tasks", summary="gets all tasks assigned to the user")
+@app.get("/profile/tasks/{userId}", summary="gets all tasks assigned to the user")
 async def getUserTasks(userId: str):  
     """Gets all task details of a user given user id
 
@@ -372,7 +407,7 @@ async def getUserTasks(userId: str):
             detail={"code": "404", "message": "Error getting user's tasks"},
         )
 
-@app.get("/profile/projects", summary="gets all projects assigned to the user")
+@app.get("/profile/projects/{userId}", summary="gets all projects assigned to the user")
 async def getUserProjects(userId: str):  
     """Gets all project ids of a user given user id
 
@@ -398,3 +433,56 @@ async def getUserProjects(userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error getting user's projects"},
         )
+
+@app.get("/profile/ratings/{userId}", summary="gets all ratings of a user")
+async def getUserRating(userId: str):  
+    """Gets a users ratings given user Id
+
+    Args:
+        userId (str): user id 
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        ratingsList(dict): dictionary containing users ratings
+    """
+
+    try:
+        ratingsList = userRatings(userId,db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": ratingsList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting user's ratings"},
+        )
+
+@app.get("/profile/{userId}/get", summary="Get details of a user")
+async def getProfileDetails(userId: str):
+    """get user details given a user Id
+
+    Args:
+        userId (str): user id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        profDetails(dict): dictionary containing user details
+    """
+
+    try:
+        profDetails = getProfDetails(userId, db)
+        return {"detail": {"code": 200, "message": profDetails}}
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error retrieving data from this user"},
+        )
+
+    
