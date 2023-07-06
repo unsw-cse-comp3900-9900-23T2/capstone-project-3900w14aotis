@@ -16,6 +16,8 @@ from src.task.update import updateTask
 from src.profile.update import updateProfile
 from src.profile.getTasks import userTasks
 from src.profile.getProjects import userProjects
+from src.profile.getRatings import userRatings
+from src.profile.getDetails import getProfDetails
 from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
 
@@ -435,12 +437,63 @@ async def getUserProjects(userId: str):
             detail={"code": "404", "message": "Error getting user's projects"},
         )
 
+@app.get("/profile/ratings/{userId}", summary="gets all ratings of a user")
+async def getUserRating(userId: str):  
+    """Gets a users ratings given user Id
+
+    Args:
+        userId (str): user id 
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        ratingsList(dict): dictionary containing users ratings
+    """
+
+    try:
+        ratingsList = userRatings(userId,db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": ratingsList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting user's ratings"},
+        )
+
+@app.get("/profile/{userId}/get", summary="Get details of a user")
+async def getProfileDetails(userId: str):
+    """get user details given a user Id
+
+    Args:
+        userId (str): user id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        profDetails(dict): dictionary containing user details
+    """
+
+    try:
+        profDetails = getProfDetails(userId, db)
+        return {"detail": {"code": 200, "message": profDetails}}
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error retrieving data from this user"},
+        )
+
 @app.post("/connections/send/{userId}", summary="sends a connection request to user")
 async def sendConnectionRequest(userEmail: str, userId: str):
     """
     Sends a connection request to user given their email. This will add it to their 
     "pending connections".
-
+    
     Args:
         userId (str): ID of user that is sending the request
         userEmail (str): email of the user that you're sending a request to
