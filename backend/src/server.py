@@ -214,6 +214,17 @@ async def getTaskDetails(projectId: str, taskId: str):
 
 @app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
 async def getTasks(projectId: str):
+    """get tasks of a project
+
+    Args:
+        projectId (str): project Id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        taskList: list of tasks including assignee details
+    """
     try:
         taskList = listTasks(projectId, db)
         return {
@@ -301,7 +312,7 @@ async def deleteTaskAssignee(assignee: Assignee):
             status_code=404,
             detail={"code": "404", "message": "Error removing taskmaster"},
         )
-    
+
 @app.post("/task/update/{projectId}/{taskId}", summary="Updates a tasks details")
 async def updateTaskDetails(item:UpdateTask, projectId:str, taskId:str):
     """Update task details given project and task Id
