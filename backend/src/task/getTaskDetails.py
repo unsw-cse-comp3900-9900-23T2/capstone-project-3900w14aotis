@@ -25,14 +25,17 @@ def getDetails(projectId, taskId, db):
         return "No document found!"
     
     assigneeList = taskDict.pop("Assignees")
+    assigneeDictList = makeAssigneeList(db,assigneeList)
+    taskDict["Assignees"] = assigneeDictList
+    return taskDict
+
+
+def makeAssigneeList(db,list):
     assigneeDictList = []
-    for assignee in assigneeList:
+    for assignee in list:
         assigneeDetail = getProfDetails(assignee,db)
         assigneeDictList.append(assigneeDetail)
-
-    taskDict["Assignees"] = assigneeDictList
-
-    return taskDict
+    return assigneeDictList
 
 
 
