@@ -15,22 +15,10 @@ const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
     };
   };
 
-  console.log(userDetails);
-  // const { uid, profileImage, firstName, lastName } = userDetails;
-  const temp = {
-    uid: "JfEqDgjMJKVin51hEdeQQcx3S833",
-    lastName: "Badoux",
-    firstName: "Xavier",
-    email: "xavier@gmail.com",
-    tasks: [
-      "zkiwWgynVwG6IWhQUatU",
-      "4kOC3mPnavPcKRr4kXwH",
-      "IsuZscOMP3TufuQ08amv",
-    ],
-    projects: ["UZCKou8Z9OeS8Ltjcs84"],
-  };
+  const { uid, profileImage, firstName, lastName } = userDetails;
+
   const handleClick = (event) => {
-    console.log(`CLICKED ${temp.uid}`);
+    console.log(`CLICKED ${uid}`);
   };
 
   return (
@@ -45,12 +33,13 @@ const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
         handleClick();
       }}
     >
-      <Tooltip title={`${temp.firstName} ${temp.lastName} Profile`}>
+      {console.log(userDetails)}
+      <Tooltip title={`${firstName} ${lastName} Profile`}>
         <Avatar
           sx={{ width: imgWidth, height: imgHeight }}
           // src="/Jira-Emblem.png"
-          alt={`${temp.firstName} ${temp.lastName}`}
-          {...stringAvatar(`${temp.firstName} ${temp.lastName}`)}
+          alt={`${firstName} ${lastName}`}
+          {...stringAvatar(`${firstName} ${lastName}`)}
         />
       </Tooltip>
     </Box>

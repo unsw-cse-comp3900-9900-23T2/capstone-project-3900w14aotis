@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/Navbar.module.css";
-import ProfilePicture from "./ProfilePictureDropdown";
+import ProfilePictureDropdown from "./ProfilePictureDropdown";
 import CreateTaskModal from "./CreateTaskModal";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { stringToObject } from "../utils/helpers";
-import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(
     stringToObject(localStorage.getItem("loggedIn"))
   );
-
-  const navigate = useNavigate();
 
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
@@ -43,22 +40,14 @@ const Navbar = () => {
     alignItems: "center",
   };
 
-  const clickHandler = () => {
-    navigate("/otis/dashboard");
-  };
   return (
     <>
       <Box sx={navbarContainerSx}>
-        <Box
-          sx={logoContainerSx}
-          onClick={() => {
-            clickHandler();
-          }}
-        >
+        <Box sx={logoContainerSx}>
           <img className={styles.logo} src="/Jira-Emblem.png" alt="Otis logo" />
           <h2>Otis</h2>
         </Box>
-        {loggedIn && <ProfilePicture />}
+        {loggedIn && <ProfilePictureDropdown />}
       </Box>
     </>
   );

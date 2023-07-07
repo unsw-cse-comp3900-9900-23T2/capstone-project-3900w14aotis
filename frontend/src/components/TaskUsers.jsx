@@ -5,12 +5,10 @@ const TaskUsers = ({ assignees }) => {
   return (
     <>
       {assignees.map((user, idx) => {
-        // console.log(user);
-
         return (
           <ProfilePicture
-            // key={user.uid}
-            // userDetails={temp}
+            key={user.uid}
+            userDetails={user}
             imgWidth={35}
             imgHeight={35}
           />
