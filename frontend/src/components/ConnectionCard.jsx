@@ -1,7 +1,8 @@
 import React from 'react';
+import ProfilePicture from './ProfilePictureDropdown';
 
 function ConnectionCard() {
-  return <div></div>;
+  return <Box></Box>;
 }
 
 export default ConnectionCard;
