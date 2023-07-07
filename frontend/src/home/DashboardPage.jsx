@@ -2,9 +2,10 @@ import React from "react";
 import { Box } from "@mui/material";
 import Headerbar from "../components/Headerbar";
 import { getAuth } from "firebase/auth";
+import SummaryTaskCards from "./SummaryTaskCards";
 
 const DashboardPage = () => {
-  console.log(getAuth());
+  // console.log(getAuth());
   return (
     <Box
       sx={{
@@ -19,18 +20,29 @@ const DashboardPage = () => {
         sx={{
           display: "flex",
           height: "calc(100vh - 70px - 5rem)",
+          width: "100%",
+          // justifyContent: "center",
         }}
       >
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
+            flex: "1",
+            // height: "100%",
           }}
         >
-          <Box>IN PROGRESS:</Box>
-          <Box>TO DO:</Box>
+          <SummaryTaskCards status={"TO DO"} />
+          <SummaryTaskCards status={"IN PROGRESS"} />
         </Box>
-        <Box>Achievements</Box>
+        <Box
+          sx={{
+            display: "flex",
+            flex: "1",
+          }}
+        >
+          Achievements
+        </Box>
       </Box>
     </Box>
   );
