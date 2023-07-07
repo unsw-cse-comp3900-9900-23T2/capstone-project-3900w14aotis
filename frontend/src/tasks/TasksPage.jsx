@@ -77,6 +77,7 @@ const TasksPage = () => {
 
   const updateModalDetails = (response, id) => {
     const taskDetails = { ...response.detail.message, ...{ id: id } };
+    console.log(taskDetails);
     setCurrTaskDetails(taskDetails);
   };
 

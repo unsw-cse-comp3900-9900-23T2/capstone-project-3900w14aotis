@@ -18,6 +18,7 @@ const LongTaskCard = ({
 }) => {
   const TaskCardClick = async () => {
     const taskDetailResponse = await taskDetailFetch(projectId, id);
+    console.log(taskDetailResponse);
     updateModalFunction(taskDetailResponse, id);
     isModalOpen(true);
   };

@@ -4,6 +4,7 @@ import { Draggable } from "react-beautiful-dnd";
 import DeadlineBox from "../components/DeadlineBox";
 import ProfilePicture from "../components/ProfilePicture";
 import styles from "./styles/SmallTaskCard.module.css";
+import TaskUsers from "../components/TaskUsers";
 
 const SmallTaskCard = ({ task, index }) => {
   return (
@@ -45,13 +46,10 @@ const SmallTaskCard = ({ task, index }) => {
               <Box
                 sx={{
                   display: "flex",
+                  gap: "10px",
                 }}
               >
-                {task.Assignees.map((user, idx) => {
-                  return (
-                    <ProfilePicture key={idx} imgWidth={28} imgHeight={28} />
-                  );
-                })}
+                <TaskUsers assignees={task.Assignees} />
               </Box>
             </Box>
           </Box>
