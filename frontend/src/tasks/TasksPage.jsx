@@ -33,7 +33,7 @@ const TasksPage = () => {
       );
       setAllTasks(sortedAllTasks);
       setTasksAfterFilter(sortedAllTasks);
-      // console.log(sortedAllTasks);
+      console.log(sortedAllTasks);
     }
   };
 
@@ -133,6 +133,7 @@ const TasksPage = () => {
         }}
       >
         {tasksAfterFilter.map((task, idx) => {
+          console.log(task);
           return (
             <LongTaskCard
               key={task.taskID}

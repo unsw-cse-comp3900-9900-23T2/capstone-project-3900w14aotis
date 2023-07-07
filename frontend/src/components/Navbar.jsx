@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import { Box } from '@mui/material';
-import styles from './styles/Navbar.module.css';
-import ProfilePicture from './ProfilePictureDropdown';
-import CreateTaskModal from './CreateTaskModal';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { stringToObject } from '../utils/helpers';
+import React, { useState } from "react";
+import { Box } from "@mui/material";
+import styles from "./styles/Navbar.module.css";
+import ProfilePicture from "./ProfilePictureDropdown";
+import CreateTaskModal from "./CreateTaskModal";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { stringToObject } from "../utils/helpers";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(
-    stringToObject(localStorage.getItem('loggedIn'))
+    stringToObject(localStorage.getItem("loggedIn"))
   );
+
+  const navigate = useNavigate();
 
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
@@ -23,28 +26,36 @@ const Navbar = () => {
   });
 
   const navbarContainerSx = {
-    position: 'fixed',
-    height: '70px',
-    backgroundColor: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)',
+    position: "fixed",
+    height: "70px",
+    backgroundColor: "white",
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
   };
 
   const logoContainerSx = {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
   };
 
+  const clickHandler = () => {
+    navigate("/otis/dashboard");
+  };
   return (
     <>
       <Box sx={navbarContainerSx}>
-        <Box sx={logoContainerSx}>
-          <img className={styles.logo} src='/Jira-Emblem.png' alt='Otis logo' />
+        <Box
+          sx={logoContainerSx}
+          onClick={() => {
+            clickHandler();
+          }}
+        >
+          <img className={styles.logo} src="/Jira-Emblem.png" alt="Otis logo" />
           <h2>Otis</h2>
         </Box>
         {loggedIn && <ProfilePicture />}
