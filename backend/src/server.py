@@ -19,6 +19,7 @@ from src.profile.getProjects import userProjects
 from src.profile.getRatings import userRatings
 from src.profile.getDetails import getProfDetails
 from src.achievement.getAchievements import listAchievements
+from src.connections.sendConnection import sendConnection
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -42,6 +43,8 @@ class TaskMaster(BaseModel):
     email: str
     tasks: list[str]
     projects: list[str]
+    connectedTo: list[str]
+    pendingConnections: list[str]
 
 
 class LoginBody(BaseModel):
@@ -215,6 +218,17 @@ async def getTaskDetails(projectId: str, taskId: str):
 
 @app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
 async def getTasks(projectId: str):
+    """get tasks of a project
+
+    Args:
+        projectId (str): project Id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        taskList: list of tasks including assignee details
+    """
     try:
         taskList = listTasks(projectId, db)
         return {
@@ -500,4 +514,29 @@ async def getProfileDetails(userId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error retrieving data from this user"},
+        )
+
+
+@app.post("/connections/send/{userId}", summary="sends a connection request to user")
+async def sendConnectionRequest(userEmail: str, currUser: str):
+    """
+    Sends a connection request to user given their email. This will add it to their
+    "pending connections".
+
+    Args:
+        currUser (str): ID of user that is sending the request
+        userEmail (str): email of the user that you're sending a request to
+
+    Returns:
+
+    """
+    try:
+        sendConnection(userEmail, currUser, db)
+        return {
+            "detail": {"code": 200, "message": f"Connection request successfully sent!"}
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error sending connection request"},
         )

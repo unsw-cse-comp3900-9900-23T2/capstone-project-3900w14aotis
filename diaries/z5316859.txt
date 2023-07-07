@@ -26,4 +26,5 @@ Week 5: debugged get task details -> task details now fully running. We were abl
 on Wednesday successfully. We also had our retrospective which brought up problems of our communication, organisation
 and minor clarity.
 
-Week 6: we have decided on sprint 2, as well as allocated tasks. I am working on connections.
+Week 6: we have decided on sprint 2, as well as allocated tasks. I have worked on connections. I also proposed
+a change to the database structure for easier access (removing collection for connections). 
