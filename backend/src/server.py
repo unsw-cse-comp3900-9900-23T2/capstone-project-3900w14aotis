@@ -47,6 +47,8 @@ class TaskMaster(BaseModel):
     projects: list[str]
     connectedTo: list[str]
     pendingConnections: list[str]
+    profileImage: str
+    coverProfileImage: str
 
 
 class LoginBody(BaseModel):
