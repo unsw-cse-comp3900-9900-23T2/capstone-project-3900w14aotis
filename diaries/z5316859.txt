@@ -22,4 +22,9 @@ This week, we began coding for Sprint 1, due in week 5. A few issues with settin
 in the end. This week, I started my tasks on getTaskDetails. I've spent time learning about the database
 and understanding it to be able to code my assigned tasks.
 
-Week 5: debugged get task details -> task details now fully running
+Week 5: debugged get task details -> task details now fully running. We were able to demo our code in class 
+on Wednesday successfully. We also had our retrospective which brought up problems of our communication, organisation
+and minor clarity.
+
+Week 6: we have decided on sprint 2, as well as allocated tasks. I have worked on connections. I also proposed
+a change to the database structure for easier access (removing collection for connections). 

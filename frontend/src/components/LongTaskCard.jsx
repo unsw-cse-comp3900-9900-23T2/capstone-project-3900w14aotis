@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/LongTaskCard.module.css";
-import ProfilePicture from "./ProfilePicture";
 import DeadlineBox from "./DeadlineBox";
 import ViewTaskModal from "./ViewTaskModal";
 import { taskDetailFetch } from "../api/task";
+import TaskUsers from "./TaskUsers";
 
 const LongTaskCard = ({
   id,
@@ -18,6 +18,7 @@ const LongTaskCard = ({
 }) => {
   const TaskCardClick = async () => {
     const taskDetailResponse = await taskDetailFetch(projectId, id);
+    console.log(taskDetailResponse);
     updateModalFunction(taskDetailResponse, id);
     isModalOpen(true);
   };
@@ -59,16 +60,12 @@ const LongTaskCard = ({
           gap: "10px",
         }}
       >
-        <DeadlineBox deadline={deadline} />
-        <Box
-          sx={{
-            display: "flex",
-          }}
-        >
-          {assignees.map((user, idx) => {
-            return <ProfilePicture imgWidth={35} imgHeight={35} />;
-          })}
-        </Box>
+        <DeadlineBox
+          deadline={deadline}
+          width={"7.4375rem"}
+          height={"2.49rem"}
+        />
+        <TaskUsers assignees={assignees} />
       </Box>
     </Box>
   );
