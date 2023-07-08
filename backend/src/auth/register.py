@@ -27,6 +27,8 @@ def authRegister(item, db):
             "projects": item.projects,
             "connectedTo": item.connectedTo,
             "pendingConnections": item.pendingConnections,
+            "profileImage": item.profileImage,
+            "coverProfileImage": item.coverProfileImage,
         }
     )
     token = signInWithEmailAndPassword(email=item.email, password=item.password)

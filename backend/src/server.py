@@ -47,6 +47,8 @@ class TaskMaster(BaseModel):
     projects: list[str]
     connectedTo: list[str]
     pendingConnections: list[str]
+    profileImage: str
+    coverProfileImage: str
 
 
 class LoginBody(BaseModel):
@@ -368,12 +370,7 @@ async def updateProfileDetails(item: UpdateBody, uid: str):
 
     try:
         uid = updateProfile(uid, db, item)
-        return {
-            "detail": {
-                "code": 200,
-                "message": f"User {uid} profile updated successfully",
-            }
-        }
+        return {"detail": {"code": 200, "message": uid}}
 
     except:
         raise HTTPException(
