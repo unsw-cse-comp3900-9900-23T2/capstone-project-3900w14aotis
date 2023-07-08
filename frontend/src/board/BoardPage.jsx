@@ -13,18 +13,10 @@ const BoardPage = () => {
         minHeight: "calc(100vh - 70px)",
       }}
     >
-      <Headerbar
-        text="Board"
-        // updateQueryFunction={updateSearchQuery}
-        // tasksSortFunction={tasksSortHandler}
-      />
+      <Headerbar text="Board" />
       <Box
         sx={{
-          display: "flex",
           height: "calc(100vh - 70px - 5rem)",
-          justifyContent: "center",
-          alignItems: "center",
-          background: "red",
         }}
       >
         <KanbanBoard />

@@ -1,0 +1,4 @@
+.statusHeading {
+  font-family: Raleway;
+  font-size: clamp(1em, 1.6em, 3em);
+}

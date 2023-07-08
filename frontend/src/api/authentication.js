@@ -10,6 +10,9 @@ export const registerFetch = async (
 ) => {
   const tasks = [];
   const projects = [];
+  const connectedTo = [];
+  const pendingConnections = [];
+
   const jsonData = JSON.stringify({
     uid,
     firstName,
@@ -18,6 +21,8 @@ export const registerFetch = async (
     email,
     tasks,
     projects,
+    connectedTo,
+    pendingConnections,
   });
 
   const requestOption = {
