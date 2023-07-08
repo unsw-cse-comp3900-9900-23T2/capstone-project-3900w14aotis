@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box } from "@mui/material";
-import CreateTaskModal from "./CreateTaskModal";
 import { useLocation } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import SortTasksDropdown from "./SortTasksDropdown";
+import { Icon } from "@iconify/react";
+import styles from "./styles/TaskModal.module.css";
 
-const Headerbar = ({ text, updateQueryFunction, tasksSortFunction }) => {
+const Headerbar = ({
+  text,
+  updateQueryFunction,
+  tasksSortFunction,
+  setModalOpen,
+}) => {
   const location = useLocation();
 
   const handleSearchQuery = (value) => {
     updateQueryFunction(value);
+  };
+
+  const openModalHandler = () => {
+    setModalOpen(true);
   };
 
   return (
@@ -42,7 +52,14 @@ const Headerbar = ({ text, updateQueryFunction, tasksSortFunction }) => {
           {text}
         </h2>
         {!location.pathname.includes("project") &&
-          location.pathname.includes("tasks") && <CreateTaskModal />}
+          location.pathname.includes("tasks") && (
+            <Icon
+              onClick={openModalHandler}
+              icon="ic:round-add"
+              style={{ fontSize: "50px", margin: "20px" }}
+              className={styles.clickButton}
+            />
+          )}
       </Box>
 
       <Box

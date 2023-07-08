@@ -33,7 +33,6 @@ const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
         handleClick();
       }}
     >
-      {console.log(userDetails)}
       <Tooltip title={`${firstName} ${lastName} Profile`}>
         <Avatar
           sx={{ width: imgWidth, height: imgHeight }}
