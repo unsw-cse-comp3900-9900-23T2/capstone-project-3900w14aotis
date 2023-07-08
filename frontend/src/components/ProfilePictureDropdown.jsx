@@ -14,15 +14,18 @@ import Logout from '@mui/icons-material/Logout';
 const ProfilePictureDropdown = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
+  
   const handleClose = () => {
     setAnchorEl(null);
+    navigate('/otis/profile');
   };
 
-  const navigate = useNavigate();
+  
 
   const logoutHandler = () => {
     handleClose();

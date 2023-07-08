@@ -1,0 +1,21 @@
+.clickButton {
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  font-size: '36px';
+}
+
+.clickButton:hover {
+  transform: scale(1.2);
+}
+
+.passwordTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imageInput {
+  width: 160px;
+  height: 160px;
+  border-radius: 80px;
+}
