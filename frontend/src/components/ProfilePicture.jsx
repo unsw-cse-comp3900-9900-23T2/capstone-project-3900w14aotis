@@ -1,34 +1,48 @@
-import React from 'react';
-import Box from '@mui/material/Box';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import React from "react";
+import Box from "@mui/material/Box";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import { stringToColor } from "../utils/helpers";
 
-function ProfilePicture({ userId, imgWidth, imgHeight }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
+  const stringAvatar = (name) => {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    };
+  };
+
+  const { uid, profileImage, firstName, lastName } = userDetails;
+
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    console.log(`CLICKED ${uid}`);
   };
 
   return (
     <Box
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        textAlign: 'center',
+        display: "flex",
+        alignItems: "center",
+        textAlign: "center",
         // padding: "0px",
       }}
+      onClick={() => {
+        handleClick();
+      }}
     >
-      <Tooltip title='Taskmaster Profile'>
-        <IconButton onClick={handleClick}>
-          <Avatar sx={{ width: imgWidth, height: imgHeight }}>
-            <img height={100} src='/Jira-Emblem.png' alt='Otis logo' />
-          </Avatar>
-        </IconButton>
+      <Tooltip title={`${firstName} ${lastName} Profile`}>
+        <Avatar
+          sx={{ width: imgWidth, height: imgHeight }}
+          // src="/Jira-Emblem.png"
+          alt={`${firstName} ${lastName}`}
+          {...stringAvatar(`${firstName} ${lastName}`)}
+        />
       </Tooltip>
     </Box>
   );
-}
+};
 
 export default ProfilePicture;

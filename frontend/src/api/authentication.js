@@ -1,5 +1,5 @@
 const API_URL = `http://localhost:${8000}`;
-const API_MEDIA_TYPE = "application/json";
+const API_MEDIA_TYPE = 'application/json';
 
 export const registerFetch = async (
   uid,
@@ -10,6 +10,11 @@ export const registerFetch = async (
 ) => {
   const tasks = [];
   const projects = [];
+  const connectedTo = [];
+  const pendingConnections = [];
+  const profileImage = '';
+  const coverProfileImage = '';
+
   const jsonData = JSON.stringify({
     uid,
     firstName,
@@ -18,11 +23,15 @@ export const registerFetch = async (
     email,
     tasks,
     projects,
+    connectedTo,
+    pendingConnections,
+    profileImage,
+    coverProfileImage,
   });
 
   const requestOption = {
-    method: "POST",
-    headers: { "Content-Type": API_MEDIA_TYPE },
+    method: 'POST',
+    headers: { 'Content-Type': API_MEDIA_TYPE },
     body: jsonData,
   };
 
@@ -41,8 +50,8 @@ export const loginFetch = async (email, password) => {
   });
 
   const requestOption = {
-    method: "POST",
-    headers: { "Content-Type": API_MEDIA_TYPE },
+    method: 'POST',
+    headers: { 'Content-Type': API_MEDIA_TYPE },
     body: jsonData,
   };
 

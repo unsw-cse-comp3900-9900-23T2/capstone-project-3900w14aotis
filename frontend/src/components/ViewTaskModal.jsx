@@ -7,6 +7,7 @@ import { Icon } from '@iconify/react';
 import styles from './styles/Modal.module.css';
 import ProfilePicture from './ProfilePicture';
 import DeadlineBox from './DeadlineBox';
+import TaskUsers from '../components/TaskUsers';
 
 const modalStyle = {
   display: 'flex',
@@ -146,18 +147,26 @@ const ViewTaskModal = ({ isOpen, onClose, details }) => {
             </Box>
             <Box sx={displayBoxStyle}>
               <Icon icon='octicon:people-16' style={{ fontSize: '50px' }} />
-              {details.Assignees &&
-                details.Assignees.map((assignee, idx) => {
-                  return (
-                    <ProfilePicture key={idx} imgWidth={35} imgHeight={35} />
-                  );
-                })}
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: '10px',
+                }}
+              >
+                {details.Assignees && (
+                  <TaskUsers assignees={details.Assignees} />
+                )}
+              </Box>
             </Box>
             <Box sx={displayBoxStyle}>
               <Icon icon='la:tasks' style={{ fontSize: '50px' }} />
               <h2>{details.Status}</h2>
             </Box>
-            <DeadlineBox deadline={details.Deadline} />
+            <DeadlineBox
+              deadline={details.Deadline}
+              width={'7.4375rem'}
+              height={'2.49rem'}
+            />
           </Box>
         </Fade>
       </Modal>
