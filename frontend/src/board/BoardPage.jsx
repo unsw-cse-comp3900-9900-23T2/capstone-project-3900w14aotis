@@ -16,7 +16,7 @@ const BoardPage = () => {
       <Headerbar text="Board" />
       <Box
         sx={{
-          height: "calc(100vh - 70px - 5rem)",
+          minHeight: "calc(100vh - 70px - 5rem)",
         }}
       >
         <KanbanBoard />

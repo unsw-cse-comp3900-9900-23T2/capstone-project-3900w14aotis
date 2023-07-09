@@ -118,11 +118,8 @@ const KanbanBoard = () => {
         sx={{
           display: "flex",
           width: "100%",
-          // gap: "50px",
           justifyContent: "space-evenly",
           paddingTop: "50px",
-          // paddingLeft: "50px",
-          // paddingRight: "50px",
         }}
       >
         {columns.map((column, idx) => {
