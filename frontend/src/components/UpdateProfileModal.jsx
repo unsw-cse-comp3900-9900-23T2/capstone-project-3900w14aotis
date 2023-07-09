@@ -16,34 +16,32 @@ import CustomButton from "./CustomButton";
 
 const UpdateProfileModal = () => {
 
+    // Initialise profile details
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [profileImage, setProfileImage] = useState("");
+    const [coverProfileImage, setCoverProfileImage] = useState("");
 
   // Get profile details
-  
   const getProfileDetails = async () => {
     try {
       const auth = getAuth();
       const profileDetailsResponse = await profileDetailFetch(
         auth.currentUser.uid
       );
-      console.log(profileDetailsResponse);
+      // TODO: try catch?
+      const profile = profileDetailsResponse.detail.message;
+      setFirstName(profile.firstName);
+      setLastName(profile.lastName);
+      setEmail(profile.email);
+      setProfileImage(profile.profileImage);
+      setCoverProfileImage(profile.coverProfileImage);
+
     } catch(error) {
       displayError(error);
     }
   };
-
-  const currFirstName = "Sophia";
-  const currLastName = "Li";
-  const currEmail = "sophiali@gmail.com";
-  const currProfileImage = "";
-  const currCoverImage = "";
-
-
-  // Initialise profile details
-  const [firstName, setFirstName] = useState(currFirstName);
-  const [lastName, setLastName] = useState(currLastName);
-  const [email, setEmail] = useState(currEmail);
-  const [profileImage, setProfileImage] = useState(currProfileImage);
-  const [coverProfileImage, setCoverProfileImage] = useState(currCoverImage);
 
   // TODO: pasword change -> old password needs to match
   const [oldPassword, setOldPassword] = useState("");
@@ -54,8 +52,8 @@ const UpdateProfileModal = () => {
 
   const [open, setOpen] = useState(false);
   const openModalHandler = () => {
-    setOpen(true);
     getProfileDetails();
+    setOpen(true);
   };
   const closeModalHandler = () => setOpen(false);
 
