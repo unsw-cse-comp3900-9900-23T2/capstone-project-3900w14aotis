@@ -12,6 +12,8 @@ export const registerFetch = async (
   const projects = [];
   const connectedTo = [];
   const pendingConnections = [];
+  const profileImage = "";
+  const coverProfileImage = "";
 
   const jsonData = JSON.stringify({
     uid,
@@ -23,6 +25,8 @@ export const registerFetch = async (
     projects,
     connectedTo,
     pendingConnections,
+    profileImage,
+    coverProfileImage,
   });
 
   const requestOption = {
