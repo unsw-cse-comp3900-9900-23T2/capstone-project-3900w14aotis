@@ -5,6 +5,8 @@ import { useLocation } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import SortTasksDropdown from './SortTasksDropdown';
 import { Icon } from '@iconify/react';
+import AcceptRequestModal from './AcceptRequestModal';
+import SendRequestModal from './SendRequestModal';
 
 const Headerbar = ({ text, updateQueryFunction, tasksSortFunction }) => {
   const location = useLocation();
@@ -46,37 +48,39 @@ const Headerbar = ({ text, updateQueryFunction, tasksSortFunction }) => {
           location.pathname.includes('tasks') && <CreateTaskModal />}
       </Box>
 
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          flex: 2,
-        }}
-      >
-        {!location.pathname.includes('project') &&
-          location.pathname.includes('tasks') && (
+      {!location.pathname.includes('project') &&
+        location.pathname.includes('tasks') && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              flex: 2,
+            }}
+          >
             <SearchBar
               type='text'
               placeholder='Search tasks by name, date or ID'
               onChangeFunction={handleSearchQuery}
             />
-          )}
-        {!location.pathname.includes('project') &&
-          location.pathname.includes('tasks') && (
             <SortTasksDropdown sortTasksFunction={tasksSortFunction} />
-          )}
-        {!location.pathname.includes('project') &&
-          location.pathname.includes('connections') && (
-            <Icon
-              icon='fluent-mdl2:message-friend-request'
-              style={{ fontSize: '45px' }}
-            />
-          )}
-        {!location.pathname.includes('project') &&
-          location.pathname.includes('connections') && (
-            <Icon icon='tabler:users-plus' style={{ fontSize: '45px' }} />
-          )}
-      </Box>
+          </Box>
+        )}
+
+      {!location.pathname.includes('project') &&
+        location.pathname.includes('connections') && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '9%',
+              marginRight: '2%',
+              justifyContent: 'space-around',
+            }}
+          >
+            <AcceptRequestModal />
+            <SendRequestModal />
+          </Box>
+        )}
     </Box>
   );
 };
