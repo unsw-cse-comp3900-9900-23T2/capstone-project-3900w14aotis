@@ -6,16 +6,31 @@ import styles from "./styles/profileModal.module.css";
 import TextInput from "./TextInput";
 import TextField from '@mui/material/TextField';
 import ImageInput from "./ImageInput";
-import { getAuth } from "firebase/auth";
+import { getAuth, updateEmail, updatePassword } from "firebase/auth";
 import { displayError, displaySuccess } from "../utils/helpers";
-import { profileUpdateFetch } from "../api/profile.js";
+import { profileDetailFetch, profileUpdateFetch } from "../api/profile.js";
 import CustomButton from "./CustomButton";
 
 
 
 
 const UpdateProfileModal = () => {
+
+
   // Get profile details
+  
+  const getProfileDetails = async () => {
+    try {
+      const auth = getAuth();
+      const profileDetailsResponse = await profileDetailFetch(
+        auth.currentUser.uid
+      );
+      console.log(profileDetailsResponse);
+    } catch(error) {
+      displayError(error);
+    }
+  };
+
   const currFirstName = "Sophia";
   const currLastName = "Li";
   const currEmail = "sophiali@gmail.com";
@@ -38,7 +53,10 @@ const UpdateProfileModal = () => {
 
 
   const [open, setOpen] = useState(false);
-  const openModalHandler = () => setOpen(true);
+  const openModalHandler = () => {
+    setOpen(true);
+    getProfileDetails();
+  };
   const closeModalHandler = () => setOpen(false);
 
   const onChangeFirstName = (value) => setFirstName(value);
@@ -51,21 +69,42 @@ const UpdateProfileModal = () => {
   const onChangeConfirmPassword = (value) => setConfirmPassword(value);
 
   const profileUpdateButtonHandler = async () => {
-    try {
-      const user = getAuth();
-      const profileUpdateFetchResponse = await profileUpdateFetch(
-        user.currentUser.uid,
-        firstName,
-        lastName,
-        email,
-        profileImage,
-        coverProfileImage
-      );
-      console.log(profileUpdateFetchResponse);
-      closeModalHandler();
-      displaySuccess(`Profile Updated Successfully!`);
-    } catch (error) {
-      displayError(`${error.message}`);
+    if (oldPassword === password) {
+      displayError("Please choose a new password!");
+    } else if (password !== confirmPassword) {
+      displayError("Passwords do not match!");
+    } else {
+      try {
+        const auth = getAuth();
+        // Update email in Firebase Auth
+        updateEmail(auth.currentUser, email)
+        .then()
+        .catch((error) => {
+          displayError(error);
+        });
+        // Update password in Firebase Auth
+        updatePassword(auth.currentUser, password)
+        .then(() => {
+          console.log("password change success!")
+        })
+        .catch((error) => {
+          displayError(error);
+        });
+        // API call to backend
+        const profileUpdateFetchResponse = await profileUpdateFetch(
+          auth.currentUser.uid,
+          firstName,
+          lastName,
+          email,
+          profileImage,
+          coverProfileImage
+        );
+        console.log(profileUpdateFetchResponse);
+        closeModalHandler();
+        displaySuccess(`Profile Updated Successfully!`);
+      } catch (error) {
+        displayError(`${error.message}`);
+      }
     }
   };
 
@@ -153,7 +192,7 @@ const UpdateProfileModal = () => {
                 label="Email"
                 type="email"
                 defaultValue={email}
-                onChangeFunction={onChangeLastName}
+                onChangeFunction={onChangeEmail}
               />
             </Box>
             <h3 className={styles.passwordTitle}>Password Change</h3>
