@@ -32,6 +32,7 @@ const ColumnStatus = ({ columnId, title, tasks }) => {
         <Box
           sx={{
             maxHeight: "calc(100vh - 400px)",
+            padding: "15px",
           }}
         >
           <Droppable droppableId={columnId}>
