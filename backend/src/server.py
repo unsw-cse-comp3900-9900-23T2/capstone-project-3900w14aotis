@@ -541,9 +541,7 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
         )
 
 
-@app.post(
-    "/connections/accept/{currUser}", summary="accepts a connection from given userId"
-)
+@app.post("/connections/accept/{currUser}", summary="accepts a connection from given userId")
 async def acceptConnectionRequest(currUser: str, userId: str):
     """
     Accepts a connection from given user id.
@@ -567,9 +565,7 @@ async def acceptConnectionRequest(currUser: str, userId: str):
         )
 
 
-@app.post(
-    "/connections/decline/{currUser}", summary="declines a connection from given userId"
-)
+@app.post("/connections/decline/{currUser}", summary="declines a connection from given userId")
 async def declineConnectionRequest(currUser: str, userId: str):
     """
     Declines a connection from given user id.
@@ -591,3 +587,4 @@ async def declineConnectionRequest(currUser: str, userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error declining connection request"},
         )
+
