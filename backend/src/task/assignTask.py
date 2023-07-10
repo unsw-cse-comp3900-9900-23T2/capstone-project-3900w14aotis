@@ -20,15 +20,16 @@ def addAssignee(projectId, taskId, email, db):
         email (str): email if the user is successfully added
 
     """
+    userEmail = email.lower()
     # ref for the task details document
     projectRef = db.collection("projects").document(projectId)
     taskRef = projectRef.collection("tasks").document(taskId)
 
     # adds user in assignees array for the task
-    taskRef.update({"Assignees": firestore.ArrayUnion([email])})
+    taskRef.update({"Assignees": firestore.ArrayUnion([userEmail])})
 
     # ref for the taskmaster's details document
-    taskmasterRef = findUser("email", email.lower(), db)
+    taskmasterRef = findUser("email", userEmail, db)
 
     # adds task in taskmaster's task list
     taskmasterRef.update({"tasks": firestore.ArrayUnion([taskId])})
@@ -49,6 +50,7 @@ def deleteAssignee(projectId, taskId, email, db):
     Returns:
         email (str): email if the user is successfully added
     """
+    userEmail = email.lower()
     # reference to task
     projectRef = db.collection("projects").document(projectId)
     taskRef = projectRef.collection("tasks").document(taskId)

@@ -28,6 +28,4 @@ def updateProfile(uid,db, item):
             }
         )
 
-        
-
     return uid
