@@ -65,11 +65,11 @@ export const sortTasksDescending = (tasksList) => {
 };
 
 export const sortTasksSoonest = (tasksList) => {
-  return tasksList.sort((a, b) => new Date(a.Title) - new Date(b.Title));
+  return tasksList.sort((a, b) => new Date(a.Deadline) - new Date(b.Deadline));
 };
 
 export const sortTasksLatest = (tasksList) => {
-  return tasksList.sort((a, b) => new Date(b.Title) - new Date(a.Title));
+  return tasksList.sort((a, b) => new Date(b.Deadline) - new Date(a.Deadline));
 };
 
 export const sortTasksImportant = (tasksList) => {
@@ -94,4 +94,24 @@ export const sortTasksLeastImportant = (tasksList) => {
   return tasksList.sort(
     (a, b) => priorityMapping[a.Priority] - priorityMapping[b.Priority]
   );
+};
+
+export const stringToColor = (string) => {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = "#";
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
 };

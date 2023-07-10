@@ -15,7 +15,7 @@ import { displayError, displaySuccess } from "../utils/helpers";
 import DropDown from "./Dropdown";
 import styles from "./styles/TaskModal.module.css";
 import CustomButton from "./CustomButton";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { createTaskFetch } from "../api/task.js";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -57,7 +57,8 @@ const createButtonBox = {
   display: "flex",
   justifyContent: "center",
 };
-const CreateTaskModal = () => {
+
+const CreateTaskModal = ({ isOpen, closeFunction }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
@@ -65,10 +66,6 @@ const CreateTaskModal = () => {
   const [assignees, setAssignees] = useState([]);
   const [priority, setPriority] = useState("");
   const [status, setStatus] = useState("");
-
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   const onChangeTitle = (value) => setTitle(value);
   const onChangeDescription = (value) => setDescription(value);
@@ -116,25 +113,48 @@ const CreateTaskModal = () => {
     return true;
   };
 
+  const createTask = async (convertedDeadline, finalAssignees) => {
+    const createTaskFetchResponse = await createTaskFetch(
+      projectId,
+      title,
+      description,
+      convertedDeadline,
+      finalAssignees,
+      priority,
+      status
+    );
+    dispatch(addTaskAction());
+    closeFunction();
+    setAssignees([]);
+    setDeadline("");
+    displaySuccess("Successfully created task!");
+  };
+
   const createTaskButtonHandler = async () => {
+    // TODO: CONSIDER OPTIONAL EMPTY DEADLINE
+    if (deadline.length === 0) {
+      displayError("Please select a deadline");
+      return;
+    }
     const date = new Date(deadline);
     const convertedDeadline = date.toISOString();
 
     try {
-      const createTaskFetchResponse = await createTaskFetch(
-        projectId,
-        title,
-        description,
-        convertedDeadline,
-        assignees,
-        priority,
-        status
-      );
-      displaySuccess("Successfully created task!");
-      dispatch(addTaskAction());
-      handleClose();
-      setAssignees([]);
-      setDeadline("");
+      const finalAssignees = [...assignees];
+      const auth = getAuth();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in
+          localStorage.setItem("loggedIn", true);
+          if (finalAssignees.length === 0) {
+            finalAssignees.push(user.email);
+          }
+          createTask(convertedDeadline, finalAssignees);
+        } else {
+          // User is signed out
+          localStorage.removeItem("loggedIn");
+        }
+      });
     } catch (error) {
       displayError(`${error.message}`);
     }
@@ -142,26 +162,20 @@ const CreateTaskModal = () => {
 
   return (
     <div>
-      <Icon
-        onClick={handleOpen}
-        icon="ic:round-add"
-        style={{ fontSize: "50px", margin: "20px" }}
-        className={styles.clickButton}
-      />
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
+        open={isOpen}
+        onClose={closeFunction}
         closeAfterTransition
       >
-        <Fade in={open}>
+        <Fade in={isOpen}>
           <Box sx={modalStyle}>
             <Box sx={titleStyle}>
               <h2>Create Task</h2>
               <Icon
                 icon="iconamoon:close-bold"
-                onClick={handleClose}
+                onClick={closeFunction}
                 style={{ fontSize: "36px" }}
                 className={styles.clickButton}
               />

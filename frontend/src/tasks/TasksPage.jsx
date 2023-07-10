@@ -15,12 +15,15 @@ import {
 } from "../utils/helpers";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import CreateTaskModal from "../components/CreateTaskModal";
 
 const TasksPage = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [tasksAfterFilter, setTasksAfterFilter] = useState([]);
   const [currTaskDetails, setCurrTaskDetails] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const { projectId } = useParams();
   const taskAdded = useSelector((state) => state.tasksUpdated);
@@ -33,7 +36,7 @@ const TasksPage = () => {
       );
       setAllTasks(sortedAllTasks);
       setTasksAfterFilter(sortedAllTasks);
-      // console.log(sortedAllTasks);
+      console.log(sortedAllTasks);
     }
   };
 
@@ -71,12 +74,12 @@ const TasksPage = () => {
     queryTasks();
   }, [searchQuery]);
 
-  const [open, setOpen] = useState(false);
   const modalOpen = () => setOpen(true);
   const modalClose = () => setOpen(false);
 
   const updateModalDetails = (response, id) => {
     const taskDetails = { ...response.detail.message, ...{ id: id } };
+    console.log(taskDetails);
     setCurrTaskDetails(taskDetails);
   };
 
@@ -104,51 +107,63 @@ const TasksPage = () => {
     setTasksAfterFilter(sortedTasks);
   };
 
+  const closeModalHandler = () => {
+    setCreateModalOpen(false);
+  };
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        width: "100%",
-        minHeight: "calc(100vh - 70px)",
-      }}
-    >
-      <Headerbar
-        text="Tasks"
-        updateQueryFunction={updateSearchQuery}
-        tasksSortFunction={tasksSortHandler}
-      />
-      <ViewTaskModal
-        isOpen={open}
-        onClose={modalClose}
-        details={currTaskDetails}
+    <>
+      <CreateTaskModal
+        isOpen={isCreateModalOpen}
+        closeFunction={closeModalHandler}
       />
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          gap: "2.19rem",
-          paddingTop: "2.19rem",
+          width: "100%",
+          minHeight: "calc(100vh - 70px)",
         }}
       >
-        {tasksAfterFilter.map((task, idx) => {
-          return (
-            <LongTaskCard
-              key={task.taskID}
-              id={task.taskID}
-              title={task.Title}
-              status={task.Status}
-              deadline={task.Deadline}
-              assignees={["Eddy", "MrCow"]}
-              isModalOpen={modalOpen}
-              projectId={projectId}
-              updateModalFunction={updateModalDetails}
-            />
-          );
-        })}
+        <Headerbar
+          text="Tasks"
+          updateQueryFunction={updateSearchQuery}
+          tasksSortFunction={tasksSortHandler}
+          setModalOpen={setCreateModalOpen}
+        />
+        <ViewTaskModal
+          isOpen={open}
+          onClose={modalClose}
+          details={currTaskDetails}
+        />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "2.19rem",
+            paddingTop: "2.19rem",
+          }}
+        >
+          {tasksAfterFilter.map((task, idx) => {
+            console.log(task);
+            return (
+              <LongTaskCard
+                key={task.taskID}
+                id={task.taskID}
+                title={task.Title}
+                status={task.Status}
+                deadline={task.Deadline}
+                assignees={task.Assignees}
+                isModalOpen={modalOpen}
+                projectId={projectId}
+                updateModalFunction={updateModalDetails}
+              />
+            );
+          })}
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

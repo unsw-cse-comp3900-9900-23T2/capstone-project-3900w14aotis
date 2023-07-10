@@ -1,0 +1,8 @@
+.taskCardTitle {
+  font-family: Cairo;
+  font-size: clamp(1em, 1.5em, 2em);
+  font-style: normal;
+  font-weight: 600;
+  margin-left: 15px;
+  margin-top: 10px;
+}

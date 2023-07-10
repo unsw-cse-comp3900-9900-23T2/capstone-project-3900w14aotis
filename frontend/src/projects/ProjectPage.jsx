@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Divider } from "@mui/material";
 import styles from "./styles/ProjectPage.module.css";
@@ -6,10 +6,44 @@ import Headerbar from "../components/Headerbar";
 import CustomButton from "../components/CustomButton";
 import { displayError } from "../utils/helpers";
 import { useLocation } from "react-router-dom";
+import { allProjectsFetch } from "../api/project";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Loading from "../components/Loading";
 
 const ProjectPage = () => {
+  const [userProjects, setUserProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
   const location = useLocation();
+
+  const getAllProjects = async (uid) => {
+    const userProjectsPromise = await allProjectsFetch(uid);
+    const projects = userProjectsPromise.detail.message;
+    setUserProjects(projects);
+    if (projects.length > 0) {
+      if (location.pathname === "/otis/project/tasks") {
+        navigate(`/otis/${projects[0]}/tasks`);
+      } else if (location.pathname === "/otis/project/board") {
+        navigate(`/otis/${projects[0]}/board`);
+      }
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        localStorage.setItem("loggedIn", true);
+        getAllProjects(user.uid);
+      } else {
+        // User is signed out
+        localStorage.removeItem("loggedIn");
+      }
+    });
+  }, []);
 
   const newProjectHandler = () => {
     try {
@@ -69,7 +103,9 @@ const ProjectPage = () => {
     rowGap: "10px",
   };
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <>
       <Box sx={projectPageContainerSx}>
         <Headerbar text="Start a Project" />
