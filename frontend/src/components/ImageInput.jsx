@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import styles from "./styles/profileModal.module.css";
+import styles from "./styles/ProfileImage.module.css";
 
 
 const ImageInput = () => {

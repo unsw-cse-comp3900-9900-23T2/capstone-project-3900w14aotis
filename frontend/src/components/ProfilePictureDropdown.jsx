@@ -22,10 +22,12 @@ const ProfilePictureDropdown = () => {
   
   const handleClose = () => {
     setAnchorEl(null);
-    navigate('/otis/profile');
   };
-
   
+  const onClickProfile = () => {
+    // setAnchorEl(null);
+    navigate('/otis/profile');
+  }
 
   const logoutHandler = () => {
     handleClose();
@@ -87,7 +89,7 @@ const ProfilePictureDropdown = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={onClickProfile}>
           <Avatar /> Profile
         </MenuItem>
         <Divider />

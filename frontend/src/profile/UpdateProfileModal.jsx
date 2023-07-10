@@ -2,14 +2,14 @@ import { Modal, Fade, Box } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { Icon } from "@iconify/react";
 import { useState } from "react";
-import styles from "./styles/profileModal.module.css";
-import TextInput from "./TextInput";
+import styles from "./styles/ProfileModal.module.css";
+import TextInput from "../components/TextInput";
 import TextField from '@mui/material/TextField';
-import ImageInput from "./ImageInput";
+import ImageInput from "../components/ImageInput";
 import { getAuth, updateEmail, updatePassword } from "firebase/auth";
 import { displayError, displaySuccess } from "../utils/helpers";
 import { profileDetailFetch, profileUpdateFetch } from "../api/profile.js";
-import CustomButton from "./CustomButton";
+import CustomButton from "../components/CustomButton";
 
 
 
@@ -44,10 +44,19 @@ const UpdateProfileModal = () => {
   };
 
   // TODO: pasword change -> old password needs to match
-  const [oldPassword, setOldPassword] = useState("");
+  // const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordColour, setPasswordColour] = useState("#B2B2B2");
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  };
 
 
   const [open, setOpen] = useState(false);
@@ -60,16 +69,24 @@ const UpdateProfileModal = () => {
   const onChangeFirstName = (value) => setFirstName(value);
   const onChangeLastName = (value) => setLastName(value);
   const onChangeEmail = (value) => setEmail(value);
-  const onChangeProfileImage = (value) => setProfileImage(value);
+  const onChangeProfileImage = (value) => {
+    // Convert file input to string to store in database
+    getBase64(value)
+    .then((data) => 
+      console.log("getBase64", data),
+    );
+    setProfileImage(value);
+  }
   const onChangeCoverProfileImage = (value) => setCoverProfileImage(value);
-  const onChangeOldPassword = (value) => setOldPassword(value);
+  // const onChangeOldPassword = (value) => setOldPassword(value);
   const onChangePassword = (value) => setPassword(value);
   const onChangeConfirmPassword = (value) => setConfirmPassword(value);
 
   const profileUpdateButtonHandler = async () => {
-    if (oldPassword === password) {
-      displayError("Please choose a new password!");
-    } else if (password !== confirmPassword) {
+    // if (oldPassword === password) {
+    //   displayError("Please choose a new password!");
+    // } 
+    if (password !== confirmPassword) {
       displayError("Passwords do not match!");
     } else {
       try {
@@ -81,13 +98,17 @@ const UpdateProfileModal = () => {
           displayError(error);
         });
         // Update password in Firebase Auth
-        updatePassword(auth.currentUser, password)
-        .then(() => {
-          console.log("password change success!")
-        })
-        .catch((error) => {
-          displayError(error);
-        });
+        // For the time being, the app will not require the old password to change password.
+        if (password !== "") {
+          updatePassword(auth.currentUser, password)
+          .then(() => {
+            console.log("password change success!")
+          })
+          .catch((error) => {
+            console.log(error);
+            displayError(error);
+          });
+        }
         // API call to backend
         const profileUpdateFetchResponse = await profileUpdateFetch(
           auth.currentUser.uid,
@@ -194,8 +215,7 @@ const UpdateProfileModal = () => {
               />
             </Box>
             <h3 className={styles.passwordTitle}>Password Change</h3>
-            <Box sx={inputContainerSx}>
-              {/* <h3>Old Password:</h3> */}
+            {/* <Box sx={inputContainerSx}>
               <TextInput
                 label="Old password"
                 type="password"
@@ -203,9 +223,8 @@ const UpdateProfileModal = () => {
                 onChangeFunction={onChangeOldPassword}
                 boxColour={passwordColour}
               />
-            </Box>
+            </Box> */}
             <Box sx={inputContainerSx}>
-              {/* <h3>New Password:</h3> */}
               <TextInput
                 label="New password"
                 type="password"
@@ -215,7 +234,6 @@ const UpdateProfileModal = () => {
               />
             </Box>
             <Box sx={inputContainerSx}>
-              {/* <h3>Confirm Password:</h3> */}
               <TextInput
                 label="Confirm password"
                 type="password"

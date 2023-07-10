@@ -4,7 +4,8 @@ import { displayError, displaySuccess } from "../utils/helpers";
 import Box from '@mui/material/Box';
 import BackButton from "../components/BackButton";
 import { Button } from "@mui/material";
-import UpdateProfileModal from "../components/UpdateProfileModal";
+import UpdateProfileModal from "./UpdateProfileModal";
+import ProfileCard from "./ProfileCard";
 
 
 
@@ -22,18 +23,20 @@ const ProfilePage = () => {
 
   const profileContainerSx = {
     display: 'flex',
-    // flexDirection: 'column',
+    flexDirection: 'column',
+    alignItems: 'center',
   }
 
   return (
     <>
       <Box sx={profileContainerSx}>
         <BackButton text="Back" onClickFunction={backButtonHandler}/>
-        <h1>Profile Page</h1>
+        <h1>Hi Sophia!</h1>
         {/* <Button onClick={backButtonHandler}>Go back</Button> */}
         <UpdateProfileModal />
-
-
+        <ProfileCard title={"Ratings"}/>
+        <ProfileCard title={"Achievements"}/>
+        <ProfileCard title={"Assigned Tasks"}/>
       </Box>
     </>
 
