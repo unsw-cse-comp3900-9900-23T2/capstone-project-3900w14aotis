@@ -301,6 +301,32 @@ async def deleteTaskAssignee(assignee: Assignee):
             status_code=404,
             detail={"code": "404", "message": "Error removing taskmaster"},
         )
+
+@app.delete("/task/delete/{projectId}/{taskId}", summary="Removes a task")
+async def deleteTask(projectId:str, taskId:str):
+    """
+    This function removes an assignee from a task.
+
+    Args:
+        projectId (str): ID for the project that the task is in
+        taskId (str): ID for the task that you want to remove someone from
+        userId (str): uID of the person you want to remove
+
+    Returns:
+        userId (str): uID if the user is successfully added
+    """
+    try:
+        deleted = taskRemove(
+            projectId,taskId, db
+        )
+        return {
+            "detail": {"code": 200, "message": f"Task: {deleted} successfully removed"}
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error removing taskmaster"},
+        )
     
 @app.post("/task/update/{projectId}/{taskId}", summary="Updates a tasks details")
 async def updateTaskDetails(item:UpdateTask, projectId:str, taskId:str):
