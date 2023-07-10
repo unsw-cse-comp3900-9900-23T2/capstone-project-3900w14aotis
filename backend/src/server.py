@@ -617,20 +617,20 @@ async def getUserConnections(userId: str):
 @app.get("/connections/getPending/{userId}", summary="gets pending connections of a user")
 async def getPendingConnections(userId: str):
     """
-    Gets all connections that the given userId is connected to.
+    Gets all pending connections that the given userId is connected to.
 
     Args:
         userId (str): userId of the person you want connections of.
 
     Returns:
-        connections (list): list of all connections of the given uId.
+        connections (list): list of all pending connections of the given uId.
     """
     try:
-        connections = getConnections(userId, "pendingConnections", db)
+        pendingConnections = getConnections(userId, "pendingConnections", db)
         return {
             "detail": {
                 "code": 200,
-                "message": connections,
+                "message": pendingConnections,
             }
         }
     except:
