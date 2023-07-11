@@ -33,6 +33,7 @@ const Headerbar = ({
         color: "#FFFFFF",
         alignItems: "center",
         justifyContent: "space-between",
+        zIndex: "1",
       }}
     >
       <Box

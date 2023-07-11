@@ -4,6 +4,7 @@ import ProfilePicture from "./ProfilePicture";
 const TaskUsers = ({ assignees }) => {
   return (
     <>
+      {console.log(assignees)}
       {assignees.map((user, idx) => {
         return (
           <ProfilePicture
