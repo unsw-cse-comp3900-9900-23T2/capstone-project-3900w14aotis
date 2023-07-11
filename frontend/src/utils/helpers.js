@@ -65,11 +65,11 @@ export const sortTasksDescending = (tasksList) => {
 };
 
 export const sortTasksSoonest = (tasksList) => {
-  return tasksList.sort((a, b) => new Date(a.Title) - new Date(b.Title));
+  return tasksList.sort((a, b) => new Date(a.Deadline) - new Date(b.Deadline));
 };
 
 export const sortTasksLatest = (tasksList) => {
-  return tasksList.sort((a, b) => new Date(b.Title) - new Date(a.Title));
+  return tasksList.sort((a, b) => new Date(b.Deadline) - new Date(a.Deadline));
 };
 
 export const sortTasksImportant = (tasksList) => {
