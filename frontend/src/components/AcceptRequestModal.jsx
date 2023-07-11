@@ -47,7 +47,7 @@ const inputBoxStyle = {
 const titleStyle = {
   display: "flex",
   flexDirection: "row",
-  gap: "78%",
+  gap: "64%",
 };
 
 const emailBoxStyle = {
@@ -64,7 +64,7 @@ const AcceptRequestModal = () => {
   const handleClose = () => setOpen(false);
 
   return (
-    <div>
+    <Box>
       <Icon
         onClick={handleOpen}
         icon="fluent-mdl2:message-friend-request"
@@ -89,11 +89,13 @@ const AcceptRequestModal = () => {
                 className={styles.clickButton}
               />
             </Box>
-            <AcceptRequestCard />
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <AcceptRequestCard />
+            </Box>
           </Box>
         </Fade>
       </Modal>
-    </div>
+    </Box>
   );
 };
 

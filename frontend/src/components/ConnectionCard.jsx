@@ -27,6 +27,7 @@ function ConnectionCard() {
         height: "23rem",
         width: "18rem",
         alignItems: "center",
+        justifyContent: "center",
       }}
     >
       <ProfilePicture

@@ -46,7 +46,7 @@ const inputBoxStyle = {
 const titleStyle = {
   display: "flex",
   flexDirection: "row",
-  gap: "78%",
+  gap: "64%",
 };
 
 const emailBoxStyle = {
@@ -88,8 +88,17 @@ const SendRequestModal = () => {
                 className={styles.clickButton}
               />
             </Box>
-            <TextInput label="Email" type="email" />
-            <CustomButton text="Send Request"></CustomButton>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                rowGap: "40px",
+              }}
+            >
+              <TextInput label="Email" type="email" />
+              <CustomButton text="Send Request"></CustomButton>
+            </Box>
           </Box>
         </Fade>
       </Modal>
