@@ -1,7 +1,7 @@
 import { Modal, Fade, Box } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./styles/ProfileModal.module.css";
 import TextInput from "../components/TextInput";
 import TextField from '@mui/material/TextField';
@@ -16,12 +16,16 @@ import CustomButton from "../components/CustomButton";
 
 const UpdateProfileModal = () => {
 
-    // Initialise profile details
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [profileImage, setProfileImage] = useState("");
-    const [coverProfileImage, setCoverProfileImage] = useState("");
+  // Initialise profile details
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [profileImage, setProfileImage] = useState("");
+  const [coverProfileImage, setCoverProfileImage] = useState("");
+
+  useEffect(() => {
+    getProfileDetails();
+  });
 
   // Get profile details
   const getProfileDetails = async () => {

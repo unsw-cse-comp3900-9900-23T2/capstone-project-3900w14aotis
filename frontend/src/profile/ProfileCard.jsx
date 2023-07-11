@@ -8,13 +8,14 @@ const ProfileCard = ({ title, data }) => {
     <>
       <Box
         sx={{
-          width: "100%",
-          height: "10rem",
-          borderRadius: "1.25rem",
-          background: "#FFF",
-          boxShadow: "0px 0px 10px 3px rgba(0, 0, 0, 0.25)",
-          display: "flex",
-          justifyContent: "center",
+          width: '90%',
+          height: '25rem',
+          borderRadius: '1.25rem',
+          background: '#FFF',
+          boxShadow: '0px 0px 10px 3px rgba(0, 0, 0, 0.25)',
+          margin: '1rem',
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
         <h3 className={styles.statusHeading}>{title}</h3>
