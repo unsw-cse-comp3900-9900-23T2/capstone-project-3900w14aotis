@@ -1,4 +1,4 @@
-def getProfDetails(uid,db):
+def getProfDetails(uid, db):
     """gets user details given a user id (email, firstname, lastname,uid, tasks, projects)
 
     Args:
@@ -9,9 +9,8 @@ def getProfDetails(uid,db):
         profDetails(dict): dictionary containing user details
     """
     profDetails = {}
-    docs = db.collection("taskmasters").where("uid", "==",uid).limit(1).stream()
+    docs = db.collection("taskmasters").where("uid", "==", uid).limit(1).stream()
     for doc in docs:
         profDetails = doc.to_dict()
 
     return profDetails
-

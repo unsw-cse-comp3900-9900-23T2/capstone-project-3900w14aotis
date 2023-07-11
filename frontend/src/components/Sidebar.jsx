@@ -89,7 +89,7 @@ const Sidebar = () => {
             <Icon
               aria-label=""
               icon="fa-solid:user-friends"
-              height="1.9375rem"
+              height="1.7rem"
               color={"#454545"}
             />
           }

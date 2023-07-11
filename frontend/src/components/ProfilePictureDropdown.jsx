@@ -11,6 +11,10 @@ import { getAuth, signOut } from "firebase/auth";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 
+// TODO: Add logic to load users profile image, if no profile pic then
+// do what ProfilePicture.jsx does.
+// TODO: :Load user profile image under the profile dropdown
+
 const ProfilePictureDropdown = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -48,9 +52,11 @@ const ProfilePictureDropdown = () => {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 50, height: 50 }}>
-              <img height={100} src="/Jira-Emblem.png" alt="Otis logo" />
-            </Avatar>
+            <Avatar
+              src="/Jira-Emblem.png"
+              sx={{ width: 50, height: 50 }}
+              alt="Otis logo"
+            />
           </IconButton>
         </Tooltip>
       </Box>
