@@ -60,15 +60,13 @@ const RegisterPage = () => {
   };
 
   const registerContainerSx = {
-    marginTop: "70px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    width: "32.4375rem",
-    height: "51rem",
     borderRadius: "20px",
     background: "#FFF",
     boxShadow: "0px 0px 10px 3px rgba(0, 0, 0, 0.25)",
+    height: "clamp(30rem, 51rem, 51rem)",
   };
 
   const inputContainerSx = {
@@ -82,46 +80,61 @@ const RegisterPage = () => {
 
   return (
     <>
-      <Box sx={registerContainerSx}>
-        <h1 className={styles.h1Text}>Register</h1>
-        <Box sx={inputContainerSx}>
-          <TextInput
-            label="First Name"
-            type="text"
-            placeholder="Eddy"
-            onChangeFunction={onChangeFirstName}
-          />
-          <TextInput
-            label="Last Name"
-            type="text"
-            placeholder="Hien"
-            onChangeFunction={onChangeLastName}
-          />
-          <TextInput
-            label="Email"
-            type="email"
-            placeholder="eddyh@gmail.com"
-            onChangeFunction={onChangeEmail}
-          />
-          <TextInput
-            label="Password"
-            type="password"
-            placeholder="myPassword!3900"
-            onChangeFunction={onChangePassword}
-            boxColour={passwordColour}
-          />
-          <TextInput
-            label="Confirm Password"
-            type="password"
-            placeholder="myPassword!3900"
-            onChangeFunction={onChangeConfirmPassword}
-            boxColour={passwordColour}
-          />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          minHeight: "calc(100vh - 70px)",
+        }}
+      >
+        <Box sx={{ width: "clamp(25rem, 30vw , 32.4375rem)" }}>
+          <Box sx={registerContainerSx}>
+            <h1 className={styles.h1Text}>Register</h1>
+            <Box sx={inputContainerSx}>
+              <TextInput
+                label="First Name"
+                type="text"
+                placeholder="Eddy"
+                onChangeFunction={onChangeFirstName}
+              />
+              <TextInput
+                label="Last Name"
+                type="text"
+                placeholder="Hien"
+                onChangeFunction={onChangeLastName}
+              />
+              <TextInput
+                label="Email"
+                type="email"
+                placeholder="eddyh@gmail.com"
+                onChangeFunction={onChangeEmail}
+              />
+              <TextInput
+                label="Password"
+                type="password"
+                placeholder="myPassword!3900"
+                onChangeFunction={onChangePassword}
+                boxColour={passwordColour}
+              />
+              <TextInput
+                label="Confirm Password"
+                type="password"
+                placeholder="myPassword!3900"
+                onChangeFunction={onChangeConfirmPassword}
+                boxColour={passwordColour}
+              />
+            </Box>
+            <CustomButton
+              text="Create Account"
+              onClickFunction={registerHandler}
+            />
+            <div className={styles.textLinkRegister}>
+              Already have an account? <TextLink linkTo="/login" text="Login" />
+            </div>
+          </Box>
         </Box>
-        <CustomButton text="Create Account" onClickFunction={registerHandler} />
-        <div className={styles.textLinkRegister}>
-          Already have an account? <TextLink linkTo="/login" text="Login" />
-        </div>
       </Box>
     </>
   );

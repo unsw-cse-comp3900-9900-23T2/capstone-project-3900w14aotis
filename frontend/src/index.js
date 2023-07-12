@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import store from "./store/configureStore.js";
 import "./index.css";
 import firebase from "./firebase";
+import "react-toastify/dist/ReactToastify.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

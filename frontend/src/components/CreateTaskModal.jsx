@@ -58,14 +58,14 @@ const createButtonBox = {
   justifyContent: "center",
 };
 
-const CreateTaskModal = ({ isOpen, closeFunction }) => {
+const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
   const [email, setEmail] = useState("");
   const [assignees, setAssignees] = useState([]);
   const [priority, setPriority] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(defaultStatus);
 
   const onChangeTitle = (value) => setTitle(value);
   const onChangeDescription = (value) => setDescription(value);
@@ -245,6 +245,7 @@ const CreateTaskModal = ({ isOpen, closeFunction }) => {
                 label="Status"
                 options={["To Do", "In Progress", "Done"]}
                 onChangeFunction={onChangeStatus}
+                defaultStatus={defaultStatus}
               ></DropDown>
             </Box>
 

@@ -24,7 +24,19 @@ const ColumnStatus = ({ columnId, title, tasks }) => {
 
   return (
     <>
-      <CreateTaskModal isOpen={isOpen} closeFunction={closeModalHandler} />
+      <CreateTaskModal
+        isOpen={isOpen}
+        closeFunction={closeModalHandler}
+        defaultStatus={
+          title === "TO DO"
+            ? "To Do"
+            : title === "IN PROGRESS"
+            ? "In Progress"
+            : title === "DONE"
+            ? "Done"
+            : "To Do"
+        }
+      />
       <Box
         sx={{
           display: "flex",

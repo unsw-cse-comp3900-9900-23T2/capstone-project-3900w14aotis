@@ -1,20 +1,9 @@
 import React from "react";
-import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import { stringToColor } from "../utils/helpers";
+import { stringAvatar } from "../utils/helpers";
 
 const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
-  const stringAvatar = (name) => {
-    return {
-      sx: {
-        bgcolor: stringToColor(name),
-      },
-      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
-    };
-  };
-
   const { uid, profileImage, firstName, lastName } = userDetails;
 
   const handleClick = (event) => {
@@ -22,26 +11,27 @@ const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        textAlign: "center",
-        // padding: "0px",
-      }}
-      onClick={() => {
-        handleClick();
-      }}
-    >
-      <Tooltip title={`${firstName} ${lastName} Profile`}>
+    <Tooltip title={`${firstName} ${lastName} Profile`}>
+      {profileImage ? (
         <Avatar
           sx={{ width: imgWidth, height: imgHeight }}
-          // src="/Jira-Emblem.png"
+          src="/Jira-Emblem.png"
+          alt={`${firstName} ${lastName}`}
+          onClick={() => {
+            handleClick();
+          }}
+        />
+      ) : (
+        <Avatar
+          sx={{ width: imgWidth, height: imgHeight }}
           alt={`${firstName} ${lastName}`}
           {...stringAvatar(`${firstName} ${lastName}`)}
+          onClick={() => {
+            handleClick();
+          }}
         />
-      </Tooltip>
-    </Box>
+      )}
+    </Tooltip>
   );
 };
 
