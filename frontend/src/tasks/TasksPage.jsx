@@ -36,6 +36,7 @@ const TasksPage = () => {
       );
       setAllTasks(sortedAllTasks);
       setTasksAfterFilter(sortedAllTasks);
+      console.log("LALLALALALLA");
       console.log(sortedAllTasks);
     }
   };

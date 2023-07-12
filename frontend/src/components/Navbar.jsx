@@ -32,6 +32,7 @@ const Navbar = () => {
     justifyContent: "space-between",
     width: "100%",
     boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
+    zIndex: "2",
   };
 
   const logoContainerSx = {

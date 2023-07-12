@@ -21,7 +21,7 @@ def authRegister(item, db):
         {
             "firstName": item.firstName,
             "lastName": item.lastName,
-            "email": item.email,
+            "email": item.email.lower(),
             "uid": item.uid,
             "tasks": item.tasks,
             "projects": item.projects,
