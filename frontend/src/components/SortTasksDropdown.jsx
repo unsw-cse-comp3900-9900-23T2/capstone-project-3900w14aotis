@@ -33,18 +33,16 @@ const SortTasksDropdown = ({ sortTasksFunction }) => {
         },
       }}
     >
+      <h3 style={{ textAlign: "center" }} onClick={handleClick}>
+        Sort By{sortedBy}
+      </h3>
       <Icon
         labelId="sortByDropdown"
         icon="octicon:filter-16"
-        style={{ fontSize: "50px", marginRight: "10px", marginLeft: "20px" }}
+        style={{ fontSize: "50px", marginRight: "30px" }}
         onClick={handleClick}
       />
-      <h3
-        style={{ textAlign: "center", marginRight: "20px" }}
-        onClick={handleClick}
-      >
-        Sort By{sortedBy}
-      </h3>
+
       <Menu
         id="sortByDropdown"
         anchorEl={anchorEl}

@@ -65,7 +65,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   const [email, setEmail] = useState("");
   const [assignees, setAssignees] = useState([]);
   const [priority, setPriority] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState(defaultStatus);
 
   const onChangeTitle = (value) => setTitle(value);
   const onChangeDescription = (value) => setDescription(value);
