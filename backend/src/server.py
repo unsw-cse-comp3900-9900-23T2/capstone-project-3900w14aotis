@@ -661,3 +661,13 @@ async def getPendingConnections(userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error retrieving user's connections"},
         )
+    
+@app.delete("/connections/remove/{userId}", summary="removes connection between two users")
+async def removeConnection(currUser: str, userId: str):
+    """
+    Removes the connection between two users.
+
+    Args:
+        currUser (str): Current user's uID
+        userId (str): User uID of the person you want to remove.
+    """
