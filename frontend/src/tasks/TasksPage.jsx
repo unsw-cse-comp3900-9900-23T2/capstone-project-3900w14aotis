@@ -36,7 +36,6 @@ const TasksPage = () => {
       );
       setAllTasks(sortedAllTasks);
       setTasksAfterFilter(sortedAllTasks);
-      console.log(sortedAllTasks);
     }
   };
 
@@ -135,6 +134,7 @@ const TasksPage = () => {
           isOpen={open}
           onClose={modalClose}
           details={currTaskDetails}
+          projectId={projectId}
         />
         <Box
           sx={{

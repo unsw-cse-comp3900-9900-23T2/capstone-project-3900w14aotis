@@ -8,6 +8,8 @@ import styles from "./styles/TaskModal.module.css";
 import ProfilePicture from "./ProfilePicture";
 import DeadlineBox from "./DeadlineBox";
 import TaskUsers from "../components/TaskUsers";
+import { deleteTaskFetch } from "../api/task";
+import { displayError, displaySuccess } from "../utils/helpers";
 
 const modalStyle = {
   display: "flex",
@@ -47,7 +49,17 @@ const faceStyle = {
     cursor: "pointer",
   },
 };
-const ViewTaskModal = ({ isOpen, onClose, details }) => {
+const ViewTaskModal = ({ isOpen, onClose, details, projectId }) => {
+  const deleteTaskHandler = async () => {
+    const deleteTaskResponse = await deleteTaskFetch(projectId, details.id);
+    if (deleteTaskResponse.code !== 200) {
+      displayError(deleteTaskResponse.message);
+    } else {
+      displaySuccess(deleteTaskResponse.message);
+    }
+    console.log(deleteTaskResponse);
+    onClose();
+  };
   return (
     <div>
       <Modal
@@ -167,6 +179,21 @@ const ViewTaskModal = ({ isOpen, onClose, details }) => {
               width={"7.4375rem"}
               height={"2.49rem"}
             />
+            <Box
+              onClick={deleteTaskHandler}
+              sx={{
+                "&:hover": {
+                  cursor: "pointer",
+                },
+              }}
+            >
+              <Icon
+                icon="mingcute:delete-line"
+                style={{
+                  fontSize: "50px",
+                }}
+              />
+            </Box>
           </Box>
         </Fade>
       </Modal>

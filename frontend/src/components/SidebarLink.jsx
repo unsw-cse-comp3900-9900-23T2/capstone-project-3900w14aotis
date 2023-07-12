@@ -33,10 +33,11 @@ const SidebarLink = ({
             background: " rgba(217, 217, 217, 0.50)",
             boxShadow: "5px 0px 0px 0px #2684FF inset",
           }),
+          justifyContent: "center",
         }}
       >
         {icon}
-        <ListItemText primary={text} sx={listItemSx} />
+        {text && <ListItemText primary={text} sx={listItemSx} />}
       </ListItemButton>
     </ListItem>
   );

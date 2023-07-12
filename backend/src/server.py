@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.task.assignTask import addAssignee
 from src.task.assignTask import deleteAssignee
 from src.task.getTaskDetails import getDetails
+from src.task.deleteTask import taskRemove
 from src.task.update import updateTask
 from src.profile.update import updateProfile
 from src.profile.getTasks import userTasks
@@ -322,7 +323,29 @@ async def deleteTaskAssignee(assignee: Assignee):
             detail={"code": "404", "message": "Error removing taskmaster"},
         )
 
+@app.delete("/task/delete/{projectId}/{taskId}", summary="Removes a task")
+async def deleteTask(projectId:str, taskId:str):
+    """
+    This function removes a task from a project
 
+    Args:
+        projectId (str): ID for the project that the task is in
+        taskId (str): ID for the task that you want to remove someone from
+
+    Returns:
+        deleted (str): taskId if it has been removed
+    """
+    try:
+        deleted = taskRemove(projectId,taskId, db)
+        return {
+            "detail": {"code": 200, "message": f"Task: {deleted} successfully removed"}
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error removing task"},
+        )
+    
 @app.post("/task/update/{projectId}/{taskId}", summary="Updates a tasks details")
 async def updateTaskDetails(item: UpdateTask, projectId: str, taskId: str):
     """Update task details given project and task Id
