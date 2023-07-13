@@ -9,9 +9,11 @@ import ProfileCard from "./ProfileCard";
 import { profileDetailFetch } from "../api/profile.js";
 import { getAuth } from "firebase/auth";
 import { useParams } from "react-router-dom";
+import ProfilePicture from "../components/ProfilePicture";
 
 const ProfilePage = () => {
   // Initialise profile details
+  const [userDetails, setUserDetails] = useState({});
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,6 +43,7 @@ const ProfilePage = () => {
       const profileDetailsResponse = await profileDetailFetch(userId);
       // TODO: try catch?
       const profile = profileDetailsResponse.detail.message;
+      setUserDetails(profile);
       console.log(profile);
       setFirstName(profile.firstName);
       setLastName(profile.lastName);
@@ -77,7 +80,7 @@ const ProfilePage = () => {
         <Box
           sx={{
             display: "flex",
-            height: "30%",
+            height: "35%",
             background: "#D9D9D9",
           }}
         >
@@ -97,18 +100,22 @@ const ProfilePage = () => {
             flexDirection: "column",
             alignItems: "center",
             flex: "3",
-            background: "pink",
+            backgroundAttachment: "fixed",
+            background:
+              "radial-gradient(98.88% 50% at 50% 50%,rgba(149, 195, 255, 0.9) 27.08%,rgba(38, 132, 255, 0.9) 98.44%)",
           }}
         >
           <Box
             sx={{
-              width: "50px",
-              height: "50px",
-              background: "black",
-              transform: "translateY(-30px)",
+              marginTop: "-170px",
             }}
           >
-            {/* TODO: INSERT PROFILE IMAGE HERE */}
+            <ProfilePicture
+              key={userId ? userId : email}
+              userDetails={userDetails}
+              imgWidth={"clamp(300px, 15vw, 15vw)"}
+              imgHeight={"clamp(300px, 15vw, 15vw)"}
+            />
           </Box>
           <Box>
             <h1>{`${firstName} ${lastName}`}</h1>
@@ -116,26 +123,11 @@ const ProfilePage = () => {
           <Box>
             <h4>{`${email}`}</h4>
           </Box>
-          <Box sx={{ height: "300px" }}>LALALLA</Box>
-          <Box sx={{ height: "300px" }}>LALALLA</Box>
-          <Box sx={{ height: "300px" }}>LALALLA</Box>
-          <Box sx={{ height: "300px" }}>LALALLA</Box>
+          <ProfileCard title={"Ratings"} />
+          <ProfileCard title={"Achievements"} />
+          <ProfileCard title={"Assigned Tasks"} />
         </Box>
       </Box>
-      {/* <Box>
-          <Box>
-            <h1>{firstName}</h1>
-            <UpdateProfileModal />
-          </Box>
-        </Box> */}
-      {/* <BackButton text="Back" onClickFunction={backButtonHandler} />
-        <Box sx={nameContainerSx}>
-          <h1>{firstName}</h1>
-          <UpdateProfileModal />
-        </Box>
-        <ProfileCard title={"Ratings"} />
-        <ProfileCard title={"Achievements"} />
-        <ProfileCard title={"Assigned Tasks"} /> */}
     </>
   );
 };

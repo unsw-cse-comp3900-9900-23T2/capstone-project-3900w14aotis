@@ -1,6 +1,5 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import styles from "./styles/ProfileLayout.module.css";
 import { Box } from "@mui/material";
 
 const ProfileLayout = () => {
@@ -10,18 +9,16 @@ const ProfileLayout = () => {
   };
 
   return (
-    <div className={styles.background}>
-      <Box sx={containerSx}>
-        <Box
-          sx={{
-            width: "100%",
-            marginTop: "70px",
-          }}
-        >
-          <Outlet />
-        </Box>
+    <Box sx={containerSx}>
+      <Box
+        sx={{
+          width: "100%",
+          marginTop: "70px",
+        }}
+      >
+        <Outlet />
       </Box>
-    </div>
+    </Box>
   );
 };
 export default ProfileLayout;
