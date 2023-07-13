@@ -68,38 +68,37 @@ const ProfilePictureDropdown = () => {
     navigate("/login");
   };
 
-  return loading ? (
-    <Loading />
-  ) : (
+  return (
     <Box sx={{ marginRight: "30px" }}>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="My Account">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
-            {userDetails.profileImage.length !== 0 ? (
-              <Avatar
-                src={userDetails.profileImage}
-                sx={{ width: 50, height: 50 }}
-                alt={`Your Profile`}
-              />
-            ) : (
-              <Avatar
-                src="/Default-Avatar.png"
-                sx={{ width: 50, height: 50 }}
-                alt={`Your Profile`}
-                // {...stringAvatar(
-                //   `${userDetails.firstName} ${userDetails.lastName}`
-                // )}
-              />
-            )}
-          </IconButton>
-        </Tooltip>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Tooltip title="My Account">
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              sx={{ ml: 2 }}
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              {userDetails.profileImage.length !== 0 ? (
+                <Avatar
+                  src={userDetails.profileImage}
+                  sx={{ width: 50, height: 50 }}
+                  alt={`Your Profile`}
+                />
+              ) : (
+                <Avatar
+                  src="/Default-Avatar.png"
+                  sx={{ width: 50, height: 50 }}
+                  alt={`Your Profile`}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
       <Menu
         anchorEl={anchorEl}
