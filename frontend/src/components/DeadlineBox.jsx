@@ -23,7 +23,7 @@ const DeadlineBox = ({ deadline, status, width, height }) => {
       if (days > 7) {
         setColor("#E5E5E5");
         setBorderColor("#8A8A8A");
-      } else if (days > 3) {
+      } else if (days > 0) {
         setColor("#FFF3C7");
         setBorderColor("#E09032");
       } else if (days <= 0) {

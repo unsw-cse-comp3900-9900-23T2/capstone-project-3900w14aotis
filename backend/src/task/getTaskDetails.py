@@ -50,7 +50,12 @@ def getProfDetails(email, db):
         profDetails(dict): dictionary of the profiles details
     """
     profDetails = {}
-    docs = db.collection("taskmasters").where("email", "==", email).limit(1).stream()
+    docs = (
+        db.collection("taskmasters")
+        .where("email", "==", email.lower())
+        .limit(1)
+        .stream()
+    )
     for doc in docs:
         profDetails = doc.to_dict()
 
