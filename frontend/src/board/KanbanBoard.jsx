@@ -14,6 +14,7 @@ const KanbanBoard = () => {
   const [doingTasks, setDoingTasks] = useState([]);
   const [doneTasks, setDoneTasks] = useState([]);
   const [board, setBoard] = useState(columns);
+  const [loading, setLoading] = useState(true);
 
   const { projectId } = useParams();
   const taskAdded = useSelector((state) => state.tasksUpdated);
@@ -34,6 +35,7 @@ const KanbanBoard = () => {
       currBoard[1].tasks = doingTasks;
       currBoard[2].tasks = doneTasks;
       setBoard(currBoard);
+      setLoading(false);
     }
   };
 
@@ -137,6 +139,7 @@ const KanbanBoard = () => {
                   ? board[2].tasks
                   : []
               }
+              isLoading={loading}
             />
           );
         })}
