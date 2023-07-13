@@ -136,3 +136,18 @@ export const updateTaskFetch = async (
   const updateTaskResponse = await updateTaskPromise.json();
   return updateTaskResponse;
 };
+
+export const deleteTaskFetch = async (projectId, taskId) => {
+  const requestOption = {
+    method: "DELETE",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+  };
+
+  const deleteTaskPromise = await fetch(
+    `${API_URL}/task/delete/${projectId}/${taskId}`,
+    requestOption
+  );
+
+  const deleteTaskResponse = await deleteTaskPromise.json();
+  return deleteTaskResponse;
+};
