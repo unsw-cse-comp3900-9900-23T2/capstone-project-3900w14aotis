@@ -30,9 +30,9 @@ const router = createBrowserRouter(
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
       </Route>
-      <Route path="/otis" element={<ProfileLayout />}>
+      <Route path="/otis/profile" element={<ProfileLayout />}>
         <Route
-          path="profile"
+          path=":userId"
           element={
             <ProtectedRoute>
               <ProfilePage />
@@ -51,7 +51,6 @@ const router = createBrowserRouter(
               </ProtectedRoute>
             }
           />
-          
           <Route
             path="project/tasks"
             element={
