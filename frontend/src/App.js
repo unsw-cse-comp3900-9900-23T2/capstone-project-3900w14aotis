@@ -1,39 +1,50 @@
-import './App.css';
-import './index.css';
+import "./App.css";
+import "./index.css";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Navigate,
   Route,
   RouterProvider,
-} from 'react-router-dom';
-import RootLayout from './layouts/RootLayout';
-import AuthLayout from './layouts/AuthLayout';
-import AppLayout from './layouts/AppLayout';
-import LoginPage from './authentication/LoginPage';
-import RegisterPage from './authentication/RegisterPage';
-import ProtectedRoute from './ProtectedRoute';
-import TasksPage from './tasks/TasksPage';
-import DashboardPage from './home/DashboardPage';
-import ProjectPage from './projects/ProjectPage';
-import CreateProject from './projects/CreateProjectPage';
-import JoinProject from './projects/JoinProjectPage';
-import BoardPage from './board/BoardPage';
-import ConnectionsPage from './connections/ConnectionsPage';
+} from "react-router-dom";
+import RootLayout from "./layouts/RootLayout";
+import AuthLayout from "./layouts/AuthLayout";
+import AppLayout from "./layouts/AppLayout";
+import ProfileLayout from "./layouts/ProfileLayout";
+import LoginPage from "./authentication/LoginPage";
+import RegisterPage from "./authentication/RegisterPage";
+import ProtectedRoute from "./ProtectedRoute";
+import TasksPage from "./tasks/TasksPage";
+import DashboardPage from "./home/DashboardPage";
+import ProjectPage from "./projects/ProjectPage";
+import CreateProject from "./projects/CreateProjectPage";
+import JoinProject from "./projects/JoinProjectPage";
+import BoardPage from "./board/BoardPage";
+import ProfilePage from "./profile/ProfilePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<RootLayout />}>
-      <Route path='/' element={<AuthLayout />}>
-        <Route index element={<Navigate to='/login' />} />
-        <Route path='login' element={<LoginPage />} />
-        <Route path='register' element={<RegisterPage />} />
+      <Route path="/" element={<AuthLayout />}>
+        <Route index element={<Navigate to="/login" />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
+      </Route>
+      <Route path="/otis/profile" element={<ProfileLayout />}>
+        <Route
+          path=":userId"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
       </Route>
       <Route element={<AppLayout />}>
-        <Route path='/otis'>
-          <Route index element={<Navigate to='/otis/dashboard' />} />
+        <Route path="/otis">
+          <Route index element={<Navigate to="/otis/dashboard" />} />
           <Route
-            path='dashboard'
+            path="dashboard"
             element={
               <ProtectedRoute>
                 <DashboardPage />
@@ -41,7 +52,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path='project/tasks'
+            path="project/tasks"
             element={
               <ProtectedRoute>
                 <ProjectPage />
@@ -49,7 +60,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path='project/board'
+            path="project/board"
             element={
               <ProtectedRoute>
                 <ProjectPage />
@@ -57,7 +68,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path=':projectId/tasks'
+            path=":projectId/tasks"
             element={
               <ProtectedRoute>
                 <TasksPage />
@@ -65,7 +76,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path=':projectId/board'
+            path=":projectId/board"
             element={
               <ProtectedRoute>
                 <BoardPage />
@@ -73,7 +84,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path='project'
+            path="project"
             element={
               <ProtectedRoute>
                 <ProjectPage />
@@ -81,7 +92,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path='project/create/board'
+            path="project/create/board"
             element={
               <ProtectedRoute>
                 <CreateProject />
@@ -89,7 +100,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path='project/create/tasks'
+            path="project/create/tasks"
             element={
               <ProtectedRoute>
                 <CreateProject />
@@ -97,7 +108,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path='project/join/board'
+            path="project/join/board"
             element={
               <ProtectedRoute>
                 <JoinProject />
@@ -105,7 +116,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path='project/join/tasks'
+            path="project/join/tasks"
             element={
               <ProtectedRoute>
                 <JoinProject />
@@ -113,7 +124,7 @@ const router = createBrowserRouter(
             }
           />
           <Route
-            path='connections'
+            path="connections"
             element={
               <ProtectedRoute>
                 <ConnectionsPage />

@@ -7,7 +7,12 @@ const TaskUsers = ({ assignees, group }) => {
   return (
     <>
       {group ? (
-        <AvatarGroup max={3}>
+        <AvatarGroup
+          max={3}
+          sx={{
+            "& .MuiAvatar-root": { width: 35, height: 35 },
+          }}
+        >
           {assignees.map((user) => {
             return (
               <ProfilePicture

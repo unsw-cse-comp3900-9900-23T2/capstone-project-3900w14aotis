@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import { Icon } from "@iconify/react";
-import styles from "./styles/TaskModal.module.css";
+import styles from "./styles/Modal.module.css";
 import ProfilePicture from "./ProfilePicture";
 import DeadlineBox from "./DeadlineBox";
 import TaskUsers from "../components/TaskUsers";
