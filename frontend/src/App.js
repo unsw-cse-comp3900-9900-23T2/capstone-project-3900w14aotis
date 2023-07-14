@@ -10,6 +10,7 @@ import {
 import RootLayout from "./layouts/RootLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import AppLayout from "./layouts/AppLayout";
+import ProfileLayout from "./layouts/ProfileLayout";
 import LoginPage from "./authentication/LoginPage";
 import RegisterPage from "./authentication/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
@@ -19,6 +20,7 @@ import ProjectPage from "./projects/ProjectPage";
 import CreateProject from "./projects/CreateProjectPage";
 import JoinProject from "./projects/JoinProjectPage";
 import BoardPage from "./board/BoardPage";
+import ProfilePage from "./profile/ProfilePage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +29,16 @@ const router = createBrowserRouter(
         <Route index element={<Navigate to="/login" />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
+      </Route>
+      <Route path="/otis/profile" element={<ProfileLayout />}>
+        <Route
+          path=":userId"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
       </Route>
       <Route element={<AppLayout />}>
         <Route path="/otis">

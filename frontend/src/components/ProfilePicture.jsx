@@ -14,7 +14,10 @@ const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
     <Tooltip title={`${firstName} ${lastName} Profile`}>
       {profileImage ? (
         <Avatar
-          sx={{ width: imgWidth, height: imgHeight }}
+          sx={{
+            width: `${imgWidth} !important`,
+            height: `${imgHeight} !important`,
+          }}
           src="/Jira-Emblem.png"
           alt={`${firstName} ${lastName}`}
           onClick={() => {
@@ -23,7 +26,10 @@ const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
         />
       ) : (
         <Avatar
-          sx={{ width: imgWidth, height: imgHeight }}
+          style={{
+            width: imgWidth,
+            height: imgHeight,
+          }}
           alt={`${firstName} ${lastName}`}
           {...stringAvatar(`${firstName} ${lastName}`)}
           onClick={() => {
