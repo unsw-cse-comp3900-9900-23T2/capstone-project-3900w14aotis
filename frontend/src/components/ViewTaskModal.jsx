@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -10,6 +10,9 @@ import DeadlineBox from "./DeadlineBox";
 import TaskUsers from "../components/TaskUsers";
 import { deleteTaskFetch } from "../api/task";
 import { displayError, displaySuccess } from "../utils/helpers";
+import { addRatingFetch } from "../api/rating";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import TaskRatingIcon from "../components/TaskRatingIcon";
 
 const modalStyle = {
   display: "flex",
@@ -19,7 +22,7 @@ const modalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 800,
+  width: "clamp(35rem, 40vw, 45vw)",
   bgcolor: "background.paper",
   boxShadow: "0px 0px 10px 10px rgba(0, 0, 0, 0.25)",
   p: 4,
@@ -49,7 +52,17 @@ const faceStyle = {
     cursor: "pointer",
   },
 };
+
 const ViewTaskModal = ({ isOpen, onClose, details, projectId }) => {
+  const ratingMapping = [
+    { mood: "Very Happy", iconName: "tabler:mood-happy" },
+    { mood: "Happy", iconName: "akar-icons:face-happy" },
+    { mood: "Tiring", iconName: "fa6-regular:face-tired" },
+    { mood: "Angry", iconName: "uil:angry" },
+    { mood: "Sad", iconName: "akar-icons:face-sad" },
+    { mood: "Very Sad", iconName: "fa-regular:sad-cry" },
+  ];
+
   const deleteTaskHandler = async () => {
     const deleteTaskResponse = await deleteTaskFetch(projectId, details.id);
     if (deleteTaskResponse.code !== 200) {
@@ -60,6 +73,31 @@ const ViewTaskModal = ({ isOpen, onClose, details, projectId }) => {
     console.log(deleteTaskResponse);
     onClose();
   };
+
+  const ratingFetch = async (uid, mood) => {
+    const addRatingResponse = await addRatingFetch(
+      projectId,
+      details.id,
+      uid,
+      mood
+    );
+    console.log(addRatingResponse);
+  };
+
+  const addRatingHandler = async (mood) => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        localStorage.setItem("loggedIn", true);
+        ratingFetch(user.uid, mood);
+      } else {
+        // User is signed out
+        localStorage.removeItem("loggedIn");
+      }
+    });
+  };
+
   return (
     <div>
       <Modal
@@ -120,41 +158,35 @@ const ViewTaskModal = ({ isOpen, onClose, details, projectId }) => {
             </Box>
             <Box sx={displayBoxStyle}>
               <Icon icon="ph:star-bold" style={{ fontSize: "50px" }} />
-              <Box sx={faceStyle}>
-                <Icon icon="tabler:mood-happy" style={{ fontSize: "50px" }} />
-                <p>Very Happy</p>
-              </Box>
-              <Box sx={faceStyle}>
-                <Icon
-                  icon="akar-icons:face-happy"
-                  style={{ fontSize: "50px" }}
-                />
-                <p>Happy</p>
-              </Box>
-              <Box sx={faceStyle}>
-                <Icon
-                  icon="fa6-regular:face-tired"
-                  style={{ fontSize: "50px" }}
-                />
-                <p>Tiring</p>
-              </Box>
-              <Box sx={faceStyle}>
-                <Icon
-                  icon="uil:angry"
-                  style={{
-                    fontSize: "50px",
-                  }}
-                  className="emotion"
-                />
-                <p>Angry</p>
-              </Box>
-              <Box sx={faceStyle}>
-                <Icon icon="akar-icons:face-sad" style={{ fontSize: "50px" }} />
-                <p>Sad</p>
-              </Box>
-              <Box sx={faceStyle}>
-                <Icon icon="fa-regular:sad-cry" style={{ fontSize: "50px" }} />
-                <p>Very sad</p>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: "20px",
+                  width: "100%",
+                }}
+              >
+                {ratingMapping.map((rating, idx) => {
+                  const auth = getAuth();
+                  const uid = auth.currentUser.uid;
+                  let rated = false;
+                  console.log(uid);
+                  console.log(details);
+                  // for (const [key, value] of Object.entries(details.Rating)) {
+                  //   if (value.includes(uid)) {
+                  //     rated = true;
+                  //     break;
+                  //   }
+                  // }
+                  return (
+                    <TaskRatingIcon
+                      key={idx}
+                      rated={rated}
+                      iconName={rating.iconName}
+                      mood={rating.mood}
+                      addRatingFunction={addRatingHandler}
+                    />
+                  );
+                })}
               </Box>
             </Box>
             <Box sx={displayBoxStyle}>
