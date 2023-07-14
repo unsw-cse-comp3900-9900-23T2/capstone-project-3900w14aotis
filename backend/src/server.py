@@ -21,8 +21,7 @@ from src.profile.getRatings import userRatings
 from src.profile.getDetails import getProfDetails
 from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
-from src.connections.connectionRespond import acceptConnection
-from src.connections.connectionRespond import declineConnection
+from src.connections.connectionRespond import acceptConnection, declineConnection
 from src.connections.getConnections import getConnections
 from src.connections.connectionRemove import unfriend
 
@@ -76,7 +75,8 @@ class NewProject(BaseModel):
 class Assignee(BaseModel):
     projectId: str
     taskId: str
-    userId: str
+    email: str
+    currUser: str
 
 
 class JoinProject(BaseModel):
@@ -287,9 +287,9 @@ async def addTaskAssignee(assignee: Assignee):
         userId (str): uID if the user is successfully added
     """
     try:
-        assigned = addAssignee(assignee.projectId, assignee.taskId, assignee.userId, db)
+        assigned = addAssignee(assignee.projectId, assignee.taskId, assignee.email, assignee.currUser, db)
         return {
-            "detail": {"code": 200, "message": f"User: {assigned} successfully added"}
+            "detail": {"code": 200, "message": assigned}
         }
     except:
         raise HTTPException(
@@ -313,7 +313,7 @@ async def deleteTaskAssignee(assignee: Assignee):
     """
     try:
         deleted = deleteAssignee(
-            assignee.projectId, assignee.taskId, assignee.userId, db
+            assignee.projectId, assignee.taskId, assignee.email, db
         )
         return {
             "detail": {"code": 200, "message": f"User: {deleted} successfully removed"}
@@ -555,9 +555,9 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
         message (str): a message to show it was successful
     """
     try:
-        sendConnection(userEmail, currUser, db)
+        messageStatus = sendConnection(userEmail, currUser, db)
         return {
-            "detail": {"code": 200, "message": f"Connection request successfully sent!"}
+            "detail": {"code": 200, "message": messageStatus}
         }
     except:
         raise HTTPException(
