@@ -555,9 +555,9 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
         message (str): a message to show it was successful
     """
     try:
-        sendConnection(userEmail, currUser, db)
+        messageStatus = sendConnection(userEmail, currUser, db)
         return {
-            "detail": {"code": 200, "message": f"Connection request successfully sent!"}
+            "detail": {"code": 200, "message": messageStatus}
         }
     except:
         raise HTTPException(

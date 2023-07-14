@@ -29,7 +29,7 @@ def addAssignee(projectId, taskId, email, currUser, db):
     # ref for the taskmaster's details document
     taskmasterRef = findUser("email", userEmail, db)
 
-    #check if users are connected
+    # check if users are connected
     if not isConnectedTo(currUser, "email", userEmail, db):
         return "Users are not connected!"
 
