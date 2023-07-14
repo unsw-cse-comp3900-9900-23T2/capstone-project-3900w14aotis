@@ -21,6 +21,7 @@ import CreateProject from "./projects/CreateProjectPage";
 import JoinProject from "./projects/JoinProjectPage";
 import BoardPage from "./board/BoardPage";
 import ProfilePage from "./profile/ProfilePage";
+import ConnectionsPage from "./connections/ConnectionsPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

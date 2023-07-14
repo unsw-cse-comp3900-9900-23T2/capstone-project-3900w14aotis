@@ -1,25 +1,11 @@
 import React, { useState } from "react";
-import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import Button from "@mui/material/Button";
 import { Icon } from "@iconify/react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import TextInput from "./TextInput";
-import TextBox from "./TextBox";
-import Chip from "@mui/material/Chip";
-import { displayError, displaySuccess } from "../utils/helpers";
-import DropDown from "./Dropdown";
 import styles from "./styles/Modal.module.css";
 import CustomButton from "./CustomButton";
-import { getAuth } from "firebase/auth";
-import { createTaskFetch } from "../api/task.js";
-import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { addTaskAction } from "../tasks/state/addTaskAction";
 
 const modalStyle = {
   display: "flex",
@@ -36,31 +22,18 @@ const modalStyle = {
   borderRadius: "15px",
 };
 
-const inputBoxStyle = {
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-  gap: "30px",
-};
-
 const titleStyle = {
   display: "flex",
   flexDirection: "row",
   gap: "64%",
 };
 
-const emailBoxStyle = {
-  width: "100%",
-};
-
-const createButtonBox = {
-  display: "flex",
-  justifyContent: "center",
-};
 const SendRequestModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [email, setEmail] = useState("");
+  const onChangeEmail = (value) => setEmail(value);
 
   return (
     <div>
@@ -96,7 +69,11 @@ const SendRequestModal = () => {
                 rowGap: "40px",
               }}
             >
-              <TextInput label="Email" type="email" />
+              <TextInput
+                label="Email"
+                type="email"
+                onChangeFunction={onChangeEmail}
+              />
               <CustomButton text="Send Request"></CustomButton>
             </Box>
           </Box>
