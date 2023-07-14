@@ -24,6 +24,7 @@ from src.connections.sendConnection import sendConnection
 from src.connections.connectionRespond import acceptConnection
 from src.connections.connectionRespond import declineConnection
 from src.connections.getConnections import getConnections
+from src.connections.connectionRemove import unfriend
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -671,3 +672,16 @@ async def removeConnection(currUser: str, userId: str):
         currUser (str): Current user's uID
         userId (str): User uID of the person you want to remove.
     """
+    try:
+        status = unfriend(currUser, userId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": status,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error removing connection"},
+        )
