@@ -1,21 +1,24 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import styles from "./styles/ProfileLayout.module.css";
-import { Container } from "@mui/material";
+import { Box } from "@mui/material";
 
 const ProfileLayout = () => {
   const containerSx = {
-    height: "calc(100vh - 70px)",
-    display: "grid",
-    placeContent: "center",
+    minHeight: "calc(100vh - 70px)",
+    display: "flex",
   };
 
   return (
-    <div className={styles.background}>
-      <Container sx={containerSx}>
+    <Box sx={containerSx}>
+      <Box
+        sx={{
+          width: "100%",
+          marginTop: "70px",
+        }}
+      >
         <Outlet />
-      </Container>
-    </div>
+      </Box>
+    </Box>
   );
 };
 export default ProfileLayout;

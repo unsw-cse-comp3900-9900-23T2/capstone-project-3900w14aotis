@@ -25,6 +25,10 @@ const SmallTaskCard = ({ task, index }) => {
               boxShadow: "0px 0px 6px 0px rgba(0, 0, 0, 0.8)",
               justifyContent: "space-between",
             }}
+            onClick={() => {
+              //TODO: view task modal popup
+              console.log(`clicked task: ${task.taskID}`);
+            }}
           >
             <h5 className={styles.taskCardTitle}>{task.Title}</h5>
             <Box
@@ -49,7 +53,7 @@ const SmallTaskCard = ({ task, index }) => {
                   gap: "10px",
                 }}
               >
-                <TaskUsers assignees={task.Assignees} />
+                <TaskUsers assignees={task.Assignees} group={true} />
               </Box>
             </Box>
           </Box>

@@ -1,20 +1,26 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import styles from "./styles/AuthLayout.module.css";
-import { Container } from "@mui/material";
+import { Box } from "@mui/material";
 
 const AuthLayout = () => {
   const containerSx = {
-    height: "calc(100vh - 70px)",
-    display: "grid",
-    placeContent: "center",
+    display: "flex",
+    minHeight: "calc(100vh - 70px)",
   };
 
   return (
     <div className={styles.background}>
-      <Container sx={containerSx}>
-        <Outlet />
-      </Container>
+      <Box sx={containerSx}>
+        <Box
+          sx={{
+            width: "100%",
+            marginTop: "70px",
+          }}
+        >
+          <Outlet />
+        </Box>
+      </Box>
     </div>
   );
 };

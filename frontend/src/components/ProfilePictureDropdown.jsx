@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -7,35 +7,63 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
-
-// TODO: Add logic to load users profile image, if no profile pic then
-// do what ProfilePicture.jsx does.
-// TODO: :Load user profile image under the profile dropdown
+import { stringAvatar } from "../utils/helpers";
+import { profileDetailFetch } from "../api/profile.js";
+import Loading from "../components/Loading";
 
 const ProfilePictureDropdown = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [userDetails, setUserDetails] = useState({});
+  const [loading, setLoading] = useState(true);
+
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+
+  const fetchUserDetails = async (uid) => {
+    const profileDetailsResponse = await profileDetailFetch(uid);
+    setUserDetails(profileDetailsResponse.detail.message);
+    setLoading(false);
+  };
+
+  const getUserDetails = async () => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        localStorage.setItem("loggedIn", true);
+        fetchUserDetails(user.uid);
+      } else {
+        // User is signed out
+        localStorage.removeItem("loggedIn");
+      }
+    });
+  };
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const onClickProfile = () => {
-    // setAnchorEl(null);
-    navigate('/otis/profile');
-  }
+    const auth = getAuth();
+    const uid = auth.currentUser.uid;
+    console.log(auth.currentUser);
+    navigate(`/otis/profile/${uid}`);
+  };
 
   const logoutHandler = () => {
-    handleClose();
     const auth = getAuth();
+    handleClose();
     signOut(auth);
     navigate("/login");
   };
@@ -43,22 +71,34 @@ const ProfilePictureDropdown = () => {
   return (
     <Box sx={{ marginRight: "30px" }}>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
-        <Tooltip title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            sx={{ ml: 2 }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
-            <Avatar
-              src="/Jira-Emblem.png"
-              sx={{ width: 50, height: 50 }}
-              alt="Otis logo"
-            />
-          </IconButton>
-        </Tooltip>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Tooltip title="My Account">
+            <IconButton
+              onClick={handleClick}
+              size="small"
+              sx={{ ml: 2 }}
+              aria-controls={open ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+            >
+              {userDetails.profileImage.length !== 0 ? (
+                <Avatar
+                  src={userDetails.profileImage}
+                  sx={{ width: 50, height: 50 }}
+                  alt={`Your Profile`}
+                />
+              ) : (
+                <Avatar
+                  src="/Default-Avatar.png"
+                  sx={{ width: 50, height: 50 }}
+                  alt={`Your Profile`}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
       <Menu
         anchorEl={anchorEl}
@@ -96,7 +136,12 @@ const ProfilePictureDropdown = () => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={onClickProfile}>
-          <Avatar /> Profile
+          <Avatar
+            src="/Default-Avatar.png"
+            sx={{ width: 50, height: 50 }}
+            alt={`Your Profile`}
+          />{" "}
+          Profile
         </MenuItem>
         <Divider />
         <MenuItem onClick={logoutHandler}>

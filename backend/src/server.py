@@ -23,6 +23,7 @@ from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
 from src.connections.connectionRespond import acceptConnection
 from src.connections.connectionRespond import declineConnection
+from src.connections.getConnections import getConnections
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -564,9 +565,7 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
         )
 
 
-@app.post(
-    "/connections/accept/{currUser}", summary="accepts a connection from given userId"
-)
+@app.post("/connections/accept/{currUser}", summary="accepts a connection from given userId")
 async def acceptConnectionRequest(currUser: str, userId: str):
     """
     Accepts a connection from given user id.
@@ -590,9 +589,7 @@ async def acceptConnectionRequest(currUser: str, userId: str):
         )
 
 
-@app.post(
-    "/connections/decline/{currUser}", summary="declines a connection from given userId"
-)
+@app.post("/connections/decline/{currUser}", summary="declines a connection from given userId")
 async def declineConnectionRequest(currUser: str, userId: str):
     """
     Declines a connection from given user id.
@@ -613,4 +610,54 @@ async def declineConnectionRequest(currUser: str, userId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error declining connection request"},
+        )
+
+@app.get("/connections/get/{userId}", summary="gets all connections of a user")
+async def getUserConnections(userId: str):
+    """
+    Gets all connections that the given userId is connected to.
+
+    Args:
+        userId (str): userId of the person you want connections of.
+
+    Returns:
+        connections (list): list of all connections of the given uId.
+    """
+    try:
+        connections = getConnections(userId, "connectedTo", db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": connections,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error retrieving user's connections"},
+        )
+
+@app.get("/connections/getPending/{userId}", summary="gets pending connections of a user")
+async def getPendingConnections(userId: str):
+    """
+    Gets all pending connections that the given userId is connected to.
+
+    Args:
+        userId (str): userId of the person you want connections of.
+
+    Returns:
+        connections (list): list of all pending connections of the given uId.
+    """
+    try:
+        pendingConnections = getConnections(userId, "pendingConnections", db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": pendingConnections,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error retrieving user's connections"},
         )

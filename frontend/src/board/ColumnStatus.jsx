@@ -7,11 +7,12 @@ import styles from "./styles/ColumnStatus.module.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import CreateTaskModal from "../components/CreateTaskModal";
+import Loading from "../components/Loading";
 
 // TODO: complete create task in board by passing in a prop for status depending
 // on status name.
 
-const ColumnStatus = ({ columnId, title, tasks }) => {
+const ColumnStatus = ({ columnId, title, tasks, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const createTaskHandler = () => {
@@ -24,7 +25,19 @@ const ColumnStatus = ({ columnId, title, tasks }) => {
 
   return (
     <>
-      <CreateTaskModal isOpen={isOpen} closeFunction={closeModalHandler} />
+      <CreateTaskModal
+        isOpen={isOpen}
+        closeFunction={closeModalHandler}
+        defaultStatus={
+          title === "TO DO"
+            ? "To Do"
+            : title === "IN PROGRESS"
+            ? "In Progress"
+            : title === "DONE"
+            ? "Done"
+            : "To Do"
+        }
+      />
       <Box
         sx={{
           display: "flex",
@@ -40,43 +53,46 @@ const ColumnStatus = ({ columnId, title, tasks }) => {
         <Box>
           <h3 className={styles.statusHeading}>{title}</h3>
         </Box>
-        <PerfectScrollbar>
-          <Box
-            sx={{
-              maxHeight: "calc(100vh - 400px)",
-              padding: "15px",
-            }}
-          >
-            <Droppable droppableId={columnId}>
-              {(provided) => {
-                return (
-                  <Box
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "20px",
-                    }}
-                  >
-                    {tasks.map((task, idx) => {
-                      return (
-                        <SmallTaskCard
-                          key={task.taskID}
-                          task={task}
-                          index={idx}
-                        />
-                      );
-                    })}
-                    {provided.placeholder}
-                  </Box>
-                );
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <PerfectScrollbar>
+            <Box
+              sx={{
+                maxHeight: "calc(100vh - 400px)",
+                padding: "15px",
               }}
-            </Droppable>
-          </Box>
-        </PerfectScrollbar>
-
+            >
+              <Droppable droppableId={columnId}>
+                {(provided) => {
+                  return (
+                    <Box
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "20px",
+                      }}
+                    >
+                      {tasks.map((task, idx) => {
+                        return (
+                          <SmallTaskCard
+                            key={task.taskID}
+                            task={task}
+                            index={idx}
+                          />
+                        );
+                      })}
+                      {provided.placeholder}
+                    </Box>
+                  );
+                }}
+              </Droppable>
+            </Box>
+          </PerfectScrollbar>
+        )}
         <Box
           sx={{
             display: "flex",

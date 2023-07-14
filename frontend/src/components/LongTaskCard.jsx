@@ -65,7 +65,7 @@ const LongTaskCard = ({
           width={"7.4375rem"}
           height={"2.49rem"}
         />
-        <TaskUsers assignees={assignees} />
+        <TaskUsers assignees={assignees} group={true} />
       </Box>
     </Box>
   );
