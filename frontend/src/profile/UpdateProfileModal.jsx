@@ -10,6 +10,7 @@ import { getAuth, updateEmail, updatePassword } from "firebase/auth";
 import { displayError, displaySuccess } from "../utils/helpers";
 import { profileDetailFetch, profileUpdateFetch } from "../api/profile.js";
 import CustomButton from "../components/CustomButton";
+import ProfilePicture from "../components/ProfilePicture";
 
 
 
@@ -17,6 +18,7 @@ import CustomButton from "../components/CustomButton";
 const UpdateProfileModal = () => {
 
   // Initialise profile details
+  const [userDetails, setUserDetails] = useState({});
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -36,6 +38,7 @@ const UpdateProfileModal = () => {
       );
       // TODO: try catch?
       const profile = profileDetailsResponse.detail.message;
+      setUserDetails(profile);
       setFirstName(profile.firstName);
       setLastName(profile.lastName);
       setEmail(profile.email);
@@ -169,9 +172,32 @@ const UpdateProfileModal = () => {
 
   return (
     <>
-      <EditIcon
+      <Icon 
+        icon="mdi-light:pencil"
+        style={{
+          color: "#454545",
+          fontSize: "36px",
+          marginTop: "55px",
+          marginLeft: "30px",
+        }}
+        className={styles.clickButton}
         onClick={openModalHandler}
       />
+      {/* <EditIcon
+        sx={{
+          color: "#454545",
+          // size: "10x",
+          marginTop: "55px",
+          marginLeft: "30px",
+          "&:hover": {
+            cursor: "pointer",
+            transform: "scale(1.2)",
+            transition: "all 0.2s ease-in-out",
+          }
+        }}
+        onClick={openModalHandler}
+        
+      /> */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -192,7 +218,12 @@ const UpdateProfileModal = () => {
             </Box>
             <Box sx={inputContainerSx}>
               <h3>Profile Image:</h3>
-              <ImageInput />
+              {/* <ImageInput /> */}
+              <ProfilePicture
+                userDetails={userDetails}
+                imgWidth={"100px"}
+                imgHeight={"100px"}
+              />
             </Box>
             <Box sx={inputContainerSx}>
               <h3>Name:</h3>
