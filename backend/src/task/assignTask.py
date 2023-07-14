@@ -1,12 +1,13 @@
 from google.cloud import firestore
-from src.serverHelper import findUser
+from src.serverHelper import findUser, getUserId
+from src.connections.connectionHelper import isConnectedTo
 
 """
 This files contains helper functions to help assign a task to any taskmaster
 """
 
 
-def addAssignee(projectId, taskId, email, db):
+def addAssignee(projectId, taskId, email, currUser, db):
     """
     This function assigns the task to a taskmaster
 
@@ -25,16 +26,20 @@ def addAssignee(projectId, taskId, email, db):
     projectRef = db.collection("projects").document(projectId)
     taskRef = projectRef.collection("tasks").document(taskId)
 
-    # adds taskmaster in assignees array for the task
-    taskRef.update({"Assignees": firestore.ArrayUnion([userEmail])})
-
     # ref for the taskmaster's details document
     taskmasterRef = findUser("email", userEmail, db)
+
+    #check if users are connected
+    if not isConnectedTo(currUser, "email", userEmail, db):
+        return "Users are not connected!"
 
     # adds task in taskmaster's task list
     taskmasterRef.update({"tasks": firestore.ArrayUnion([taskId])})
 
-    return email
+    # adds taskmaster in assignees array for the task
+    taskRef.update({"Assignees": firestore.ArrayUnion([userEmail])})
+
+    return f"User: {email} successfully added"
 
 
 def deleteAssignee(projectId, taskId, email, db):
