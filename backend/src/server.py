@@ -21,10 +21,10 @@ from src.profile.getRatings import userRatings
 from src.profile.getDetails import getProfDetails
 from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
-from src.connections.connectionRespond import acceptConnection
-from src.connections.connectionRespond import declineConnection
+from src.connections.connectionRespond import acceptConnection, declineConnection
 from src.connections.getConnections import getConnections
 from src.rating.addRating import addRating
+from src.connections.connectionRemove import unfriend
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -76,7 +76,8 @@ class NewProject(BaseModel):
 class Assignee(BaseModel):
     projectId: str
     taskId: str
-    userId: str
+    email: str
+    currUser: str
 
 
 class JoinProject(BaseModel):
@@ -293,10 +294,10 @@ async def addTaskAssignee(assignee: Assignee):
         userId (str): uID if the user is successfully added
     """
     try:
-        assigned = addAssignee(assignee.projectId, assignee.taskId, assignee.userId, db)
-        return {
-            "detail": {"code": 200, "message": f"User: {assigned} successfully added"}
-        }
+        assigned = addAssignee(
+            assignee.projectId, assignee.taskId, assignee.email, assignee.currUser, db
+        )
+        return {"detail": {"code": 200, "message": assigned}}
     except:
         raise HTTPException(
             status_code=404,
@@ -319,7 +320,7 @@ async def deleteTaskAssignee(assignee: Assignee):
     """
     try:
         deleted = deleteAssignee(
-            assignee.projectId, assignee.taskId, assignee.userId, db
+            assignee.projectId, assignee.taskId, assignee.email, db
         )
         return {
             "detail": {"code": 200, "message": f"User: {deleted} successfully removed"}
@@ -563,10 +564,8 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
         message (str): a message to show it was successful
     """
     try:
-        sendConnection(userEmail, currUser, db)
-        return {
-            "detail": {"code": 200, "message": f"Connection request successfully sent!"}
-        }
+        messageStatus = sendConnection(userEmail, currUser, db)
+        return {"detail": {"code": 200, "message": messageStatus}}
     except:
         raise HTTPException(
             status_code=404,
@@ -677,6 +676,32 @@ async def getPendingConnections(userId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error retrieving user's connections"},
+        )
+
+
+@app.delete(
+    "/connections/remove/{userId}", summary="removes connection between two users"
+)
+async def removeConnection(currUser: str, userId: str):
+    """
+    Removes the connection between two users.
+
+    Args:
+        currUser (str): Current user's uID
+        userId (str): User uID of the person you want to remove.
+    """
+    try:
+        status = unfriend(currUser, userId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": status,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error removing connection"},
         )
 
 
