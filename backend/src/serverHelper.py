@@ -42,3 +42,17 @@ def getUserDoc(queryField, queryValue, db):
         return userDict
     else:
         return "User not found!"
+    
+def getUserId(queryField, queryValue, db):
+    """
+    Retrieves the user's ID given any relevant information about that user.
+
+    Args:
+        queryField (str): field that you have information for 
+                        (e.g. email, uid, first/last name) of a user
+        queryValue (str): information for the field you declared
+        db : database
+    """
+    userDict = getUserDoc(queryField, queryValue, db)
+    userId = userDict.pop("uid")
+    return userId

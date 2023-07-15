@@ -1,10 +1,10 @@
 import { Modal, Fade, Box } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
 import styles from "./styles/ProfileModal.module.css";
 import TextInput from "../components/TextInput";
-import TextField from '@mui/material/TextField';
+import TextField from "@mui/material/TextField";
 import ImageInput from "../components/ImageInput";
 import { getAuth, updateEmail, updatePassword } from "firebase/auth";
 import { displayError, displaySuccess } from "../utils/helpers";
@@ -12,11 +12,7 @@ import { profileDetailFetch, profileUpdateFetch } from "../api/profile.js";
 import CustomButton from "../components/CustomButton";
 import ProfilePicture from "../components/ProfilePicture";
 
-
-
-
 const UpdateProfileModal = () => {
-
   // Initialise profile details
   const [userDetails, setUserDetails] = useState({});
   const [firstName, setFirstName] = useState("");
@@ -27,7 +23,7 @@ const UpdateProfileModal = () => {
 
   useEffect(() => {
     getProfileDetails();
-  });
+  }, []);
 
   // Get profile details
   const getProfileDetails = async () => {
@@ -44,15 +40,14 @@ const UpdateProfileModal = () => {
       setEmail(profile.email);
       setProfileImage(profile.profileImage);
       setCoverProfileImage(profile.coverProfileImage);
-
-    } catch(error) {
+    } catch (error) {
       displayError(error);
     }
   };
 
   // TODO: pasword change -> old password needs to match
   // const [oldPassword, setOldPassword] = useState("");
-  const [password, setPassword] = useState("")
+  const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordColour, setPasswordColour] = useState("#B2B2B2");
 
@@ -61,10 +56,9 @@ const UpdateProfileModal = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
+      reader.onerror = (error) => reject(error);
     });
   };
-
 
   const [open, setOpen] = useState(false);
   const openModalHandler = () => {
@@ -78,12 +72,9 @@ const UpdateProfileModal = () => {
   const onChangeEmail = (value) => setEmail(value);
   const onChangeProfileImage = (value) => {
     // Convert file input to string to store in database
-    getBase64(value)
-    .then((data) => 
-      console.log("getBase64", data),
-    );
+    getBase64(value).then((data) => console.log("getBase64", data));
     setProfileImage(value);
-  }
+  };
   const onChangeCoverProfileImage = (value) => setCoverProfileImage(value);
   // const onChangeOldPassword = (value) => setOldPassword(value);
   const onChangePassword = (value) => setPassword(value);
@@ -92,7 +83,7 @@ const UpdateProfileModal = () => {
   const profileUpdateButtonHandler = async () => {
     // if (oldPassword === password) {
     //   displayError("Please choose a new password!");
-    // } 
+    // }
     if (password !== confirmPassword) {
       displayError("Passwords do not match!");
     } else {
@@ -100,21 +91,21 @@ const UpdateProfileModal = () => {
         const auth = getAuth();
         // Update email in Firebase Auth
         updateEmail(auth.currentUser, email)
-        .then()
-        .catch((error) => {
-          displayError(error);
-        });
+          .then()
+          .catch((error) => {
+            displayError(error);
+          });
         // Update password in Firebase Auth
         // For the time being, the app will not require the old password to change password.
         if (password !== "") {
           updatePassword(auth.currentUser, password)
-          .then(() => {
-            console.log("password change success!")
-          })
-          .catch((error) => {
-            console.log(error);
-            displayError(error);
-          });
+            .then(() => {
+              console.log("password change success!");
+            })
+            .catch((error) => {
+              console.log(error);
+              displayError(error);
+            });
         }
         // API call to backend
         const profileUpdateFetchResponse = await profileUpdateFetch(
@@ -133,7 +124,6 @@ const UpdateProfileModal = () => {
       }
     }
   };
-
 
   const modalContainerSx = {
     display: "flex",
@@ -172,7 +162,7 @@ const UpdateProfileModal = () => {
 
   return (
     <>
-      <Icon 
+      <Icon
         icon="mdi-light:pencil"
         style={{
           color: "#454545",
@@ -284,13 +274,9 @@ const UpdateProfileModal = () => {
               />
             </Box>
           </Box>
-
         </Fade>
-
-
       </Modal>
-    
     </>
-  )
-}
+  );
+};
 export default UpdateProfileModal;
