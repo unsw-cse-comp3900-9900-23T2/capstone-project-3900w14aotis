@@ -11,6 +11,9 @@ import { displayError, displaySuccess } from "../utils/helpers";
 import { profileDetailFetch, profileUpdateFetch } from "../api/profile.js";
 import CustomButton from "../components/CustomButton";
 import ProfilePicture from "../components/ProfilePicture";
+import { useDispatch } from "react-redux";
+import { updateProfileAction } from "../profile/state/updateProfileAction";
+
 
 const UpdateProfileModal = () => {
   // Initialise profile details
@@ -80,6 +83,8 @@ const UpdateProfileModal = () => {
   const onChangePassword = (value) => setPassword(value);
   const onChangeConfirmPassword = (value) => setConfirmPassword(value);
 
+  const dispatch = useDispatch();
+
   const profileUpdateButtonHandler = async () => {
     // if (oldPassword === password) {
     //   displayError("Please choose a new password!");
@@ -101,6 +106,7 @@ const UpdateProfileModal = () => {
           updatePassword(auth.currentUser, password)
             .then(() => {
               console.log("password change success!");
+              // TODO: sign user back in
             })
             .catch((error) => {
               console.log(error);
@@ -117,6 +123,7 @@ const UpdateProfileModal = () => {
           coverProfileImage
         );
         console.log(profileUpdateFetchResponse);
+        dispatch(updateProfileAction());
         closeModalHandler();
         displaySuccess(`Profile Updated Successfully!`);
       } catch (error) {

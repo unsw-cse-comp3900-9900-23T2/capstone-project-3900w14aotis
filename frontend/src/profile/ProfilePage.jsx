@@ -10,6 +10,7 @@ import { profileDetailFetch } from "../api/profile.js";
 import { getAuth } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";
+import { useSelector } from "react-redux";
 
 const ProfilePage = () => {
   // Initialise profile details
@@ -23,6 +24,7 @@ const ProfilePage = () => {
   const navigate = useNavigate();
 
   const { userId } = useParams();
+  const profileUpdated = useSelector((state) => state.profileUpdated);
 
   const backButtonHandler = () => {
     try {
@@ -34,7 +36,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     getProfileDetails();
-  }, []);
+  }, [profileUpdated]);
 
   // Get profile details
   const getProfileDetails = async () => {
