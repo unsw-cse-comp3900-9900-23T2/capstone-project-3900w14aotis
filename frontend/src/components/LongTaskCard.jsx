@@ -1,9 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/LongTaskCard.module.css";
 import DeadlineBox from "./DeadlineBox";
-import ViewTaskModal from "./ViewTaskModal";
-import { taskDetailFetch } from "../api/task";
 import TaskUsers from "./TaskUsers";
 
 const LongTaskCard = ({
@@ -14,12 +12,10 @@ const LongTaskCard = ({
   assignees,
   isModalOpen,
   projectId,
-  updateModalFunction,
+  clickedTaskHandler,
 }) => {
   const TaskCardClick = async () => {
-    const taskDetailResponse = await taskDetailFetch(projectId, id);
-    console.log(taskDetailResponse);
-    updateModalFunction(taskDetailResponse, id);
+    clickedTaskHandler(id);
     isModalOpen(true);
   };
   return (

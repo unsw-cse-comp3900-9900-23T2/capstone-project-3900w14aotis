@@ -21,11 +21,11 @@ import Loading from "../components/Loading";
 const TasksPage = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [tasksAfterFilter, setTasksAfterFilter] = useState([]);
-  const [currTaskDetails, setCurrTaskDetails] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [clickedTaskId, setClickedTaskId] = useState("");
 
   const { projectId } = useParams();
   const taskAdded = useSelector((state) => state.tasksUpdated);
@@ -78,11 +78,6 @@ const TasksPage = () => {
 
   const modalOpen = () => setOpen(true);
   const modalClose = () => setOpen(false);
-
-  const updateModalDetails = (response, id) => {
-    const taskDetails = { ...response.detail.message, ...{ id: id } };
-    setCurrTaskDetails(taskDetails);
-  };
 
   const updateSearchQuery = (value) => {
     setSearchQuery(value);
@@ -139,9 +134,10 @@ const TasksPage = () => {
             <ViewTaskModal
               isOpen={open}
               onClose={modalClose}
-              details={currTaskDetails}
               projectId={projectId}
+              taskId={clickedTaskId}
             />
+
             <Box
               sx={{
                 display: "flex",
@@ -152,7 +148,6 @@ const TasksPage = () => {
               }}
             >
               {tasksAfterFilter.map((task, idx) => {
-                // console.log(task);
                 return (
                   <LongTaskCard
                     key={task.taskID}
@@ -163,7 +158,7 @@ const TasksPage = () => {
                     assignees={task.Assignees}
                     isModalOpen={modalOpen}
                     projectId={projectId}
-                    updateModalFunction={updateModalDetails}
+                    clickedTaskHandler={setClickedTaskId}
                   />
                 );
               })}
