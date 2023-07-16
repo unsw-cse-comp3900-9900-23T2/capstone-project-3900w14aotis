@@ -375,9 +375,9 @@ async def updateTaskDetails(item: UpdateTask, projectId: str, taskId: str):
     """
 
     try:
-        taskId = updateTask(projectId, taskId, db, item)
+        taskDict = updateTask(projectId, taskId, db, item)
         return {
-            "detail": {"code": 200, "message": f"Task {taskId} updated successfully"}
+            "detail": {"code": 200, "message": taskDict}
         }
 
     except:
