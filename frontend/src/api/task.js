@@ -58,6 +58,7 @@ export const createTaskFetch = async (
     assignees,
     priority,
     status,
+    creationTime: new Date().toISOString(),
   });
 
   const requestOption = {

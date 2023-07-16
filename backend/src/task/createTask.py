@@ -37,6 +37,7 @@ def createNewTask(newTask, projectId, db):
                 "Sad": [],
                 "Very Sad": [],
             },
+            "CreationTime": newTask.creationTime,
         }
     )
 

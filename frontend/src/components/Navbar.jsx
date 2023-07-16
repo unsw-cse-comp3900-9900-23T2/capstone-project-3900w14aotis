@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/Navbar.module.css";
 import ProfilePictureDropdown from "./ProfilePictureDropdown";
-import CreateTaskModal from "./CreateTaskModal";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { stringToObject } from "../utils/helpers";
 
