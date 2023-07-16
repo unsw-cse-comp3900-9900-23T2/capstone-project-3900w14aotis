@@ -17,6 +17,7 @@ def updateTask(projectId,taskId,db, item):
     taskDict = {
         "TaskID": taskId,
         "Task Fledgling": "In Progress",
+        "Task Master": "In Progress",
     }
     #Check if user is part of the task's assignee list
     userRef = findUser("uid",item.creatorId,db)
@@ -38,6 +39,35 @@ def updateTask(projectId,taskId,db, item):
                 }
             )
         taskDict["Task Fledgling"] = "Done"
+    
+
+    #Task Master Achievement
+    taskMasterDoc = getAchievement(db, "Task Master",item.creatorId)
+    for achievement in taskMasterDoc:
+        goal = achievement.get("target")
+        currValue = achievement.get("currentValue")
+        #If Achievement is alrdy done, skip
+        if currValue == goal:
+            taskDict["Task Master"] = "Done"
+            break
+            
+        else:
+            currValue += 1
+            #If current Value meets the goal, update achievement status to done
+            if currValue == goal:
+                achievement.reference.update(
+                    {
+                    "currentValue": currValue,
+                    "status": "Done"
+                    }
+                )
+                taskDict["Task Master"] = "Done"
+            else:
+                achievement.reference.update(
+                    {
+                    "currentValue": currValue,
+                    }
+                )
 
 
     taskDocRef.update(

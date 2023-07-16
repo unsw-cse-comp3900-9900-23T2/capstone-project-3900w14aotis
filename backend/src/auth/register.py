@@ -78,6 +78,17 @@ def authRegister(item, db):
         }
     )
 
+    #Initialise Task Master achievement
+    achievementCollection.add(
+        {
+            "achievement": "Task Master",
+            "description": "Complete 5 tasks",
+            "target": 5,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
     token = signInWithEmailAndPassword(email=item.email, password=item.password)
 
     return token
