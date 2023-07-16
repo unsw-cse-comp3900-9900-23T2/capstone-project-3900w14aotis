@@ -5,7 +5,7 @@ import { Box, LinearProgress, linearProgressClasses } from "@mui/material";
 
 function ConnectionCard() {
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-    height: "5%",
+    height: "40%",
     width: "70%",
     borderRadius: "10px",
     [`&.${linearProgressClasses.colorPrimary}`]: {
@@ -33,13 +33,25 @@ function ConnectionCard() {
       <ProfilePicture
         key={25}
         userDetails={123}
-        imgWidth="50px"
-        imgHeight="50px"
+        imgWidth={100}
+        imgHeight={100}
       />
-      <h2>Calvin Chang</h2>
-      <p>calvoc123@gmail.com</p>
-      <p>Workload</p>
-      <BorderLinearProgress variant="determinate" value={90} />
+      <Box>
+        <h2>Calvin Chang</h2>
+        <p>calvoc123@gmail.com</p>
+      </Box>
+      <Box
+        sx={{
+          width: "100%",
+          height: "20%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <p>Workload</p>
+        <BorderLinearProgress variant="determinate" value={90} />
+      </Box>
     </Box>
   );
 }

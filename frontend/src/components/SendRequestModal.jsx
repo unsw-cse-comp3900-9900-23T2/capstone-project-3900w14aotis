@@ -6,27 +6,9 @@ import { Icon } from "@iconify/react";
 import TextInput from "./TextInput";
 import styles from "./styles/Modal.module.css";
 import CustomButton from "./CustomButton";
-
-const modalStyle = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "20px",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 800,
-  bgcolor: "background.paper",
-  boxShadow: "0px 0px 10px 10px rgba(0, 0, 0, 0.25)",
-  p: 4,
-  borderRadius: "15px",
-};
-
-const titleStyle = {
-  display: "flex",
-  flexDirection: "row",
-  gap: "64%",
-};
+import { displayError, displaySuccess } from "../utils/helpers";
+import { getAuth } from "firebase/auth";
+import { sendConnectionFetch } from "../api/connections";
 
 const SendRequestModal = () => {
   const [open, setOpen] = useState(false);
@@ -35,6 +17,35 @@ const SendRequestModal = () => {
   const [email, setEmail] = useState("");
   const onChangeEmail = (value) => setEmail(value);
 
+  const sendConnectionHandler = async () => {
+    try {
+      const user = getAuth();
+      const res = await sendConnectionFetch(email, user.currentUser.uid);
+      displaySuccess("Connection sent!");
+    } catch (error) {
+      displayError(`${error.message}`);
+    }
+  };
+  const modalStyle = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 800,
+    bgcolor: "background.paper",
+    boxShadow: "0px 0px 10px 10px rgba(0, 0, 0, 0.25)",
+    p: 4,
+    borderRadius: "15px",
+  };
+
+  const titleStyle = {
+    display: "flex",
+    flexDirection: "row",
+    gap: "64%",
+  };
   return (
     <div>
       <Icon
@@ -74,7 +85,10 @@ const SendRequestModal = () => {
                 type="email"
                 onChangeFunction={onChangeEmail}
               />
-              <CustomButton text="Send Request"></CustomButton>
+              <CustomButton
+                text="Send Request"
+                onClickFunction={sendConnectionHandler}
+              ></CustomButton>
             </Box>
           </Box>
         </Fade>

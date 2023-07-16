@@ -2,6 +2,8 @@ import React from "react";
 import Box from "@mui/material/Box";
 import ProfilePicture from "./ProfilePicture";
 import { Icon } from "@iconify/react";
+import styles from "./styles/Modal.module.css";
+
 function AcceptRequestCard() {
   return (
     <Box
@@ -26,8 +28,16 @@ function AcceptRequestCard() {
       </Box>
 
       <Box>
-        <Icon icon="mdi:tick-circle-outline" style={{ fontSize: "50px" }} />
-        <Icon icon="bx:x-circle" style={{ fontSize: "50px" }} />
+        <Icon
+          icon="mdi:tick-circle-outline"
+          className={styles.clickButton}
+          style={{ fontSize: "50px" }}
+        />
+        <Icon
+          icon="bx:x-circle"
+          className={styles.clickButton}
+          style={{ fontSize: "50px" }}
+        />
       </Box>
     </Box>
   );

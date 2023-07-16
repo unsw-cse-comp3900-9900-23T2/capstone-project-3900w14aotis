@@ -255,6 +255,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
                   label={"Deadline"}
                   value={deadline}
                   onChange={(deadline) => setDeadline(deadline)}
+                  format="DD-MM-YYYY"
                 />
               </LocalizationProvider>
             </Box>
