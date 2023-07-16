@@ -36,7 +36,8 @@ def updateDict(ratingMap, ratingDict,uid):
         uid (str): user id
     """
     for key,value in ratingMap.items():
-        if uid in value:
-            ratingDict[key] += 1
+        for rating in value:
+            if uid == rating.uid:
+                ratingDict[key] += 1         
     return
 

@@ -250,6 +250,10 @@ async def getTasks(projectId: str):
             detail={"code": "404", "message": "Error getting tasks"},
         )
 
+# @app.get("/tasks/{projectId}/{index}", summary="Lists 5 tasks of a given project starting from index")
+# async def getIndexTask(projectId:str, index:str):
+
+    """getTasks(projectId:Str, )"""
 
 @app.post("/project/join/{projectId}", summary="Join a project")
 async def joinProject(item: JoinProject, projectId: str):
