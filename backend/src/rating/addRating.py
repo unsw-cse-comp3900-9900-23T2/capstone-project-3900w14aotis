@@ -23,7 +23,11 @@ def addRating(projectId, taskId, uid, mood, db):
     """
     projectDocRef = db.collection("projects").document(projectId)
     taskDocRef = projectDocRef.collection("tasks").document(taskId)
-
+    taskDict = {
+        "TaskID": taskId,
+        "New Critic": "In Progress",
+        "Connoisseur": "In Progress",
+    }
     #Check if user is part of the task's assignee list
     userRef = findUser("uid",uid,db)
     userEmail = userRef.get().get("email")
@@ -45,6 +49,46 @@ def addRating(projectId, taskId, uid, mood, db):
                 "status": "Done",
                 }
             ) 
+        taskDict["New Critic"] = "Done"
+            
+    
+    #If task has alrdy been rated the specified mood, remove the mood
+    ratingDict = taskDocRef.get().to_dict()["Rating"]
+    for user in ratingDict[mood]:
+        if len(user) > 0 and user["uid"] == uid:
+            ratingDict[mood].remove(user)
+            taskDocRef.update({"Rating": ratingDict})
+            return None
+
+    #Connoisser Achievement
+    connoisseurAchievement = getAchievement(db,"Connoisseur", uid)
+    for achievement in connoisseurAchievement:
+        goal = achievement.get("target")
+        currentValue = achievement.get("currentValue")  
+        #If Achievement is alrdy done, skip 
+        if currentValue == goal:
+            taskDict["Connoisseur"] = "Done" 
+            break
+
+        else:
+            currentValue += 1
+            #If currentValue meets the goal, update achievement status to done
+            if currentValue == goal:
+                achievement.reference.update(
+                    {
+                    "currentValue": currentValue,
+                    "status": "Done"
+                    }
+                ) 
+                taskDict["Connoisseur"] = "Done" 
+            #Otherwise, only update currValue
+            else:
+                achievement.reference.update(
+                    {
+                    "currentValue": currentValue,
+                    }
+                )
+
 
     userDoc = getUserDoc("uid", uid, db)
     addTaskUserObj = {
@@ -53,13 +97,6 @@ def addRating(projectId, taskId, uid, mood, db):
         "lastName": userDoc["lastName"],
         "email": userDoc["email"],
     }
-
-    ratingDict = taskDocRef.get().to_dict()["Rating"]
-    for user in ratingDict[mood]:
-        if len(user) > 0 and user["uid"] == uid:
-            ratingDict[mood].remove(user)
-            taskDocRef.update({"Rating": ratingDict})
-            return taskId
 
     for key, value in ratingDict.items():
         for user in value:
@@ -70,5 +107,5 @@ def addRating(projectId, taskId, uid, mood, db):
     ratingDict[mood].append(addTaskUserObj)
 
     taskDocRef.update({"Rating": ratingDict})
-
-    return taskId
+    
+    return taskDict

@@ -56,6 +56,17 @@ def authRegister(item, db):
         }
     )
 
+    #Initialise Connoisseur achievement
+    achievementCollection.add(
+        {
+            "achievement": "Connoisseur",
+            "description": "Rate 5 tasks",
+            "target": 5,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
     token = signInWithEmailAndPassword(email=item.email, password=item.password)
 
     return token
