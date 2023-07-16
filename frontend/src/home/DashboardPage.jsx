@@ -23,7 +23,6 @@ const DashboardPage = () => {
           task.Assignees.some((assignee) => assignee.uid === uid)
       );
       const filteredTodoTasks = sortTasksSoonest(todoTasks).slice(0, 3);
-      console.log(filteredTodoTasks);
       setTodoTasks(filteredTodoTasks);
 
       const doingTasks = allTasks.filter(
@@ -34,6 +33,8 @@ const DashboardPage = () => {
 
       const filteredDoingTasks = sortTasksSoonest(doingTasks).slice(0, 3);
       setDoingTasks(filteredDoingTasks);
+
+      setLoading(false);
     }
   };
 
@@ -90,7 +91,11 @@ const DashboardPage = () => {
             // height: "100%",
           }}
         >
-          <SummaryTaskCards status={"TO DO"} tasks={todoTasks} />
+          <SummaryTaskCards
+            status={"TO DO"}
+            tasks={todoTasks}
+            isLoading={loading}
+          />
           <SummaryTaskCards status={"IN PROGRESS"} tasks={doingTasks} />
         </Box>
         <Box

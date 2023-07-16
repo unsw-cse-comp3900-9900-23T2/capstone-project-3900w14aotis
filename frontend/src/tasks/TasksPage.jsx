@@ -16,14 +16,16 @@ import {
 import { useSelector } from "react-redux";
 import moment from "moment";
 import CreateTaskModal from "../components/CreateTaskModal";
+import Loading from "../components/Loading";
 
 const TasksPage = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [tasksAfterFilter, setTasksAfterFilter] = useState([]);
-  const [currTaskDetails, setCurrTaskDetails] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [clickedTaskId, setClickedTaskId] = useState("");
 
   const { projectId } = useParams();
   const taskAdded = useSelector((state) => state.tasksUpdated);
@@ -36,6 +38,7 @@ const TasksPage = () => {
       );
       setAllTasks(sortedAllTasks);
       setTasksAfterFilter(sortedAllTasks);
+      setLoading(false);
     }
   };
 
@@ -75,12 +78,6 @@ const TasksPage = () => {
 
   const modalOpen = () => setOpen(true);
   const modalClose = () => setOpen(false);
-
-  const updateModalDetails = (response, id) => {
-    const taskDetails = { ...response.detail.message, ...{ id: id } };
-    console.log(taskDetails);
-    setCurrTaskDetails(taskDetails);
-  };
 
   const updateSearchQuery = (value) => {
     setSearchQuery(value);
@@ -130,38 +127,44 @@ const TasksPage = () => {
           tasksSortFunction={tasksSortHandler}
           setModalOpen={setCreateModalOpen}
         />
-        <ViewTaskModal
-          isOpen={open}
-          onClose={modalClose}
-          details={currTaskDetails}
-          projectId={projectId}
-        />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "2.19rem",
-            paddingTop: "2.19rem",
-          }}
-        >
-          {tasksAfterFilter.map((task, idx) => {
-            console.log(task);
-            return (
-              <LongTaskCard
-                key={task.taskID}
-                id={task.taskID}
-                title={task.Title}
-                status={task.Status}
-                deadline={task.Deadline}
-                assignees={task.Assignees}
-                isModalOpen={modalOpen}
-                projectId={projectId}
-                updateModalFunction={updateModalDetails}
-              />
-            );
-          })}
-        </Box>
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            <ViewTaskModal
+              isOpen={open}
+              onClose={modalClose}
+              projectId={projectId}
+              taskId={clickedTaskId}
+            />
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "2.19rem",
+                paddingTop: "2.19rem",
+              }}
+            >
+              {tasksAfterFilter.map((task, idx) => {
+                return (
+                  <LongTaskCard
+                    key={task.taskID}
+                    id={task.taskID}
+                    title={task.Title}
+                    status={task.Status}
+                    deadline={task.Deadline}
+                    assignees={task.Assignees}
+                    isModalOpen={modalOpen}
+                    projectId={projectId}
+                    clickedTaskHandler={setClickedTaskId}
+                  />
+                );
+              })}
+            </Box>
+          </>
+        )}
       </Box>
     </>
   );

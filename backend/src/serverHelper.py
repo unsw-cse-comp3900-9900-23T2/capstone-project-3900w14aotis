@@ -1,6 +1,8 @@
 """
 This files contains helper functions that will help modularise 
 """
+
+
 def findUser(queryField, queryValue, db):
     """
     Finds the user given any field in taskmasters, and the value of that field.
@@ -14,12 +16,18 @@ def findUser(queryField, queryValue, db):
     Returns:
         taskmasterRef: reference to the taskmaster's doc
     """
-    docs = db.collection("taskmasters").where(queryField, "==", queryValue).limit(1).stream()
+    docs = (
+        db.collection("taskmasters")
+        .where(queryField, "==", queryValue)
+        .limit(1)
+        .stream()
+    )
     docId = ""
-    for doc in docs: 
+    for doc in docs:
         docId = doc.id
     taskmasterRef = db.collection("taskmasters").document(docId)
     return taskmasterRef
+
 
 def getUserDoc(queryField, queryValue, db):
     """
@@ -36,19 +44,20 @@ def getUserDoc(queryField, queryValue, db):
     currUserRef = findUser(queryField, queryValue, db)
     userDict = {}
     userDoc = currUserRef.get()
-    
+
     if userDoc.exists:
         userDict = userDoc.to_dict()
         return userDict
     else:
         return "User not found!"
-    
+
+
 def getUserId(queryField, queryValue, db):
     """
     Retrieves the user's ID given any relevant information about that user.
 
     Args:
-        queryField (str): field that you have information for 
+        queryField (str): field that you have information for
                         (e.g. email, uid, first/last name) of a user
         queryValue (str): information for the field you declared
         db : database
