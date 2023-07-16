@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/Navbar.module.css";
 import ProfilePictureDropdown from "./ProfilePictureDropdown";
@@ -11,16 +11,18 @@ const Navbar = () => {
     stringToObject(localStorage.getItem("loggedIn"))
   );
 
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in
-      setLoggedIn(true);
-    } else {
-      // User is signed out
-      setLoggedIn(false);
-    }
-  });
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        setLoggedIn(true);
+      } else {
+        // User is signed out
+        setLoggedIn(false);
+      }
+    });
+  }, []);
 
   const navbarContainerSx = {
     position: "fixed",
