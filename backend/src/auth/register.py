@@ -31,6 +31,7 @@ def authRegister(item, db):
             "coverProfileImage": item.coverProfileImage,
         }
     )
+    
     parentDocRef = db.collection("achievements").document(item.uid)
     achievementCollection = parentDocRef.collection("achievements")
     #Initialise innovator achievement
@@ -38,6 +39,17 @@ def authRegister(item, db):
         {
             "achievement": "Innovator",
             "description": "Create your first task",
+            "target": 1,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
+    #Initialise New Critic achievement
+    achievementCollection.add(
+        {
+            "achievement": "New Critic",
+            "description": "Rate your first task",
             "target": 1,
             "currentValue": 0,
             "status": "In Progress",

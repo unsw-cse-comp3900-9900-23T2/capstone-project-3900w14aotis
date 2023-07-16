@@ -1,5 +1,5 @@
 from google.cloud import firestore
-from src.serverHelper import getUserDoc
+from src.serverHelper import getUserDoc, getAchievement,findUser
 
 """
 This files contains helper functions to help remove a rating from a task
@@ -24,8 +24,29 @@ def addRating(projectId, taskId, uid, mood, db):
     projectDocRef = db.collection("projects").document(projectId)
     taskDocRef = projectDocRef.collection("tasks").document(taskId)
 
-    userDoc = getUserDoc("uid", uid, db)
+    #Check if user is part of the task's assignee list
+    userRef = findUser("uid",uid,db)
+    userEmail = userRef.get().get("email")
+    # If user isnt part of task, return none
+    assigneeList = taskDocRef.get().get("Assignees")
+    if userEmail not in assigneeList:
+        return None
 
+    #If New Critic Achievement is in progress, mark as done
+    achievementDoc = getAchievement(db,"New Critic", uid)
+    for achievement in achievementDoc:
+        if achievement.get("status") == "In Progress":
+            achievement.reference.update(
+                {
+                "achievement": "New Critic",
+                "description": "Rate your first task",
+                "target": 1,
+                "currentValue": 1,
+                "status": "Done",
+                }
+            ) 
+
+    userDoc = getUserDoc("uid", uid, db)
     addTaskUserObj = {
         "uid": userDoc["uid"],
         "firstName": userDoc["firstName"],

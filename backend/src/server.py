@@ -720,11 +720,11 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
         userId (str): uID if the user is successfully added
     """
     try:
-        assigned = addRating(rating.projectId, rating.taskId, userId, rating.mood, db)
+        task = addRating(rating.projectId, rating.taskId, userId, rating.mood, db)
         return {
             "detail": {
                 "code": 200,
-                "message": f"User: {assigned} successfully rated task",
+                "message": task,
             }
         }
     except:
