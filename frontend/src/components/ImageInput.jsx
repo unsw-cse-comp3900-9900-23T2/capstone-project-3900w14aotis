@@ -1,23 +1,45 @@
 import React from "react";
 import { useState } from "react";
 import styles from "./styles/ProfileImage.module.css";
+import ProfilePicture from "../components/ProfilePicture";
+import CoverPicture from "../profile/CoverPicture";
 
 
-const ImageInput = () => {
+const ImageInput = ({
+  type,
+  userDetails,
+  width,
+  height,
+  onChangeFunction,
+  onDeleteFunction,
+}) => {
   const [image, setImage] = useState("");
-
-  const handleChange = (image) => {
-    console.log(image.target.files);
-    setImage(URL.createObjectURL(image.target.files[0]));
-  }
 
   return (
     <div>
-      <img src={image} className={styles.imageInput} />
+      {type === "PROFILE" ? (
+        <ProfilePicture
+          userDetails={userDetails}
+          imgWidth={width}
+          imgHeight={height}
+        />
+      ) : (
+        <CoverPicture
+          userDetails={userDetails}
+          imgWidth={width}
+          imgHeight={height}
+        />
+      )}
+      
       <input
         type="file"
-        onChange={handleChange}
+        onChange={onChangeFunction}
       />
+      <button
+        onClick={onDeleteFunction}
+      >
+        Delete Image
+      </button>
     </div>
   )
 }

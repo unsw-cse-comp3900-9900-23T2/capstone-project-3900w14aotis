@@ -2,12 +2,13 @@ import { Modal, Fade, Box } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./styles/ProfileModal.module.css";
 import TextInput from "../components/TextInput";
 import TextField from "@mui/material/TextField";
 import ImageInput from "../components/ImageInput";
 import { getAuth, updateEmail, updatePassword } from "firebase/auth";
-import { displayError, displaySuccess } from "../utils/helpers";
+import { displayError, displaySuccess, fileToDataUrl } from "../utils/helpers";
 import { profileDetailFetch, profileUpdateFetch } from "../api/profile.js";
 import CustomButton from "../components/CustomButton";
 import ProfilePicture from "../components/ProfilePicture";
@@ -54,15 +55,6 @@ const UpdateProfileModal = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordColour, setPasswordColour] = useState("#B2B2B2");
 
-  const getBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
-
   const [open, setOpen] = useState(false);
   const openModalHandler = () => {
     getProfileDetails();
@@ -73,16 +65,27 @@ const UpdateProfileModal = () => {
   const onChangeFirstName = (value) => setFirstName(value);
   const onChangeLastName = (value) => setLastName(value);
   const onChangeEmail = (value) => setEmail(value);
-  const onChangeProfileImage = (value) => {
+  const onChangeProfileImage = (event) => {
     // Convert file input to string to store in database
-    getBase64(value).then((data) => console.log("getBase64", data));
-    setProfileImage(value);
+    const newImage = event.target.files[0];
+    setProfileImage(newImage);
   };
-  const onChangeCoverProfileImage = (value) => setCoverProfileImage(value);
+  const onDeleteProfileImage = () => {
+    setProfileImage("");
+  };
+  const onChangeCoverProfileImage = (event) => {
+    // Convert file input to string to store in database
+    const newImage = event.target.files[0];
+    setCoverProfileImage(newImage);
+  };
+  const onDeleteCoverProfileImage = () => {
+    setCoverProfileImage("");
+  };
   // const onChangeOldPassword = (value) => setOldPassword(value);
   const onChangePassword = (value) => setPassword(value);
   const onChangeConfirmPassword = (value) => setConfirmPassword(value);
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const profileUpdateButtonHandler = async () => {
@@ -107,20 +110,32 @@ const UpdateProfileModal = () => {
             .then(() => {
               console.log("password change success!");
               // TODO: sign user back in
+              navigate("/login");
             })
             .catch((error) => {
               console.log(error);
               displayError(error);
             });
         }
+        // Check image files
+        const newProfileImage = profileImage === "" ? (
+          ""
+        ) : (
+          await fileToDataUrl(profileImage)
+        );
+        const newCoverProfileImage = coverProfileImage === "" ? (
+          ""
+        ) : (
+          await fileToDataUrl(coverProfileImage)
+        );
         // API call to backend
         const profileUpdateFetchResponse = await profileUpdateFetch(
           auth.currentUser.uid,
           firstName,
           lastName,
           email,
-          profileImage,
-          coverProfileImage
+          newProfileImage,
+          newCoverProfileImage
         );
         console.log(profileUpdateFetchResponse);
         dispatch(updateProfileAction());
@@ -152,7 +167,6 @@ const UpdateProfileModal = () => {
     flexDirection: "row",
     gap: "78%",
     justifyContent: "center",
-    // TODO: center text
   };
 
   const inputContainerSx = {
@@ -174,27 +188,12 @@ const UpdateProfileModal = () => {
         style={{
           color: "#454545",
           fontSize: "36px",
-          marginTop: "55px",
+          marginTop: "12%",
           marginLeft: "30px",
         }}
         className={styles.clickButton}
         onClick={openModalHandler}
       />
-      {/* <EditIcon
-        sx={{
-          color: "#454545",
-          // size: "10x",
-          marginTop: "55px",
-          marginLeft: "30px",
-          "&:hover": {
-            cursor: "pointer",
-            transform: "scale(1.2)",
-            transition: "all 0.2s ease-in-out",
-          }
-        }}
-        onClick={openModalHandler}
-        
-      /> */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -215,11 +214,24 @@ const UpdateProfileModal = () => {
             </Box>
             <Box sx={inputContainerSx}>
               <h3>Profile Image:</h3>
-              {/* <ImageInput /> */}
-              <ProfilePicture
+              <ImageInput
+                type="PROFILE"
                 userDetails={userDetails}
-                imgWidth={"100px"}
-                imgHeight={"100px"}
+                width={"200px"}
+                height={"200px"}
+                onChangeFunction={onChangeProfileImage}
+                onDeleteFunction={onDeleteProfileImage}
+              />
+            </Box>
+            <Box sx={inputContainerSx}>
+              <h3>Cover Photo:</h3>
+              <ImageInput
+                type="COVER"
+                userDetails={userDetails}
+                width={"600px"}
+                height={"auto"}
+                onChangeFunction={onChangeCoverProfileImage}
+                onDeleteFunction={onDeleteCoverProfileImage}
               />
             </Box>
             <Box sx={inputContainerSx}>

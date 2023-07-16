@@ -18,7 +18,8 @@ const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
             width: `${imgWidth} !important`,
             height: `${imgHeight} !important`,
           }}
-          src="/Jira-Emblem.png"
+          // src="/Jira-Emblem.png"
+          src={profileImage}
           alt={`${firstName} ${lastName}`}
           onClick={() => {
             handleClick();
