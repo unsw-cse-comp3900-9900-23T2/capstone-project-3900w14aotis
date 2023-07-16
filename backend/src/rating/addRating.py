@@ -42,9 +42,6 @@ def addRating(projectId, taskId, uid, mood, db):
         if achievement.get("status") == "In Progress":
             achievement.reference.update(
                 {
-                "achievement": "New Critic",
-                "description": "Rate your first task",
-                "target": 1,
                 "currentValue": 1,
                 "status": "Done",
                 }

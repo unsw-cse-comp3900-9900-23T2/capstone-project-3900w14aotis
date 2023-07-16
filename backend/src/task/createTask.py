@@ -27,9 +27,6 @@ def createNewTask(newTask, projectId, db):
         if achievement.get("status") == "In Progress":
             achievement.reference.update(
                 {
-                "achievement": "Innovator",
-                "description": "Create your first task",
-                "target": 1,
                 "currentValue": 1,
                 "status": "Done",
                 }
