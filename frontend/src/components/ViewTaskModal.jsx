@@ -11,45 +11,46 @@ import TaskUsers from "../components/TaskUsers";
 import { deleteTaskFetch } from "../api/task";
 import { displayError, displaySuccess } from "../utils/helpers";
 
-const modalStyle = {
-  display: "flex",
-  flexDirection: "column",
-  gap: "20px",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 800,
-  bgcolor: "background.paper",
-  boxShadow: "0px 0px 10px 10px rgba(0, 0, 0, 0.25)",
-  p: 4,
-  borderRadius: "15px",
-};
-
-const titleStyle = {
-  display: "flex",
-  flexDirection: "row",
-  gap: "78%",
-  justifyContent: "flex-end",
-};
-
-const displayBoxStyle = {
-  display: "flex",
-  flexDirection: "row",
-  alignItems: "center",
-  gap: "30px",
-};
-
-const faceStyle = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  "&:hover": {
-    color: "#2578e6",
-    cursor: "pointer",
-  },
-};
 const ViewTaskModal = ({ isOpen, onClose, details, projectId }) => {
+  const modalStyle = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 800,
+    bgcolor: "background.paper",
+    boxShadow: "0px 0px 10px 10px rgba(0, 0, 0, 0.25)",
+    p: 4,
+    borderRadius: "15px",
+  };
+
+  const titleStyle = {
+    display: "flex",
+    flexDirection: "row",
+    gap: "78%",
+    justifyContent: "flex-end",
+  };
+
+  const displayBoxStyle = {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "30px",
+  };
+
+  const faceStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    "&:hover": {
+      color: "#2578e6",
+      cursor: "pointer",
+    },
+  };
+
   const deleteTaskHandler = async () => {
     const deleteTaskResponse = await deleteTaskFetch(projectId, details.id);
     if (deleteTaskResponse.code !== 200) {
