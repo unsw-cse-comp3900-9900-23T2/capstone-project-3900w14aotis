@@ -31,6 +31,19 @@ def authRegister(item, db):
             "coverProfileImage": item.coverProfileImage,
         }
     )
+    parentDocRef = db.collection("achievements").document(item.uid)
+    achievementCollection = parentDocRef.collection("achievements")
+    #Initialise innovator achievement
+    achievementCollection.add(
+        {
+            "achievement": "Innovator",
+            "description": "Create your first task",
+            "target": 1,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
     token = signInWithEmailAndPassword(email=item.email, password=item.password)
 
     return token

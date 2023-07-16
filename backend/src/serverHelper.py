@@ -65,3 +65,20 @@ def getUserId(queryField, queryValue, db):
     userDict = getUserDoc(queryField, queryValue, db)
     userId = userDict.pop("uid")
     return userId
+
+def getAchievement(db, achievementName,uid):
+    """
+    Finds the achievement according to achievement name
+
+    Args:
+        db: database
+        achievementName (str): name of the achievement, e.g. Innovator
+        uid (str): user id
+    Returns:
+        achievement: achievement returned in the form of a stream containing 1 element
+    """
+    achievementDocRef = db.collection("achievements").document(uid)
+    achievementCollection = achievementDocRef.collection("achievements")
+    achievement = (achievementCollection.where("achievement", "==", achievementName).limit(1).stream())
+
+    return achievement

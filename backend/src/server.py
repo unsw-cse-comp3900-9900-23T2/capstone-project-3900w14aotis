@@ -66,6 +66,7 @@ class Task(BaseModel):
     assignees: list[str]
     priority: str
     status: str
+    creatorId: str
 
 
 class NewProject(BaseModel):
