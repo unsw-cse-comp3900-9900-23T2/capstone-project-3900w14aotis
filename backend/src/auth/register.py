@@ -67,6 +67,17 @@ def authRegister(item, db):
         }
     )
 
+    #Initialise Task Fledgling achievement
+    achievementCollection.add(
+        {
+            "achievement": "Task Fledgling",
+            "description": "Complete First Task",
+            "target": 1,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
     token = signInWithEmailAndPassword(email=item.email, password=item.password)
 
     return token

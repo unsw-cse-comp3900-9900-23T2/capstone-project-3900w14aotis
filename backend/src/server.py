@@ -99,6 +99,7 @@ class UpdateTask(BaseModel):
     deadline: datetime
     priority: str
     status: str
+    creatorId: str
 
 
 class TaskRatingBody(BaseModel):
