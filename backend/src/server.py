@@ -23,6 +23,7 @@ from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
 from src.connections.connectionRespond import acceptConnection, declineConnection
 from src.connections.getConnections import getConnections
+from src.rating.addRating import addRating
 from src.connections.connectionRemove import unfriend
 
 db = initialiseFirestore()
@@ -97,6 +98,12 @@ class UpdateTask(BaseModel):
     deadline: datetime
     priority: str
     status: str
+
+
+class TaskRatingBody(BaseModel):
+    projectId: str
+    taskId: str
+    mood: str
 
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
@@ -287,10 +294,10 @@ async def addTaskAssignee(assignee: Assignee):
         userId (str): uID if the user is successfully added
     """
     try:
-        assigned = addAssignee(assignee.projectId, assignee.taskId, assignee.email, assignee.currUser, db)
-        return {
-            "detail": {"code": 200, "message": assigned}
-        }
+        assigned = addAssignee(
+            assignee.projectId, assignee.taskId, assignee.email, assignee.currUser, db
+        )
+        return {"detail": {"code": 200, "message": assigned}}
     except:
         raise HTTPException(
             status_code=404,
@@ -324,8 +331,9 @@ async def deleteTaskAssignee(assignee: Assignee):
             detail={"code": "404", "message": "Error removing taskmaster"},
         )
 
+
 @app.delete("/task/delete/{projectId}/{taskId}", summary="Removes a task")
-async def deleteTask(projectId:str, taskId:str):
+async def deleteTask(projectId: str, taskId: str):
     """
     This function removes a task from a project
 
@@ -337,7 +345,7 @@ async def deleteTask(projectId:str, taskId:str):
         deleted (str): taskId if it has been removed
     """
     try:
-        deleted = taskRemove(projectId,taskId, db)
+        deleted = taskRemove(projectId, taskId, db)
         return {
             "detail": {"code": 200, "message": f"Task: {deleted} successfully removed"}
         }
@@ -346,7 +354,8 @@ async def deleteTask(projectId:str, taskId:str):
             status_code=404,
             detail={"code": "404", "message": "Error removing task"},
         )
-    
+
+
 @app.post("/task/update/{projectId}/{taskId}", summary="Updates a tasks details")
 async def updateTaskDetails(item: UpdateTask, projectId: str, taskId: str):
     """Update task details given project and task Id
@@ -556,9 +565,7 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
     """
     try:
         messageStatus = sendConnection(userEmail, currUser, db)
-        return {
-            "detail": {"code": 200, "message": messageStatus}
-        }
+        return {"detail": {"code": 200, "message": messageStatus}}
     except:
         raise HTTPException(
             status_code=404,
@@ -566,7 +573,9 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
         )
 
 
-@app.post("/connections/accept/{currUser}", summary="accepts a connection from given userId")
+@app.post(
+    "/connections/accept/{currUser}", summary="accepts a connection from given userId"
+)
 async def acceptConnectionRequest(currUser: str, userId: str):
     """
     Accepts a connection from given user id.
@@ -590,7 +599,9 @@ async def acceptConnectionRequest(currUser: str, userId: str):
         )
 
 
-@app.post("/connections/decline/{currUser}", summary="declines a connection from given userId")
+@app.post(
+    "/connections/decline/{currUser}", summary="declines a connection from given userId"
+)
 async def declineConnectionRequest(currUser: str, userId: str):
     """
     Declines a connection from given user id.
@@ -612,6 +623,7 @@ async def declineConnectionRequest(currUser: str, userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error declining connection request"},
         )
+
 
 @app.get("/connections/get/{userId}", summary="gets all connections of a user")
 async def getUserConnections(userId: str):
@@ -638,7 +650,10 @@ async def getUserConnections(userId: str):
             detail={"code": "404", "message": "Error retrieving user's connections"},
         )
 
-@app.get("/connections/getPending/{userId}", summary="gets pending connections of a user")
+
+@app.get(
+    "/connections/getPending/{userId}", summary="gets pending connections of a user"
+)
 async def getPendingConnections(userId: str):
     """
     Gets all pending connections that the given userId is connected to.
@@ -662,8 +677,11 @@ async def getPendingConnections(userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error retrieving user's connections"},
         )
-    
-@app.delete("/connections/remove/{userId}", summary="removes connection between two users")
+
+
+@app.delete(
+    "/connections/remove/{userId}", summary="removes connection between two users"
+)
 async def removeConnection(currUser: str, userId: str):
     """
     Removes the connection between two users.
@@ -684,4 +702,32 @@ async def removeConnection(currUser: str, userId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error removing connection"},
+        )
+
+
+@app.post("/task/rate/{userId}", summary="Rate a task")
+async def addTaskRating(rating: TaskRatingBody, userId: str):
+    """
+    This function adds an assignee to the given task.
+
+    Args:
+        projectId (str): ID for the project that the task is in
+        taskId (str): ID for the task that you want to assign someone to
+        userId (str): uID of the person you want to assign
+
+    Returns:
+        userId (str): uID if the user is successfully added
+    """
+    try:
+        assigned = addRating(rating.projectId, rating.taskId, userId, rating.mood, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": f"User: {assigned} successfully rated task",
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error rating task"},
         )
