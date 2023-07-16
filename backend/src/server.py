@@ -733,3 +733,5 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error rating task"},
         )
+    
+

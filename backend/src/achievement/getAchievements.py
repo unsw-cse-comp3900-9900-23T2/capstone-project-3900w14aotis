@@ -6,13 +6,13 @@ This file contains helper functions to get all achievements of a user given user
 def listAchievements(userId,db):
 
     parentDocId = userId
-    subCollection = "records"
+    subCollection = "achievements"
     parentDocRef = db.collection("achievements").document(parentDocId)
     achievementList = []
     achievementCollection = parentDocRef.collection(subCollection).stream()
     for achievement in achievementCollection: 
         achievementDict = achievement.to_dict()
-        achievementDict["Achievement"] = achievement.id
+        achievementDict["achievementId"] = achievement.id
         achievementList.append(achievementDict)
     
     return achievementList
