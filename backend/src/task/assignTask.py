@@ -1,5 +1,5 @@
 from google.cloud import firestore
-from src.serverHelper import findUser, getUserId
+from src.serverHelper import findUser
 from src.connections.connectionHelper import isConnectedTo
 
 """

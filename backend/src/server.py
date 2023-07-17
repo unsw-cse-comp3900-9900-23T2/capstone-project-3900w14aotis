@@ -170,7 +170,7 @@ async def createTask(task: Task, projectId: str):
         return {
             "detail": {
                 "code": 200,
-                "message": f"Task {taskId[1].id} created successfully",
+                "message": f"Task {taskId} created successfully",
             }
         }
     except:
