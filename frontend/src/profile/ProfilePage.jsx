@@ -6,7 +6,7 @@ import BackButton from "../components/BackButton";
 import { Button } from "@mui/material";
 import UpdateProfileModal from "./UpdateProfileModal";
 import ProfileCard from "./ProfileCard";
-import { profileDetailFetch } from "../api/profile.js";
+import { profileAchievementsFetch, profileDetailFetch } from "../api/profile.js";
 import { getAuth } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";
@@ -63,8 +63,28 @@ const ProfilePage = () => {
     }
   };
 
+  // const [achievements, setAchievements] = useState([]);
+
+  // useEffect(() => {
+  //   getAchievements();
+  // }, []);
+
+  // // Get user achievements
+  // const getAchievements = async () => {
+  //   try {
+  //     const achievementsResponse = await profileAchievementsFetch(userId);
+  //     const profileAchievements = achievementsResponse.detail.message;
+  //     setAchievements(profileAchievements);
+  //   } catch (error) {
+  //     displayError(error);
+  //   }
+  // };
+
   const [allTasks, setAllTasks] = useState([]);
   const [projects, setProjects] = useState([]);
+  
+  // TODO: try to remove projects and tasks fetch and instead retreive user tasks from userDetails
+  // backend will need to action this.
   
   // Get all projects
   const getAllProjects = async (uid) => {
@@ -201,8 +221,7 @@ const ProfilePage = () => {
             <h4>{`${email}`}</h4>
           </Box>
           <ProfileCard title={"Ratings"} />
-          {/* <ProfileCard title={"Achievements"} /> */}
-          <ProfileAchievements />
+          {/* <ProfileAchievements achievements={achievements} /> */}
           <ProfileAssignedTasks tasks={allTasks}/>
         </Box>
       </Box>

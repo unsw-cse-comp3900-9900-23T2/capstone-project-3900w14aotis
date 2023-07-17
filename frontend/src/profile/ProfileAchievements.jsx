@@ -1,9 +1,9 @@
 import React from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/ProfileCard.module.css";
-import ProfileTaskCard from "./AssignedTaskCard";
+import AchievementSmallCard from "./AchievementSmallCard";
 
-const ProfileAchievements = ({ tasks }) => {
+const ProfileAchievements = ({ achievements }) => {
   return (
     <>
       <Box
@@ -34,9 +34,9 @@ const ProfileAchievements = ({ tasks }) => {
             padding: '2%',
           }}
         >
-          {/* {tasks.map((task) => {
+          {/* {achievements.map((achievement) => {
             return (
-              <ProfileTaskCard task={task}/>
+              <AchievementSmallCard achievementDetails={achievement}/>
             )
           })} */}
         </Box>
