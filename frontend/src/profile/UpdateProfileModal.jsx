@@ -76,6 +76,7 @@ const UpdateProfileModal = () => {
   const onChangeCoverProfileImage = (event) => {
     // Convert file input to string to store in database
     const newImage = event.target.files[0];
+    console.log("newImage: ", newImage)
     setCoverProfileImage(newImage);
   };
   const onDeleteCoverProfileImage = () => {
@@ -123,6 +124,7 @@ const UpdateProfileModal = () => {
         ) : (
           await fileToDataUrl(profileImage)
         );
+        console.log("cover photos image: ", coverProfileImage);
         const newCoverProfileImage = coverProfileImage === "" ? (
           ""
         ) : (
@@ -186,9 +188,10 @@ const UpdateProfileModal = () => {
       <Icon
         icon="mdi-light:pencil"
         style={{
-          color: "#454545",
+          // color: "#454545",
+          color: "#000",
           fontSize: "36px",
-          marginTop: "12%",
+          marginTop: "8%",
           marginLeft: "30px",
         }}
         className={styles.clickButton}
@@ -228,7 +231,7 @@ const UpdateProfileModal = () => {
               <ImageInput
                 type="COVER"
                 userDetails={userDetails}
-                width={"600px"}
+                width={"100px"}
                 height={"auto"}
                 onChangeFunction={onChangeCoverProfileImage}
                 onDeleteFunction={onDeleteCoverProfileImage}

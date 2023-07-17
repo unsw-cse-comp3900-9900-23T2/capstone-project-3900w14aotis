@@ -1,3 +1,14 @@
+.userName {
+  margin-top: 5%;
+  margin-bottom: 0;
+  color: #000;
+}
+
+.email {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
 .statusHeading {
   font-family: Raleway;
   font-size: clamp(1em, 1.8em, 3em);

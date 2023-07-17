@@ -15,7 +15,8 @@ import { allTasksFetch } from "../api/task";
 import { allProjectsFetch } from "../api/project";
 import ProfileAssignedTasks from "./ProfileAssignedTasks";
 import ProfileAchievements from "./ProfileAchievements";
-
+import styles from "./styles/ProfileCard.module.css";
+import CustomButton from "../components/CustomButton";
 
 
 const ProfilePage = () => {
@@ -208,11 +209,19 @@ const ProfilePage = () => {
             display: "flex",
             flexDirection: "row",
           }}>
-            <h1>{`${firstName} ${lastName}`}</h1>
+            <h1 className={styles.userName}>{`${firstName} ${lastName}`}</h1>
             <UpdateProfileModal />
           </Box>
-          <Box>
-            <h4>{`${email}`}</h4>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <h4 className={styles.email}>{`${email}`}</h4>
+            <CustomButton text="Connect" />
           </Box>
           <ProfileCard title={"Ratings"} />
           <ProfileAchievements achievements={achievements} />
