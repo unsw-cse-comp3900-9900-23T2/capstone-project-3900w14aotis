@@ -45,3 +45,18 @@ export const profileUpdateFetch = async (
     const profileUpdateResponse = await profileUpdatePromise.json();
     return profileUpdateResponse;
 };
+
+// export const profileAchievementsFetch = async (uId) => {
+//   const requestOption = {
+//     method: "GET",
+//     headers: { "Content-Type": API_MEDIA_TYPE },
+//   };
+
+//   const profileDetailPromise = await fetch(
+//     `${API_URL}/profile/${uId}/get`,
+//     requestOption
+//   );
+
+//   const profileDetailResponse = await profileDetailPromise.json();
+//   return profileDetailResponse;
+// };

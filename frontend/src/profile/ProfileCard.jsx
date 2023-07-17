@@ -1,6 +1,5 @@
 import React from "react";
 import { Box } from "@mui/material";
-import DeadlineBox from "../components/DeadlineBox";
 import styles from "./styles/ProfileCard.module.css";
 
 const ProfileCard = ({ title, data }) => {

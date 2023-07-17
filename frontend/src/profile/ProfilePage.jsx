@@ -11,6 +11,12 @@ import { getAuth } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";
 import { useSelector } from "react-redux";
+import { allTasksFetch } from "../api/task";
+import { allProjectsFetch } from "../api/project";
+import ProfileAssignedTasks from "./ProfileAssignedTasks";
+import ProfileAchievements from "./ProfileAchievements";
+
+
 
 const ProfilePage = () => {
   // Initialise profile details
@@ -41,7 +47,7 @@ const ProfilePage = () => {
   // Get profile details
   const getProfileDetails = async () => {
     try {
-      const auth = getAuth();
+      // const auth = getAuth();
       const profileDetailsResponse = await profileDetailFetch(userId);
       // TODO: try catch?
       const profile = profileDetailsResponse.detail.message;
@@ -56,6 +62,44 @@ const ProfilePage = () => {
       displayError(error);
     }
   };
+
+  const [allTasks, setAllTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
+  
+  // Get all projects
+  const getAllProjects = async (uid) => {
+    // console.log("uid", uid);
+    const userProjectsPromise = await allProjectsFetch(uid);
+    console.log(userProjectsPromise);
+    const projects = userProjectsPromise.detail.message;
+    setProjects(projects);
+    console.log("projects", projects);
+    if (projects.length > 0) {
+      // Assume that there will only be one project
+      getAllTasks(projects[0], uid);
+    }
+  }
+
+
+  // Get all tasks
+  const getAllTasks = async (projectId, uid) => {
+
+    const allTasksResponse = await allTasksFetch(projectId);
+    console.log("all tasks response: ", allTasksResponse);
+    if (allTasksResponse.detail.code === 200) {
+      const currTasks = allTasksResponse.detail.message;
+      const tasks = currTasks.filter(
+        (task) =>
+          task.Assignees.some((assignee) => assignee.uid === uid)
+      );
+      setAllTasks(tasks);
+    }
+  };
+
+  useEffect(() => {
+    getAllProjects(userId);
+  }, []);
+
 
   return (
     <>
@@ -157,8 +201,9 @@ const ProfilePage = () => {
             <h4>{`${email}`}</h4>
           </Box>
           <ProfileCard title={"Ratings"} />
-          <ProfileCard title={"Achievements"} />
-          <ProfileCard title={"Assigned Tasks"} />
+          {/* <ProfileCard title={"Achievements"} /> */}
+          <ProfileAchievements />
+          <ProfileAssignedTasks tasks={allTasks}/>
         </Box>
       </Box>
     </>
