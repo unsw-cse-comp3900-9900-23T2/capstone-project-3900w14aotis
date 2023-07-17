@@ -6,7 +6,7 @@ from src.auth.login import authLogin
 from datetime import datetime
 from src.task.createTask import createNewTask
 from src.task.createProject import createNewProject
-from src.task.getTasks import listTasks
+from src.task.getTasks import listTasks, listPaginatedTasks
 from src.task.createProject import joinExistingProject
 from fastapi.middleware.cors import CORSMiddleware
 from src.task.assignTask import addAssignee
@@ -231,7 +231,7 @@ async def getTaskDetails(projectId: str, taskId: str):
         )
 
 
-@app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
+@app.get("/tasks/{projectId}", summary="Lists all tasks of given project")
 async def getTasks(projectId: str):
     """get tasks of a project
 
@@ -250,6 +250,36 @@ async def getTasks(projectId: str):
             "detail": {
                 "code": 200,
                 "message": taskList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting tasks"},
+        )
+
+
+@app.get(
+    "/tasks/{projectId}/{latestTaskId}", summary="Paginates the tasks of given project"
+)
+async def getPaginatedTasks(projectId: str, latestTaskId: str):
+    """get tasks of a project
+
+    Args:
+        projectId (str): project Id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        taskList: list of tasks including assignee details
+    """
+    try:
+        taskDict = listPaginatedTasks(projectId, latestTaskId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": taskDict,
             }
         }
     except:

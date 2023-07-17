@@ -91,6 +91,21 @@ export const allTasksFetch = async (projectId) => {
   return allTasksResponse;
 };
 
+export const paginateTasksFetch = async (projectId, latestTaskId) => {
+  const requestOption = {
+    method: "GET",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+  };
+
+  const allTasksPromise = await fetch(
+    `${API_URL}/tasks/${projectId}/${latestTaskId}`,
+    requestOption
+  );
+
+  const allTasksResponse = await allTasksPromise.json();
+  return allTasksResponse;
+};
+
 export const taskDetailFetch = async (projectId, taskId) => {
   const requestOption = {
     method: "GET",
