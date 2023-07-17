@@ -32,7 +32,7 @@ def createNewTask(newTask, projectId, db):
             "Rating": {
                 "Very Happy": [],
                 "Happy": [],
-                "Normal": [],
+                "Neutral": [],
                 "Sad": [],
                 "Very Sad": [],
             },
