@@ -1,30 +1,25 @@
 from src.serverHelper import getUserDoc
-from src.rating.ratingHelper import findUserRating
 """
 This file contains helper functions to calculate workload for a user.
 """
 
-MAX_TASKS = 10.0
+DEFAULT_WEIGHT = 10.0
+MAX_WEIGHT = 100.0
 
-def calculateWorkload(currUser, db):
+def calculate(currUser, db):
     userDoc = getUserDoc("uid", currUser, db)
     
     #1. basic weighted task out of total tasks
     taskList = userDoc.pop("tasks")
-    taskNum = len(taskList)
-    taskWeight = taskNum/MAX_TASKS
 
-    for task in taskList:
-        #2. rating system?
-        
-        
-        #3. priority system
-        taskPrio = task['priority']
-        prioWeight = 1
-        match taskPrio:
-            case "High":
-                prioWeight = -0.5
-            case "Low":
-                prioWeight = 0.5
-            case _:
-                prioWeight = 1
+    # max num tasks is 10, this is full workload (100%)
+    taskNum = len(taskList)
+    if taskNum > 10:
+        return MAX_WEIGHT
+
+    totalWorkload = taskNum * DEFAULT_WEIGHT
+    
+    if totalWorkload > MAX_WEIGHT:
+        return MAX_WEIGHT
+
+    return totalWorkload

@@ -25,6 +25,7 @@ from src.connections.connectionRespond import acceptConnection, declineConnectio
 from src.connections.getConnections import getConnections
 from src.rating.addRating import addRating
 from src.connections.connectionRemove import unfriend
+from src.workload.calculateWorkload import calculate
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -730,4 +731,30 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error rating task"},
+        )
+
+@app.post("/workload/calculate/{currUser}", summary="calculate workload for a person")
+async def calculateWorkload(currUser: str):
+    """
+    Calculates workload for a given user
+
+    Args:
+        currUser (str): user Id for the user you want to calculate workload
+
+    Returns:
+        workload (float): a number that is <100 which shows how much workload they have
+                        this can be taken as a percentage
+    """
+    try: 
+        workload = calculate(currUser, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": workload,
+            }
+        } 
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error calculating workload"},
         )
