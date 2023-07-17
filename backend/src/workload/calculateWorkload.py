@@ -1,30 +1,61 @@
-from src.serverHelper import getUserDoc
+from src.serverHelper import getUserDoc, getProjectID, getTaskDoc
 from src.rating.ratingHelper import findUserRating
 """
 This file contains helper functions to calculate workload for a user.
 """
 
-MAX_TASKS = 10.0
+DEFAULT_WEIGHT = 10.0
+MAX_WEIGHT = 100.0
 
-def calculateWorkload(currUser, db):
+def calculate(currUser, db):
     userDoc = getUserDoc("uid", currUser, db)
     
     #1. basic weighted task out of total tasks
     taskList = userDoc.pop("tasks")
-    taskNum = len(taskList)
-    taskWeight = taskNum/MAX_TASKS
 
-    for task in taskList:
+    # max num tasks is 10, this is full workload (100%)
+    taskNum = len(taskList)
+    if taskNum > 10:
+        return MAX_WEIGHT
+
+    totalWorkload = 0
+
+    for taskId in taskList:
         #2. rating system?
+        projectId = getProjectID(taskId, db)
+        moodRating = "happy" #findUserRating(projectId, taskId, currUser, db)
+        moodWeight = 1.0
+        match moodRating:
+            case "Very Happy":
+                moodWeight = 0.5
+            case "Happy":
+                moodWeight = 0.75
+            case "Neutral":
+                moodWeight = 1
+            case "Sad":
+                moodWeight = 1.25
+            case "Very Sad":
+                moodWeight = 1.5
+            case _:
+                moodWeight = 1
         
         
         #3. priority system
-        taskPrio = task['priority']
-        prioWeight = 1
+        taskDoc = getTaskDoc(projectId, taskId, db)
+        taskPrio = taskDoc.get('priority')
+        prioWeight = 1.0
         match taskPrio:
             case "High":
-                prioWeight = -0.5
+                prioWeight = 1.5
             case "Low":
                 prioWeight = 0.5
             case _:
                 prioWeight = 1
+
+        totalTaskWeight = DEFAULT_WEIGHT * moodWeight * prioWeight
+        totalWorkload += totalTaskWeight
+        
+    if totalWorkload > MAX_WEIGHT:
+        return MAX_WEIGHT
+
+    return totalWorkload
