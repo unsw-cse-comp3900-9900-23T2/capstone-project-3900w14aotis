@@ -49,7 +49,8 @@ export const createTaskFetch = async (
   deadline,
   assignees,
   priority,
-  status
+  status,
+  creatorId
 ) => {
   const jsonData = JSON.stringify({
     title,
@@ -58,6 +59,7 @@ export const createTaskFetch = async (
     assignees,
     priority,
     status,
+    creatorId,
   });
 
   const requestOption = {

@@ -47,12 +47,9 @@ const ProfilePage = () => {
   // Get profile details
   const getProfileDetails = async () => {
     try {
-      // const auth = getAuth();
       const profileDetailsResponse = await profileDetailFetch(userId);
-      // TODO: try catch?
       const profile = profileDetailsResponse.detail.message;
       setUserDetails(profile);
-      console.log(profile);
       setFirstName(profile.firstName);
       setLastName(profile.lastName);
       setEmail(profile.email);
@@ -63,22 +60,23 @@ const ProfilePage = () => {
     }
   };
 
-  // const [achievements, setAchievements] = useState([]);
+  const [achievements, setAchievements] = useState([]);
 
-  // useEffect(() => {
-  //   getAchievements();
-  // }, []);
+  useEffect(() => {
+    getAchievements();
+  }, []);
 
-  // // Get user achievements
-  // const getAchievements = async () => {
-  //   try {
-  //     const achievementsResponse = await profileAchievementsFetch(userId);
-  //     const profileAchievements = achievementsResponse.detail.message;
-  //     setAchievements(profileAchievements);
-  //   } catch (error) {
-  //     displayError(error);
-  //   }
-  // };
+  // Get user achievements
+  const getAchievements = async () => {
+    try {
+      const achievementsResponse = await profileAchievementsFetch(userId);
+      const userAchievements = achievementsResponse.detail.message;
+      console.log("achievements: ", userAchievements);
+      setAchievements(userAchievements);
+    } catch (error) {
+      displayError(error);
+    }
+  };
 
   const [allTasks, setAllTasks] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -90,10 +88,8 @@ const ProfilePage = () => {
   const getAllProjects = async (uid) => {
     // console.log("uid", uid);
     const userProjectsPromise = await allProjectsFetch(uid);
-    console.log(userProjectsPromise);
     const projects = userProjectsPromise.detail.message;
     setProjects(projects);
-    console.log("projects", projects);
     if (projects.length > 0) {
       // Assume that there will only be one project
       getAllTasks(projects[0], uid);
@@ -103,9 +99,7 @@ const ProfilePage = () => {
 
   // Get all tasks
   const getAllTasks = async (projectId, uid) => {
-
     const allTasksResponse = await allTasksFetch(projectId);
-    console.log("all tasks response: ", allTasksResponse);
     if (allTasksResponse.detail.code === 200) {
       const currTasks = allTasksResponse.detail.message;
       const tasks = currTasks.filter(
@@ -221,7 +215,7 @@ const ProfilePage = () => {
             <h4>{`${email}`}</h4>
           </Box>
           <ProfileCard title={"Ratings"} />
-          {/* <ProfileAchievements achievements={achievements} /> */}
+          <ProfileAchievements achievements={achievements} />
           <ProfileAssignedTasks tasks={allTasks}/>
         </Box>
       </Box>

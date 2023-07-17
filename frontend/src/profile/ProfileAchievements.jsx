@@ -30,15 +30,17 @@ const ProfileAchievements = ({ achievements }) => {
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'center',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            flexWrap: 'wrap',
             padding: '2%',
           }}
         >
-          {/* {achievements.map((achievement) => {
+          {achievements.map((achievement) => {
             return (
               <AchievementSmallCard achievementDetails={achievement}/>
             )
-          })} */}
+          })}
         </Box>
       </Box>
     

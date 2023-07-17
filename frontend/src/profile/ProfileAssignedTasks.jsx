@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/ProfileCard.module.css";
-import ProfileTaskCard from "./AssignedTaskCard";
+import AssignedTaskCard from "./AssignedTaskCard";
 
 const ProfileAssignedTasks = ({ tasks }) => {
   return (
@@ -30,13 +30,15 @@ const ProfileAssignedTasks = ({ tasks }) => {
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'center',
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            flexWrap: 'wrap',
             padding: '2%',
           }}
         >
           {tasks.map((task) => {
             return (
-              <ProfileTaskCard task={task}/>
+              <AssignedTaskCard task={task}/>
             )
           })}
         </Box>
