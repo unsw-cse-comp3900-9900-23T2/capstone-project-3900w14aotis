@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import SortTasksDropdown from "./SortTasksDropdown";
 import { Icon } from "@iconify/react";
-import AcceptRequestModal from "./AcceptRequestModal";
+import PendingRequestModal from "./PendingRequestModal";
 import SendRequestModal from "./SendRequestModal";
 import SearchBar from "./SearchBar";
 import styles from "./styles/Modal.module.css";
@@ -94,7 +94,7 @@ const Headerbar = ({
               justifyContent: "space-around",
             }}
           >
-            <AcceptRequestModal />
+            <PendingRequestModal />
             <SendRequestModal />
           </Box>
         )}

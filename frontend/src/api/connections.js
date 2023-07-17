@@ -32,7 +32,7 @@ export const pendingConnectionsFetch = async (uId) => {
   };
 
   const pendingConnectionsPromise = await fetch(
-    `${API_URL}/connections/get/${uId}`,
+    `${API_URL}/connections/getPending/${uId}`,
     requestOption
   );
   const pendingConnectionsResponse = await pendingConnectionsPromise.json();

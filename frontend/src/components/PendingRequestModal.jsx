@@ -4,9 +4,9 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import { Icon } from "@iconify/react";
 import styles from "./styles/Modal.module.css";
-import AcceptRequestCard from "./AcceptRequestCard";
+import PendingRequestCard from "./PendingRequestCard";
 
-const AcceptRequestModal = () => {
+const PendingRequestModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -58,7 +58,7 @@ const AcceptRequestModal = () => {
               />
             </Box>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <AcceptRequestCard />
+              <PendingRequestCard />
             </Box>
           </Box>
         </Fade>
@@ -67,4 +67,4 @@ const AcceptRequestModal = () => {
   );
 };
 
-export default AcceptRequestModal;
+export default PendingRequestModal;

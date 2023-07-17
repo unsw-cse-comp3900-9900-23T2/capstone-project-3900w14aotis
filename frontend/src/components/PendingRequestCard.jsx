@@ -4,7 +4,7 @@ import ProfilePicture from "./ProfilePicture";
 import { Icon } from "@iconify/react";
 import styles from "./styles/Modal.module.css";
 
-function AcceptRequestCard() {
+function PendingRequestCard() {
   return (
     <Box
       sx={{
@@ -43,4 +43,4 @@ function AcceptRequestCard() {
   );
 }
 
-export default AcceptRequestCard;
+export default PendingRequestCard;
