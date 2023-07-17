@@ -1,4 +1,5 @@
-from src.serverHelper import getUserDoc, getUserId
+from src.serverHelper import getUserDoc
+from src.rating.ratingHelper import findUserRating
 """
 This file contains helper functions to calculate workload for a user.
 """
@@ -15,7 +16,7 @@ def calculateWorkload(currUser, db):
 
     for task in taskList:
         #2. rating system?
-        ratingList = task['Rating']
+        
         
         #3. priority system
         taskPrio = task['priority']

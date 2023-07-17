@@ -65,3 +65,38 @@ def getUserId(queryField, queryValue, db):
     userDict = getUserDoc(queryField, queryValue, db)
     userId = userDict.pop("uid")
     return userId
+
+def getTaskRef(projectId, taskId, db):
+    """
+    Retrieves doc reference of the task.
+
+    Args:
+        projectId (str): project ID of the task you want to access
+        taskId (str): task ID of the task you want to get.
+        db: database used
+    """
+    projectDocRef = db.collection("projects").document(projectId)
+    taskDocRef = projectDocRef.collection("tasks").document(taskId)
+
+    return taskDocRef
+
+def getTaskDoc(projectId, taskId, db):
+    """
+    Retrieves doc (in dictionary form) of the task.
+
+    Args:
+        projectId (str): project ID of the task you want to access
+        taskId (str): task ID of the task you want to get.
+        db: database used
+    """
+    projectDocRef = db.collection("projects").document(projectId)
+    taskDocRef = projectDocRef.collection("tasks").document(taskId)
+    taskDict = {}
+    doc = taskDocRef.get()
+
+    if doc.exists:
+        taskDict = doc.to_dict()
+    else:
+        return "No document found!"
+    
+    return taskDict
