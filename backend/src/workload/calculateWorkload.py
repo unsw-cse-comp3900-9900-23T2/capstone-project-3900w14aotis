@@ -14,6 +14,9 @@ def calculateWorkload(currUser, db):
     taskWeight = taskNum/MAX_TASKS
 
     for task in taskList:
+        #2. rating system?
+        ratingList = task['Rating']
+        
         #3. priority system
         taskPrio = task['priority']
         prioWeight = 1
@@ -24,6 +27,3 @@ def calculateWorkload(currUser, db):
                 prioWeight = 0.5
             case _:
                 prioWeight = 1
-
-
-    #2. rating system?
