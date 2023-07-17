@@ -66,6 +66,7 @@ class Task(BaseModel):
     assignees: list[str]
     priority: str
     status: str
+    creatorId: str
 
 
 class NewProject(BaseModel):
@@ -98,6 +99,7 @@ class UpdateTask(BaseModel):
     deadline: datetime
     priority: str
     status: str
+    creatorId: str
 
 
 class TaskRatingBody(BaseModel):
@@ -373,9 +375,9 @@ async def updateTaskDetails(item: UpdateTask, projectId: str, taskId: str):
     """
 
     try:
-        taskId = updateTask(projectId, taskId, db, item)
+        taskDict = updateTask(projectId, taskId, db, item)
         return {
-            "detail": {"code": 200, "message": f"Task {taskId} updated successfully"}
+            "detail": {"code": 200, "message": taskDict}
         }
 
     except:
@@ -719,11 +721,11 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
         userId (str): uID if the user is successfully added
     """
     try:
-        assigned = addRating(rating.projectId, rating.taskId, userId, rating.mood, db)
+        task = addRating(rating.projectId, rating.taskId, userId, rating.mood, db)
         return {
             "detail": {
                 "code": 200,
-                "message": f"User: {assigned} successfully rated task",
+                "message": task,
             }
         }
     except:
@@ -731,3 +733,5 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
             status_code=404,
             detail={"code": "404", "message": "Error rating task"},
         )
+    
+

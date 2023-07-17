@@ -31,6 +31,64 @@ def authRegister(item, db):
             "coverProfileImage": item.coverProfileImage,
         }
     )
+    
+    parentDocRef = db.collection("achievements").document(item.uid)
+    achievementCollection = parentDocRef.collection("achievements")
+    #Initialise innovator achievement
+    achievementCollection.add(
+        {
+            "achievement": "Innovator",
+            "description": "Create your first task",
+            "target": 1,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
+    #Initialise New Critic achievement
+    achievementCollection.add(
+        {
+            "achievement": "New Critic",
+            "description": "Rate your first task",
+            "target": 1,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
+    #Initialise Connoisseur achievement
+    achievementCollection.add(
+        {
+            "achievement": "Connoisseur",
+            "description": "Rate 5 tasks",
+            "target": 5,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
+    #Initialise Task Fledgling achievement
+    achievementCollection.add(
+        {
+            "achievement": "Task Fledgling",
+            "description": "Complete First Task",
+            "target": 1,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
+    #Initialise Task Master achievement
+    achievementCollection.add(
+        {
+            "achievement": "Task Master",
+            "description": "Complete 5 tasks",
+            "target": 5,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
     token = signInWithEmailAndPassword(email=item.email, password=item.password)
 
     return token
