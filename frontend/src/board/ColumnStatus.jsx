@@ -8,12 +8,15 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import CreateTaskModal from "../components/CreateTaskModal";
 import Loading from "../components/Loading";
-
-// TODO: complete create task in board by passing in a prop for status depending
-// on status name.
+import { useParams } from "react-router-dom";
+import ViewTaskModal from "../components/ViewTaskModal";
 
 const ColumnStatus = ({ columnId, title, tasks, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [viewTaskModalOpen, setViewTaskModalOpen] = useState(false);
+  const [taskId, setTaskId] = useState("");
+
+  const { projectId } = useParams();
 
   const createTaskHandler = () => {
     setIsOpen(true);
@@ -21,6 +24,12 @@ const ColumnStatus = ({ columnId, title, tasks, isLoading }) => {
 
   const closeModalHandler = () => {
     setIsOpen(false);
+    setViewTaskModalOpen(false);
+  };
+
+  const viewTaskHandler = (taskId) => {
+    setTaskId(taskId);
+    setViewTaskModalOpen(true);
   };
 
   return (
@@ -37,6 +46,12 @@ const ColumnStatus = ({ columnId, title, tasks, isLoading }) => {
             ? "Done"
             : "To Do"
         }
+      />
+      <ViewTaskModal
+        isOpen={viewTaskModalOpen}
+        onClose={closeModalHandler}
+        projectId={projectId}
+        taskId={taskId}
       />
       <Box
         sx={{
@@ -82,6 +97,7 @@ const ColumnStatus = ({ columnId, title, tasks, isLoading }) => {
                             key={task.taskID}
                             task={task}
                             index={idx}
+                            viewTaskFunction={viewTaskHandler}
                           />
                         );
                       })}

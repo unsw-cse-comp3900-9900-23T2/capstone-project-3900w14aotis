@@ -2,11 +2,10 @@ import { Box } from "@mui/material";
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import DeadlineBox from "../components/DeadlineBox";
-import ProfilePicture from "../components/ProfilePicture";
 import styles from "./styles/SmallTaskCard.module.css";
 import TaskUsers from "../components/TaskUsers";
 
-const SmallTaskCard = ({ task, index }) => {
+const SmallTaskCard = ({ task, index, viewTaskFunction }) => {
   return (
     <Draggable draggableId={task.taskID} index={index}>
       {(provided) => {
@@ -28,6 +27,7 @@ const SmallTaskCard = ({ task, index }) => {
             onClick={() => {
               //TODO: view task modal popup
               console.log(`clicked task: ${task.taskID}`);
+              viewTaskFunction(task.taskID);
             }}
           >
             <h5 className={styles.taskCardTitle}>{task.Title}</h5>
