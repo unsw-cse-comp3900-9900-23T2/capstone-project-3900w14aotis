@@ -228,12 +228,18 @@ async def getTaskDetails(projectId: str, taskId: str):
         taskDetails = getDetails(projectId, taskId, db)
         return {"detail": {"code": 200, "message": taskDetails}}
     except HTTPException as e:
-        if e.status_code == 404 and e.detail == {"code": "404", "message": "Document doesn't exist"}:
+        if e.status_code == 404 and e.detail == {
+            "code": "404",
+            "message": "Document doesn't exist",
+        }:
             raise
         else:
             raise HTTPException(
                 status_code=404,
-                detail={"code": "404", "message": "Error retrieving data from this task"},
+                detail={
+                    "code": "404",
+                    "message": "Error retrieving data from this task",
+                },
             )
 
 
@@ -606,15 +612,25 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
     except HTTPException as e:
         if e.status_code == 400:
             raise
-        elif e.status_code == 409 and e.detail == {"code": "409", "message": "User is already connected!"}:
+        elif e.status_code == 409 and e.detail == {
+            "code": "409",
+            "message": "User is already connected!",
+        }:
             raise
-        elif e.status_code == 409 and e.detail == {"code": "409", "message": "User already sent a request"}:
+        elif e.status_code == 409 and e.detail == {
+            "code": "409",
+            "message": "User already sent a request",
+        }:
             raise
-        else:    
+        else:
             raise HTTPException(
                 status_code=404,
-                detail={"code": "404", "message": "Error retrieving data from this user"},
+                detail={
+                    "code": "404",
+                    "message": "Error retrieving data from this user",
+                },
             )
+
 
 @app.post(
     "/connections/accept/{currUser}", summary="accepts a connection from given userId"
@@ -777,6 +793,7 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
             detail={"code": "404", "message": "Error rating task"},
         )
 
+
 @app.get("/workload/calculate/{currUser}", summary="calculate workload for a person")
 async def calculateWorkload(currUser: str):
     """
@@ -789,14 +806,14 @@ async def calculateWorkload(currUser: str):
         workload (float): a number that is <100 which shows how much workload they have
                         this can be taken as a percentage
     """
-    try: 
+    try:
         workload = calculate(currUser, db)
         return {
             "detail": {
                 "code": 200,
                 "message": workload,
             }
-        } 
+        }
     except:
         raise HTTPException(
             status_code=404,
