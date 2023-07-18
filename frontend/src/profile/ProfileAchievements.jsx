@@ -18,19 +18,18 @@ const ProfileAchievements = ({ achievements }) => {
           margin: "1rem",
           display: "flex",
           flexDirection: "column",
-          // height: "70%",
         }}
       >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "1%",
+          }}
+        >
+          <h3 className={styles.statusHeading}>Achievements</h3>
+        </Box>
         <PerfectScrollbar>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "1%",
-            }}
-          >
-            <h3 className={styles.statusHeading}>Achievements</h3>
-          </Box>
           <Box
             sx={{
               display: "flex",
