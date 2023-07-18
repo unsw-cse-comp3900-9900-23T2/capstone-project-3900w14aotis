@@ -567,12 +567,18 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
     try:
         messageStatus = sendConnection(userEmail, currUser, db)
         return {"detail": {"code": 200, "message": messageStatus}}
-    except:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error sending connection request"},
-        )
-
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
+        elif e.status_code == 409 and e.detail == {"code": "409", "message": "User is already connected!"}:
+            raise
+        elif e.status_code == 409 and e.detail == {"code": "409", "message": "User already sent a request"}:
+            raise
+        else:    
+            raise HTTPException(
+                status_code=404,
+                detail={"code": "404", "message": "Error retrieving data from this user"},
+            )
 
 @app.post(
     "/connections/accept/{currUser}", summary="accepts a connection from given userId"
