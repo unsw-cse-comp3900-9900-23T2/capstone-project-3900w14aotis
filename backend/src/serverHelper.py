@@ -61,7 +61,27 @@ def getUserId(queryField, queryValue, db):
                         (e.g. email, uid, first/last name) of a user
         queryValue (str): information for the field you declared
         db : database
+
+    Returns:
+        userId (str): userid you were looking for
     """
     userDict = getUserDoc(queryField, queryValue, db)
     userId = userDict.pop("uid")
     return userId
+
+def getTaskRef(projectId, taskId, db):
+    """
+    Retrieves doc reference of the task.
+
+    Args:
+        projectId (str): project ID of the task you want to access
+        taskId (str): task ID of the task you want to get.
+        db: database used
+    
+    Returns:
+        taskRef: reference to task document
+    """
+    projectDocRef = db.collection("projects").document(projectId)
+    taskDocRef = projectDocRef.collection("tasks").document(taskId)
+
+    return taskDocRef

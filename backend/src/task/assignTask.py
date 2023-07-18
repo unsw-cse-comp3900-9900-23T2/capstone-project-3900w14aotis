@@ -1,5 +1,5 @@
 from google.cloud import firestore
-from src.serverHelper import findUser, getUserId
+from src.serverHelper import findUser
 from src.connections.connectionHelper import isConnectedTo
 
 """
@@ -61,10 +61,10 @@ def deleteAssignee(projectId, taskId, email, db):
     taskRef = projectRef.collection("tasks").document(taskId)
 
     # remove assignee from task assignee list
-    taskRef.update({"Assignees": firestore.ArrayRemove([email])})
+    taskRef.update({"Assignees": firestore.ArrayRemove([userEmail])})
 
     # ref for the taskmaster's details document
-    taskmasterRef = findUser("email", email.lower(), db)
+    taskmasterRef = findUser("email", userEmail, db)
 
     # remove task from taskmaster's task list
     taskmasterRef.update({"tasks": firestore.ArrayRemove([taskId])})
