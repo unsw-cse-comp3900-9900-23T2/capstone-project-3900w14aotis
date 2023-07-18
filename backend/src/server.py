@@ -302,7 +302,9 @@ async def addTaskAssignee(assignee: Assignee):
             assignee.projectId, assignee.taskId, assignee.email, assignee.currUser, db
         )
         return {"detail": {"code": 200, "message": assigned}}
-    except:
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error assigning taskmaster"},
@@ -708,7 +710,9 @@ async def removeConnection(currUser: str, userId: str):
                 "message": status,
             }
         }
-    except:
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error removing connection"},
