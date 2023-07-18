@@ -85,3 +85,22 @@ def getTaskRef(projectId, taskId, db):
     taskDocRef = projectDocRef.collection("tasks").document(taskId)
 
     return taskDocRef
+
+def isValidUser(queryField, queryValue, db):
+    """
+    Checks if user is valid given any information of a user.
+
+    Args:
+        queryField (str): field for the information you have
+        queryValue (str): information you have of the user
+        db: database
+    
+    Returns:
+        bool: returns True if a user exists with that, or False otherwise
+    """
+    docs = db.collection("taskmasters").where(queryField, "==", queryValue).stream()
+    
+    for doc in docs:
+        if doc.exists:
+            return True
+    return False
