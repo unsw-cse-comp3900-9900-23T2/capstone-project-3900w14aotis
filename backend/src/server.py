@@ -224,11 +224,14 @@ async def getTaskDetails(projectId: str, taskId: str):
     try:
         taskDetails = getDetails(projectId, taskId, db)
         return {"detail": {"code": 200, "message": taskDetails}}
-    except:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error retrieving data from this task"},
-        )
+    except HTTPException as e:
+        if e.status_code == 404 and e.detail == {"code": "404", "message": "Document doesn't exist"}:
+            raise
+        else:
+            raise HTTPException(
+                status_code=404,
+                detail={"code": "404", "message": "Error retrieving data from this task"},
+            )
 
 
 @app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
