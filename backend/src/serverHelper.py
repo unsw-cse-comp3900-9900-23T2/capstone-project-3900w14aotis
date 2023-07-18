@@ -61,6 +61,9 @@ def getUserId(queryField, queryValue, db):
                         (e.g. email, uid, first/last name) of a user
         queryValue (str): information for the field you declared
         db : database
+
+    Returns:
+        userId (str): userid you were looking for
     """
     userDict = getUserDoc(queryField, queryValue, db)
     userId = userDict.pop("uid")
@@ -87,3 +90,41 @@ def getAchievement(db, achievementName, uid):
     )
 
     return achievement
+
+
+def getTaskRef(projectId, taskId, db):
+    """
+    Retrieves doc reference of the task.
+
+    Args:
+        projectId (str): project ID of the task you want to access
+        taskId (str): task ID of the task you want to get.
+        db: database used
+
+    Returns:
+        taskRef: reference to task document
+    """
+    projectDocRef = db.collection("projects").document(projectId)
+    taskDocRef = projectDocRef.collection("tasks").document(taskId)
+
+    return taskDocRef
+
+
+def isValidUser(queryField, queryValue, db):
+    """
+    Checks if user is valid given any information of a user.
+
+    Args:
+        queryField (str): field for the information you have
+        queryValue (str): information you have of the user
+        db: database
+
+    Returns:
+        bool: returns True if a user exists with that, or False otherwise
+    """
+    docs = db.collection("taskmasters").where(queryField, "==", queryValue).stream()
+
+    for doc in docs:
+        if doc.exists:
+            return True
+    return False

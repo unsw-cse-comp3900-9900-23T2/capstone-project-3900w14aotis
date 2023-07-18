@@ -1,5 +1,5 @@
-from src.config.firestoreUtils import auth
-from src.serverHelper import getAchievement
+from src.serverHelper import getAchievement, findUser
+from google.cloud import firestore
 
 """
 This file contains helper functions to create a new task within a project.
@@ -47,8 +47,7 @@ def createNewTask(newTask, projectId, db):
             "Rating": {
                 "Very Happy": [],
                 "Happy": [],
-                "Tiring": [],
-                "Angry": [],
+                "Neutral": [],
                 "Sad": [],
                 "Very Sad": [],
             },
@@ -56,4 +55,9 @@ def createNewTask(newTask, projectId, db):
         }
     )
 
-    return taskRef
+    # Assigns task to taskmasters in given newTask object
+    for email in newTask.assignees:
+        taskmasterRef = findUser("email", email.lower(), db)
+        taskmasterRef.update({"tasks": firestore.ArrayUnion([taskRef[1].id])})
+
+    return taskRef[1].id
