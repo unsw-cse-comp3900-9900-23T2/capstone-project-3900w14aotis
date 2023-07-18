@@ -28,3 +28,9 @@ and minor clarity.
 
 Week 6: we have decided on sprint 2, as well as allocated tasks. I have worked on connections. I also proposed
 a change to the database structure for easier access (removing collection for connections). 
+
+Week 7: did connections (respond, send, get, helper). added helper functions for serverHelper.
+
+Week 8:  Found issues with exceptions and handled it, learned about how to catch and raise
+httpExceptions. Did bugfixes for other team members, to rectify backend (returns and also any 
+changes they needed e.g. assign task when creating.). Finished basic implementation of calculate workload.

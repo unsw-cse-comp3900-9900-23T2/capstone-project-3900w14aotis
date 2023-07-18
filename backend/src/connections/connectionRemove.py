@@ -1,4 +1,5 @@
 from google.cloud import firestore
+from fastapi import HTTPException
 from src.serverHelper import findUser
 from src.connections.connectionHelper import isConnectedTo
 """
@@ -7,7 +8,10 @@ This files contains helper functions to help send a connection to a taskmaster
 def unfriend(currUser, userId, db):
     # check if users are connected
     if not isConnectedTo(currUser, "uid", userId, db):
-        return "Users are not connected!"
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "400", "message": "User is not a connection!"},
+        )
 
     # removes connection from currUser
     currUserRef = findUser("uid", currUser, db)
@@ -20,4 +24,15 @@ def unfriend(currUser, userId, db):
     userRef.update(
         {"connectedTo": firestore.ArrayRemove([currUser])}
     )
-    return f"{userId} removed from {currUser}'s connections"
+    userDoc = userRef.get().to_dict()
+    userFirstName = userDoc.get('firstName')
+    userLastName = userDoc.get('lastName')
+
+
+    currUserDoc = currUserRef.get().to_dict()
+    currUserFirst = currUserDoc.get('firstName')
+    currUserLast = currUserDoc.get('lastName')
+
+
+
+    return f"{userFirstName} {userLastName} removed from {currUserFirst} {currUserLast}'s connections"
