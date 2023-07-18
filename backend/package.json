@@ -4,6 +4,6 @@
     "firebase-admin": "^11.9.0"
   },
   "scripts": {
-    "start": "py -m uvicorn src.server:app --reload"
+    "start": "python -m uvicorn src.server:app --reload"
   }
 }
