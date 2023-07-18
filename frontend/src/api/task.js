@@ -49,7 +49,8 @@ export const createTaskFetch = async (
   deadline,
   assignees,
   priority,
-  status
+  status,
+  creatorId
 ) => {
   const jsonData = JSON.stringify({
     title,
@@ -58,6 +59,8 @@ export const createTaskFetch = async (
     assignees,
     priority,
     status,
+    creationTime: new Date().toISOString(),
+    creatorId,
   });
 
   const requestOption = {
@@ -90,6 +93,21 @@ export const allTasksFetch = async (projectId) => {
   return allTasksResponse;
 };
 
+export const paginateTasksFetch = async (projectId, latestTaskId) => {
+  const requestOption = {
+    method: "GET",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+  };
+
+  const allTasksPromise = await fetch(
+    `${API_URL}/tasks/${projectId}/${latestTaskId}`,
+    requestOption
+  );
+
+  const allTasksResponse = await allTasksPromise.json();
+  return allTasksResponse;
+};
+
 export const taskDetailFetch = async (projectId, taskId) => {
   const requestOption = {
     method: "GET",
@@ -112,7 +130,8 @@ export const updateTaskFetch = async (
   description,
   deadline,
   priority,
-  status
+  status,
+  creatorId
 ) => {
   const jsonData = JSON.stringify({
     title,
@@ -120,6 +139,7 @@ export const updateTaskFetch = async (
     deadline,
     priority,
     status,
+    creatorId,
   });
 
   const requestOption = {

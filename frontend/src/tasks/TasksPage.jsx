@@ -10,13 +10,17 @@ import {
   sortTasksDescending,
   sortTasksSoonest,
   sortTasksLatest,
+  sortTasksCreationRecent,
   sortTasksImportant,
   sortTasksLeastImportant,
+  paginateTasks,
 } from "../utils/helpers";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import CreateTaskModal from "../components/CreateTaskModal";
 import Loading from "../components/Loading";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const TasksPage = () => {
   const [allTasks, setAllTasks] = useState([]);
@@ -26,18 +30,24 @@ const TasksPage = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [clickedTaskId, setClickedTaskId] = useState("");
+  const [numTasks, setNumTasks] = useState(0);
+  const [pageNum, setPageNum] = useState(1);
+  const [removedTaskId, setRemovedTaskId] = useState("");
 
   const { projectId } = useParams();
-  const taskAdded = useSelector((state) => state.tasksUpdated);
+  const taskAdded = useSelector((state) => state.taskAdded);
+  const taskDeleted = useSelector((state) => state.taskDeleted);
 
   const getAllTasks = async () => {
     const allTasksResponse = await allTasksFetch(projectId);
     if (allTasksResponse.detail.code === 200) {
-      const sortedAllTasks = sortTasksAscending(
+      const sortedAllTasks = sortTasksCreationRecent(
         allTasksResponse.detail.message
       );
-      setAllTasks(sortedAllTasks);
-      setTasksAfterFilter(sortedAllTasks);
+      const paginatedTasks = paginateTasks(sortedAllTasks);
+      setAllTasks(paginatedTasks);
+      setTasksAfterFilter(paginatedTasks);
+      setNumTasks(sortedAllTasks.length);
       setLoading(false);
     }
   };
@@ -60,21 +70,51 @@ const TasksPage = () => {
   const queryTasks = () => {
     const currentTasks = [...allTasks];
     let filteredTasks = [...tasksAfterFilter];
+
+    let flatCurrentTasks = currentTasks.flat(1);
+
     if (searchQuery.length === 0) {
       getAllTasks();
     } else {
-      filteredTasks = currentTasks.filter(isSearchQuery);
-      setTasksAfterFilter(filteredTasks);
+      filteredTasks = flatCurrentTasks.filter(isSearchQuery);
+      setNumTasks(filteredTasks.length);
+      setPageNum(1);
+      const paginatedTasks = paginateTasks(filteredTasks);
+      setTasksAfterFilter(paginatedTasks);
     }
   };
 
   useEffect(() => {
-    getAllTasks();
-  }, [taskAdded]);
+    if (removedTaskId !== "") {
+      const tasksCopy = [...tasksAfterFilter];
+      const removedTaskList = tasksCopy.map((pageTasks) => {
+        return pageTasks.filter((task) => {
+          return task.taskID !== removedTaskId;
+        });
+      });
+      const flatTaskList = removedTaskList.flat(1);
+      const paginatedTasks = paginateTasks(flatTaskList);
+      setTasksAfterFilter(paginatedTasks);
+      setNumTasks(flatTaskList.length);
+    }
+  }, [removedTaskId]);
+
+  useEffect(() => {
+    const queriedTasks = [...tasksAfterFilter];
+    if (
+      pageNum !== 1 &&
+      pageNum === queriedTasks.length &&
+      tasksAfterFilter[pageNum - 1].length <= 1
+    ) {
+      setPageNum(pageNum - 1);
+      setNumTasks(tasksAfterFilter.flat(1).length - 1);
+    }
+  }, [taskDeleted]);
 
   useEffect(() => {
     queryTasks();
-  }, [searchQuery]);
+    setPageNum(1);
+  }, [searchQuery, taskAdded]);
 
   const modalOpen = () => setOpen(true);
   const modalClose = () => setOpen(false);
@@ -84,23 +124,28 @@ const TasksPage = () => {
   };
 
   const tasksSortHandler = (sortBy) => {
-    let sortedTasks = [...allTasks];
+    // let sortedTasks = [...allTasks];
+    let sortedTasks = [...tasksAfterFilter];
+    const taskList = sortedTasks.flat(1);
     if (sortBy === "Ascending") {
-      sortedTasks = sortTasksAscending(sortedTasks);
+      sortedTasks = sortTasksAscending(taskList);
     } else if (sortBy === "Descending") {
-      sortedTasks = sortTasksDescending(sortedTasks);
+      sortedTasks = sortTasksDescending(taskList);
     } else if (sortBy === "Soonest") {
-      sortedTasks = sortTasksSoonest(sortedTasks);
+      sortedTasks = sortTasksSoonest(taskList);
     } else if (sortBy === "Latest") {
-      sortedTasks = sortTasksLatest(sortedTasks);
+      sortedTasks = sortTasksLatest(taskList);
     } else if (sortBy === "Important") {
-      sortedTasks = sortTasksImportant(sortedTasks);
+      sortedTasks = sortTasksImportant(taskList);
     } else if (sortBy === "LeastImportant") {
-      sortedTasks = sortTasksLeastImportant(sortedTasks);
+      sortedTasks = sortTasksLeastImportant(taskList);
+    } else if (sortBy === "Default") {
+      sortedTasks = sortTasksCreationRecent(taskList);
     }
 
-    setAllTasks(sortedTasks);
-    setTasksAfterFilter(sortedTasks);
+    const paginatedTasks = paginateTasks(sortedTasks);
+    setAllTasks(paginatedTasks);
+    setTasksAfterFilter(paginatedTasks);
   };
 
   const closeModalHandler = () => {
@@ -136,8 +181,8 @@ const TasksPage = () => {
               onClose={modalClose}
               projectId={projectId}
               taskId={clickedTaskId}
+              setRemovedTaskId={setRemovedTaskId}
             />
-
             <Box
               sx={{
                 display: "flex",
@@ -145,23 +190,48 @@ const TasksPage = () => {
                 alignItems: "center",
                 gap: "2.19rem",
                 paddingTop: "2.19rem",
+                height: "90%",
               }}
             >
-              {tasksAfterFilter.map((task, idx) => {
-                return (
-                  <LongTaskCard
-                    key={task.taskID}
-                    id={task.taskID}
-                    title={task.Title}
-                    status={task.Status}
-                    deadline={task.Deadline}
-                    assignees={task.Assignees}
-                    isModalOpen={modalOpen}
-                    projectId={projectId}
-                    clickedTaskHandler={setClickedTaskId}
-                  />
-                );
-              })}
+              {tasksAfterFilter.length > 0 ? (
+                tasksAfterFilter[pageNum - 1].map((task, idx) => {
+                  return (
+                    <LongTaskCard
+                      key={task.taskID}
+                      id={task.taskID}
+                      title={task.Title}
+                      status={task.Status}
+                      deadline={task.Deadline}
+                      assignees={task.Assignees}
+                      isModalOpen={modalOpen}
+                      projectId={projectId}
+                      clickedTaskHandler={setClickedTaskId}
+                    />
+                  );
+                })
+              ) : (
+                <p>Tasks Not Found</p>
+              )}
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "30px",
+                height: "10%",
+              }}
+            >
+              <Stack spacing={2}>
+                <Pagination
+                  count={Math.ceil(numTasks / 5)}
+                  shape="rounded"
+                  size="large"
+                  onChange={(e, value) => {
+                    setPageNum(value);
+                  }}
+                  page={pageNum}
+                />
+              </Stack>
             </Box>
           </>
         )}
