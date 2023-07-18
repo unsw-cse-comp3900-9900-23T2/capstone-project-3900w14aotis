@@ -746,7 +746,7 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
             detail={"code": "404", "message": "Error rating task"},
         )
 
-@app.post("/workload/calculate/{currUser}", summary="calculate workload for a person")
+@app.get("/workload/calculate/{currUser}", summary="calculate workload for a person")
 async def calculateWorkload(currUser: str):
     """
     Calculates workload for a given user
