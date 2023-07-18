@@ -42,7 +42,7 @@ const ProfileAssignedTasks = ({ tasks }) => {
           >
             {tasks.map((task) => {
               return (
-                <AssignedTaskCard task={task}/>
+                <AssignedTaskCard task={task} viewTaskFunction={() => {console.log("VIEW TASK clicked")}}/>
               )
             })}
           </Box>
