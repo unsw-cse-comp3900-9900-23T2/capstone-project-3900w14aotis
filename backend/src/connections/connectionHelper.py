@@ -1,4 +1,3 @@
-from google.cloud import firestore
 from src.serverHelper import getUserDoc, getUserId
 """
 This files contains helper functions to help send a connection to a taskmaster
