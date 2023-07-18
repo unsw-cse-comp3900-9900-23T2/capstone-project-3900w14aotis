@@ -16,9 +16,15 @@ import TaskRatingIcon from "../components/TaskRatingIcon";
 import { taskDetailFetch } from "../api/task";
 import Loading from "./Loading";
 import { useDispatch } from "react-redux";
-import { addTaskAction } from "../tasks/state/addTaskAction";
+import { deleteTaskAction } from "../tasks/state/deleteTaskAction";
 
-const ViewTaskModal = ({ isOpen, onClose, projectId, taskId }) => {
+const ViewTaskModal = ({
+  isOpen,
+  onClose,
+  projectId,
+  taskId,
+  setRemovedTaskId,
+}) => {
   // TODO: rating options are skewed (more negatives, add a neutral option)
   const ratingMapping = [
     { mood: "Very Sad", iconName: "fa-regular:sad-cry" },
@@ -37,9 +43,13 @@ const ViewTaskModal = ({ isOpen, onClose, projectId, taskId }) => {
   const dispatch = useDispatch();
 
   const getTaskDetails = async () => {
-    if (taskId) {
+    // console.log(isOpen);
+    if (isOpen && taskId) {
       const taskDetailsResponse = await taskDetailFetch(projectId, taskId);
-      setDetails(taskDetailsResponse.detail.message);
+      // console.log(taskDetailsResponse);
+      if (taskDetailsResponse.detail.code === 200) {
+        setDetails(taskDetailsResponse.detail.message);
+      }
       setLoading(false);
     }
   };
@@ -64,7 +74,8 @@ const ViewTaskModal = ({ isOpen, onClose, projectId, taskId }) => {
     if (deleteTaskResponse.detail.code !== 200) {
       displayError(deleteTaskResponse.detail.message);
     } else {
-      dispatch(addTaskAction());
+      setRemovedTaskId(taskId);
+      dispatch(deleteTaskAction());
       displaySuccess(deleteTaskResponse.detail.message);
     }
     onClose();
@@ -208,27 +219,28 @@ const ViewTaskModal = ({ isOpen, onClose, projectId, taskId }) => {
                         width: "100%",
                       }}
                     >
-                      {ratingMapping.map((rating, idx) => {
-                        let rated = false;
-                        if (details) {
-                          const ratingList = details.Rating[rating.mood];
-                          for (const userRating of ratingList) {
-                            if (userRating.uid === userId) {
-                              rated = true;
+                      {ratingMapping.length > 0 &&
+                        ratingMapping.map((rating, idx) => {
+                          let rated = false;
+                          if (details) {
+                            const ratingList = details.Rating[rating.mood];
+                            for (const userRating of ratingList) {
+                              if (userRating.uid === userId) {
+                                rated = true;
+                              }
                             }
+                            return (
+                              <TaskRatingIcon
+                                key={idx}
+                                rated={rated}
+                                iconName={rating.iconName}
+                                mood={rating.mood}
+                                addRatingFunction={addRatingHandler}
+                                userRatings={details.Rating[rating.mood]}
+                              />
+                            );
                           }
-                          return (
-                            <TaskRatingIcon
-                              key={idx}
-                              rated={rated}
-                              iconName={rating.iconName}
-                              mood={rating.mood}
-                              addRatingFunction={addRatingHandler}
-                              userRatings={details.Rating[rating.mood]}
-                            />
-                          );
-                        }
-                      })}
+                        })}
                     </Box>
                   </Box>
                   <Box sx={displayBoxStyle}>

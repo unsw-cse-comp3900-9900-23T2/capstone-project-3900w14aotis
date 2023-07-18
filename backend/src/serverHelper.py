@@ -69,6 +69,29 @@ def getUserId(queryField, queryValue, db):
     userId = userDict.pop("uid")
     return userId
 
+
+def getAchievement(db, achievementName, uid):
+    """
+    Finds the achievement according to achievement name
+
+    Args:
+        db: database
+        achievementName (str): name of the achievement, e.g. Innovator
+        uid (str): user id
+    Returns:
+        achievement: achievement returned in the form of a stream containing 1 element
+    """
+    achievementDocRef = db.collection("achievements").document(uid)
+    achievementCollection = achievementDocRef.collection("achievements")
+    achievement = (
+        achievementCollection.where("achievement", "==", achievementName)
+        .limit(1)
+        .stream()
+    )
+
+    return achievement
+
+
 def getTaskRef(projectId, taskId, db):
     """
     Retrieves doc reference of the task.
@@ -77,7 +100,7 @@ def getTaskRef(projectId, taskId, db):
         projectId (str): project ID of the task you want to access
         taskId (str): task ID of the task you want to get.
         db: database used
-    
+
     Returns:
         taskRef: reference to task document
     """
@@ -85,6 +108,7 @@ def getTaskRef(projectId, taskId, db):
     taskDocRef = projectDocRef.collection("tasks").document(taskId)
 
     return taskDocRef
+
 
 def isValidUser(queryField, queryValue, db):
     """
@@ -94,12 +118,12 @@ def isValidUser(queryField, queryValue, db):
         queryField (str): field for the information you have
         queryValue (str): information you have of the user
         db: database
-    
+
     Returns:
         bool: returns True if a user exists with that, or False otherwise
     """
     docs = db.collection("taskmasters").where(queryField, "==", queryValue).stream()
-    
+
     for doc in docs:
         if doc.exists:
             return True

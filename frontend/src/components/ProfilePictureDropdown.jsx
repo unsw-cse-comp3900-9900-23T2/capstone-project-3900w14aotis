@@ -13,6 +13,8 @@ import Logout from "@mui/icons-material/Logout";
 import { stringAvatar } from "../utils/helpers";
 import { profileDetailFetch } from "../api/profile.js";
 import Loading from "../components/Loading";
+import { useSelector } from "react-redux";
+import { updateProfileAction } from "../profile/state/updateProfileAction";
 
 const ProfilePictureDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -42,9 +44,11 @@ const ProfilePictureDropdown = () => {
     });
   };
 
+  const profileUpdated = useSelector((state) => state.profileUpdated);
+
   useEffect(() => {
     getUserDetails();
-  }, []);
+  }, [profileUpdated]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -83,7 +87,7 @@ const ProfilePictureDropdown = () => {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              {userDetails.profileImage.length !== 0 ? (
+              {userDetails.profileImage !== "" ? (
                 <Avatar
                   src={userDetails.profileImage}
                   sx={{ width: 50, height: 50 }}
@@ -91,7 +95,10 @@ const ProfilePictureDropdown = () => {
                 />
               ) : (
                 <Avatar
-                  src="/Default-Avatar.png"
+                  // src="/Default-Avatar.png"
+                  {...stringAvatar(
+                    `${userDetails.firstName} ${userDetails.lastName}`
+                  )}
                   sx={{ width: 50, height: 50 }}
                   alt={`Your Profile`}
                 />
@@ -136,11 +143,22 @@ const ProfilePictureDropdown = () => {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={onClickProfile}>
-          <Avatar
-            src="/Default-Avatar.png"
-            sx={{ width: 50, height: 50 }}
-            alt={`Your Profile`}
-          />{" "}
+          {userDetails.profileImage !== "" ? (
+            <Avatar
+              src={userDetails.profileImage}
+              sx={{ width: 50, height: 50 }}
+              alt={`Your Profile`}
+            />
+          ) : (
+            <Avatar
+              // src="/Default-Avatar.png"
+              {...stringAvatar(
+                `${userDetails.firstName} ${userDetails.lastName}`
+              )}
+              sx={{ width: 50, height: 50 }}
+              alt={`Your Profile`}
+            />
+          )}{" "}
           Profile
         </MenuItem>
         <Divider />
