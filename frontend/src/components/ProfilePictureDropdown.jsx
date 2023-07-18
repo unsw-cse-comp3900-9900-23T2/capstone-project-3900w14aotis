@@ -14,6 +14,7 @@ import { stringAvatar } from "../utils/helpers";
 import { profileDetailFetch } from "../api/profile.js";
 import Loading from "../components/Loading";
 import { useSelector } from "react-redux";
+import { updateProfileAction } from "../profile/state/updateProfileAction";
 
 const ProfilePictureDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);

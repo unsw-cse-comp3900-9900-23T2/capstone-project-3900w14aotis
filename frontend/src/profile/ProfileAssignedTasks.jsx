@@ -2,6 +2,8 @@ import React from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/ProfileCard.module.css";
 import AssignedTaskCard from "./AssignedTaskCard";
+import "react-perfect-scrollbar/dist/css/styles.css";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 const ProfileAssignedTasks = ({ tasks }) => {
   return (
@@ -18,30 +20,32 @@ const ProfileAssignedTasks = ({ tasks }) => {
           flexDirection: 'column',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: '1%',
-          }}
-        >
-          <h3 className={styles.statusHeading}>Assigned Tasks</h3>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            flexWrap: 'wrap',
-            padding: '2%',
-          }}
-        >
-          {tasks.map((task) => {
-            return (
-              <AssignedTaskCard task={task}/>
-            )
-          })}
-        </Box>
+        <PerfectScrollbar>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: '1%',
+            }}
+          >
+            <h3 className={styles.statusHeading}>Assigned Tasks</h3>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              flexWrap: 'wrap',
+              padding: '2%',
+            }}
+          >
+            {tasks.map((task) => {
+              return (
+                <AssignedTaskCard task={task}/>
+              )
+            })}
+          </Box>
+        </PerfectScrollbar>
       </Box>
     
     </>

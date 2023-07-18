@@ -15,6 +15,7 @@ const ProfileCard = ({ title, data }) => {
           margin: '1rem',
           display: 'flex',
           justifyContent: 'center',
+          marginTop: '3%',
         }}
       >
         <h3 className={styles.statusHeading}>{title}</h3>
