@@ -8,8 +8,30 @@ import { getAuth } from "firebase/auth";
 import { displaySuccess, displayError } from "../utils/helpers";
 import styles from "./styles/Modal.module.css";
 import RemoveConnectionModal from "./RemoveConnectionModal";
+import { workloadFetch } from "../api/workload";
+import { useState, useEffect } from "react";
 
 function ConnectionCard({ uId, name, email }) {
+  const [workload, setWorkload] = useState("");
+
+  const getWorkload = async () => {
+    try {
+      const user = getAuth();
+
+      const workloadResponse = await workloadFetch(user.currentUser.uid);
+
+      const workload = workloadResponse.detail.message;
+
+      setWorkload(workload);
+    } catch (error) {
+      displayError(error);
+    }
+  };
+
+  useEffect(() => {
+    getWorkload();
+  }, []);
+
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: "40%",
     width: "70%",
