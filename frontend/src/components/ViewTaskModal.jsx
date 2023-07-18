@@ -29,8 +29,7 @@ const ViewTaskModal = ({
   const ratingMapping = [
     { mood: "Very Sad", iconName: "fa-regular:sad-cry" },
     { mood: "Sad", iconName: "akar-icons:face-sad" },
-    { mood: "Angry", iconName: "uil:angry" },
-    { mood: "Tiring", iconName: "fa6-regular:face-tired" },
+    { mood: "Neutral", iconName: "akar-icons:face-neutral" },
     { mood: "Happy", iconName: "akar-icons:face-happy" },
     { mood: "Very Happy", iconName: "tabler:mood-happy" },
   ];
@@ -43,10 +42,8 @@ const ViewTaskModal = ({
   const dispatch = useDispatch();
 
   const getTaskDetails = async () => {
-    // console.log(isOpen);
     if (isOpen && taskId) {
       const taskDetailsResponse = await taskDetailFetch(projectId, taskId);
-      // console.log(taskDetailsResponse);
       if (taskDetailsResponse.detail.code === 200) {
         setDetails(taskDetailsResponse.detail.message);
       }
@@ -224,6 +221,7 @@ const ViewTaskModal = ({
                           let rated = false;
                           if (details) {
                             const ratingList = details.Rating[rating.mood];
+
                             for (const userRating of ratingList) {
                               if (userRating.uid === userId) {
                                 rated = true;
