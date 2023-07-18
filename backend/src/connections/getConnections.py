@@ -1,4 +1,3 @@
-from google.cloud import firestore
 from src.serverHelper import getUserDoc, findUser
 
 EMPTY = 0
