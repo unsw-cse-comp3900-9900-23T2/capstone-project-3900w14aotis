@@ -3,8 +3,14 @@ import Box from "@mui/material/Box";
 import ProfilePicture from "./ProfilePicture";
 import { Icon } from "@iconify/react";
 import styles from "./styles/Modal.module.css";
+import { getAuth } from "firebase/auth";
+import { pendingConnectionsFetch } from "../api/connections";
+import { displayError } from "../utils/helpers";
 
-function PendingRequestCard() {
+const PendingConnectionCard = () => {
+  const [name, setName] = "";
+  const [email, setEmail] = "";
+
   return (
     <Box
       sx={{
@@ -23,8 +29,8 @@ function PendingRequestCard() {
         imgHeight="50px"
       />
       <Box>
-        <p>Calvin Chang</p>
-        <p>calvoc123@gmail.com</p>
+        <p>{name}</p>
+        <p>{email}</p>
       </Box>
 
       <Box>
@@ -41,6 +47,6 @@ function PendingRequestCard() {
       </Box>
     </Box>
   );
-}
+};
 
-export default PendingRequestCard;
+export default PendingConnectionCard;

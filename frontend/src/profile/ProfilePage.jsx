@@ -144,10 +144,12 @@ const ProfilePage = () => {
               imgHeight={"clamp(300px, 15vw, 15vw)"}
             />
           </Box>
-          <Box sx={{
-            display: "flex",
-            flexDirection: "row",
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+            }}
+          >
             <h1>{`${firstName} ${lastName}`}</h1>
             <UpdateProfileModal />
           </Box>

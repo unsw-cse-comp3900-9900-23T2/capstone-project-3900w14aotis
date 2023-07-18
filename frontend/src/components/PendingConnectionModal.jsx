@@ -4,9 +4,9 @@ import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import { Icon } from "@iconify/react";
 import styles from "./styles/Modal.module.css";
-import PendingRequestCard from "./PendingRequestCard";
+import PendingConnectionCard from "./PendingConnectionCard";
 
-const PendingRequestModal = () => {
+const PendingConnectionModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -58,7 +58,7 @@ const PendingRequestModal = () => {
               />
             </Box>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
-              <PendingRequestCard />
+              <PendingConnectionCard />
             </Box>
           </Box>
         </Fade>
@@ -67,4 +67,4 @@ const PendingRequestModal = () => {
   );
 };
 
-export default PendingRequestModal;
+export default PendingConnectionModal;
