@@ -18,7 +18,7 @@ function ConnectionCard({ uId, name, email }) {
     try {
       const user = getAuth();
 
-      const workloadResponse = await workloadFetch(user.currentUser.uid);
+      const workloadResponse = await workloadFetch(uId);
 
       const workload = workloadResponse.detail.message;
 
@@ -87,7 +87,8 @@ function ConnectionCard({ uId, name, email }) {
         }}
       >
         <p>Workload</p>
-        <BorderLinearProgress variant="determinate" value={90} />
+        {console.log(workload)}
+        <BorderLinearProgress variant="determinate" value={workload} />
       </Box>
       <RemoveConnectionModal uId={uId} style={removeButtonStyles} />
     </Box>
