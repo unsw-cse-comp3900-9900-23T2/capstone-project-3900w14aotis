@@ -85,26 +85,3 @@ def getTaskRef(projectId, taskId, db):
     taskDocRef = projectDocRef.collection("tasks").document(taskId)
 
     return taskDocRef
-
-def getTaskDoc(projectId, taskId, db):
-    """
-    Retrieves doc (in dictionary form) of the task.
-
-    Args:
-        projectId (str): project ID of the task you want to access
-        taskId (str): task ID of the task you want to get.
-        db: database used
-
-    Returns:
-        taskDict (dict): dictionary of the task doc
-    """
-    taskDocRef = getTaskRef(projectId, taskId, db)
-    taskDict = {}
-    doc = taskDocRef.get()
-
-    if doc.exists:
-        taskDict = doc.to_dict()
-    else:
-        return "No document found!"
-    
-    return taskDict
