@@ -13,3 +13,14 @@
   justify-content: center;
   align-items: center;
 }
+
+.passwordSubtitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3%;
+}
+
+.modalTitle {
+  width: 50%;
+}

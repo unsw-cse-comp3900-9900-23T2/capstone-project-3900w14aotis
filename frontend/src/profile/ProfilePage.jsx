@@ -195,6 +195,7 @@ const ProfilePage = () => {
                 <img
                   src={coverProfileImage}
                   alt={`${firstName} ${lastName} CP`}
+                  style={{ width: "100%", height: "auto", objectFit: "fill" }}
                 />
               ) : (
                 // TODO: FEEL FREE TO CHANGE DEFAULT COVER PIC

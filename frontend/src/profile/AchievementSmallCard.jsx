@@ -19,8 +19,6 @@ const AchievementSmallCard = ({
         width: "48%",
         height: "7.1875rem",
         background: "#FFF",
-        // borderRadius: "1.25rem",
-        // boxShadow: "0px 0px 6px 0px rgba(0, 0, 0, 0.8)",
         justifyContent: "space-between",
         margin: "1%",
       }}
