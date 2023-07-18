@@ -19,35 +19,35 @@ const ProfileAchievements = ({ achievements }) => {
           margin: '1rem',
           display: 'flex',
           flexDirection: 'column',
-          // height: "70%",
         }}
       >
-        <PerfectScrollbar>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: '1%',
-            }}
-          >
-            <h3 className={styles.statusHeading}>Achievements</h3>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              flexWrap: 'wrap',
-              padding: '2%',
-            }}
-          >
-            {achievements.map((achievement) => {
-              return (
-                <AchievementSmallCard achievementDetails={achievement}/>
-              )
-            })}
-          </Box>
-        </PerfectScrollbar>
+        
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '1%',
+          }}
+        >
+          <h3 className={styles.statusHeading}>Achievements</h3>
+        </Box>
+          <PerfectScrollbar>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                flexWrap: 'wrap',
+                padding: '2%',
+              }}
+            >
+              {achievements.map((achievement) => {
+                return (
+                  <AchievementSmallCard achievementDetails={achievement}/>
+                )
+              })}
+            </Box>
+          </PerfectScrollbar>
       </Box>
     </>
   );

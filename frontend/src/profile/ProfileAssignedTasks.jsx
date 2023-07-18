@@ -20,16 +20,17 @@ const ProfileAssignedTasks = ({ tasks }) => {
           flexDirection: 'column',
         }}
       >
+        
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: '1%',
+          }}
+        >
+          <h3 className={styles.statusHeading}>Assigned Tasks</h3>
+        </Box>
         <PerfectScrollbar>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: '1%',
-            }}
-          >
-            <h3 className={styles.statusHeading}>Assigned Tasks</h3>
-          </Box>
           <Box
             sx={{
               display: 'flex',
