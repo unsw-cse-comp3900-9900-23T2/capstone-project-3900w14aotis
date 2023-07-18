@@ -74,7 +74,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
     return true;
   };
 
-  const createTask = async (convertedDeadline, finalAssignees) => {
+  const createTask = async (creatorId, convertedDeadline, finalAssignees) => {
     const createTaskFetchResponse = await createTaskFetch(
       projectId,
       title,
@@ -82,7 +82,8 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
       convertedDeadline,
       finalAssignees,
       priority,
-      status
+      status,
+      creatorId,
     );
 
     dispatch(addTaskAction());
@@ -112,7 +113,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
             finalAssignees.push(user.email);
             setAssignees(finalAssignees);
           }
-          createTask(convertedDeadline, finalAssignees);
+          createTask(user.uid, convertedDeadline, finalAssignees);
         } else {
           // User is signed out
           localStorage.removeItem("loggedIn");
