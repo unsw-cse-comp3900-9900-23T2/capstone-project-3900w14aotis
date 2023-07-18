@@ -3,15 +3,17 @@ import { Box } from "@mui/material";
 import Headerbar from "../components/Headerbar";
 import LongTaskCard from "../components/LongTaskCard";
 import { useParams } from "react-router-dom";
-import { allTasksFetch, paginateTasksFetch } from "../api/task";
+import { allTasksFetch } from "../api/task";
 import ViewTaskModal from "../components/ViewTaskModal";
 import {
   sortTasksAscending,
   sortTasksDescending,
   sortTasksSoonest,
   sortTasksLatest,
+  sortTasksCreationRecent,
   sortTasksImportant,
   sortTasksLeastImportant,
+  paginateTasks,
 } from "../utils/helpers";
 import { useSelector } from "react-redux";
 import moment from "moment";
@@ -21,14 +23,7 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
 const TasksPage = () => {
-  //TODO: consider cases for:
-  // 1. Adding new task
-  // 2. Removing task
-  // 3. Searching task (allTasks)
-  // 4. Filtering task (allTasks or backend)
-
   const [allTasks, setAllTasks] = useState([]);
-  const [currPageTasks, setCurrentPageTasks] = useState([]);
   const [tasksAfterFilter, setTasksAfterFilter] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
@@ -37,96 +32,22 @@ const TasksPage = () => {
   const [clickedTaskId, setClickedTaskId] = useState("");
   const [numTasks, setNumTasks] = useState(0);
   const [pageNum, setPageNum] = useState(1);
+  const [removedTaskId, setRemovedTaskId] = useState("");
 
   const { projectId } = useParams();
-  const taskAdded = useSelector((state) => state.tasksUpdated);
-
-  const getPaginatedTasks = async () => {
-    if (pageNum > 1) {
-      if (allTasks.length < pageNum) {
-        const allTasksCopy = [...allTasks];
-        console.log(allTasksCopy);
-        let prevPageTasks = allTasks[allTasks.length - 1];
-        for (let i = allTasks.length; i < pageNum; i++) {
-          console.log(`PAGE${i + 1}`);
-          // console.log(allTasksCopy);
-          // console.log(currPageTasksCopy)
-          const currPageTasksCopy = [...currPageTasks];
-          // console.log(currPageTaskCopy);
-          // const latestTask = currPageTasksCopy[currPageTasksCopy.length - 1];
-          const latestTask = prevPageTasks[prevPageTasks.length - 1];
-          console.log(latestTask);
-          const paginatedTasksResponse = await paginateTasksFetch(
-            projectId,
-            latestTask.taskID
-          );
-          if (paginatedTasksResponse.detail.code === 200) {
-            const taskList = paginatedTasksResponse.detail.message.taskList;
-            const sortedTasks = sortTasksSoonest(taskList);
-            const pageTasks = sortedTasks;
-            console.log("Page Tasks:");
-            console.log(pageTasks);
-            allTasksCopy.push(pageTasks);
-            console.log(allTasksCopy);
-            setNumTasks(paginatedTasksResponse.detail.message.numTasks);
-            prevPageTasks = sortedTasks;
-          }
-          setAllTasks(allTasksCopy);
-          setCurrentPageTasks(prevPageTasks);
-          // console.log(allTasks[i - 1][allTasks.length - 1]);
-        }
-        // const prevPageTasks = allTasks[pageNum - 2];
-        // const latestTask = prevPageTasks[prevPageTasks.length - 1];
-        // const allTasksCopy = [...allTasks];
-        // const paginatedTasksResponse = await paginateTasksFetch(
-        //   projectId,
-        //   latestTask.taskID
-        // );
-        // if (paginatedTasksResponse.detail.code === 200) {
-        //   const taskList = paginatedTasksResponse.detail.message.taskList;
-        //   const sortedTasks = sortTasksSoonest(taskList);
-        //   const pageTasks = sortedTasks;
-        //   allTasksCopy.push(pageTasks);
-        //   setNumTasks(paginatedTasksResponse.detail.message.numTasks);
-        //   setAllTasks(allTasksCopy);
-        //   setCurrentPageTasks(sortedTasks);
-        // }
-      } else {
-        console.log("Page > 1 and No new fetch");
-        setCurrentPageTasks(allTasks[pageNum - 1]);
-      }
-    } else {
-      console.log("Page == 1");
-      setCurrentPageTasks(allTasks[pageNum - 1]);
-    }
-  };
+  const taskAdded = useSelector((state) => state.taskAdded);
+  const taskDeleted = useSelector((state) => state.taskDeleted);
 
   const getAllTasks = async () => {
-    // const allTasksResponse = await allTasksFetch(projectId);
-    // if (allTasksResponse.detail.code === 200) {
-    //   const tasks = allTasksResponse.detail.message;
-    //   setNumTasks(tasks.length);
-    // }
-
-    const paginatedTasksResponse = await paginateTasksFetch(
-      projectId,
-      "initialise"
-    );
-    if (paginatedTasksResponse.detail.code === 200) {
-      const allTasksCopy = [...allTasks];
-      const taskList = paginatedTasksResponse.detail.message.taskList;
-      const sortedTasks = sortTasksSoonest(taskList);
-
-      const pageTasks = sortedTasks;
-      allTasksCopy.push(pageTasks);
-
-      // const latestTask = sortedTasks[sortedTasks.length - 1];
-      // setLatestTaskId(latestTask.taskID);
-
-      setNumTasks(paginatedTasksResponse.detail.message.numTasks);
-      setCurrentPageTasks(sortedTasks);
-      setAllTasks(allTasksCopy);
-      setTasksAfterFilter(sortedTasks);
+    const allTasksResponse = await allTasksFetch(projectId);
+    if (allTasksResponse.detail.code === 200) {
+      const sortedAllTasks = sortTasksCreationRecent(
+        allTasksResponse.detail.message
+      );
+      const paginatedTasks = paginateTasks(sortedAllTasks);
+      setAllTasks(paginatedTasks);
+      setTasksAfterFilter(paginatedTasks);
+      setNumTasks(sortedAllTasks.length);
       setLoading(false);
     }
   };
@@ -149,26 +70,51 @@ const TasksPage = () => {
   const queryTasks = () => {
     const currentTasks = [...allTasks];
     let filteredTasks = [...tasksAfterFilter];
+
+    let flatCurrentTasks = currentTasks.flat(1);
+
     if (searchQuery.length === 0) {
       getAllTasks();
     } else {
-      filteredTasks = currentTasks.filter(isSearchQuery);
-      setTasksAfterFilter(filteredTasks);
+      filteredTasks = flatCurrentTasks.filter(isSearchQuery);
+      setNumTasks(filteredTasks.length);
+      setPageNum(1);
+      const paginatedTasks = paginateTasks(filteredTasks);
+      setTasksAfterFilter(paginatedTasks);
     }
   };
 
   useEffect(() => {
-    // setAllTasks(tasksAfterFilter[pageNum - 1]);
-    getPaginatedTasks();
-  }, [pageNum, taskAdded]);
+    if (removedTaskId !== "") {
+      const tasksCopy = [...tasksAfterFilter];
+      const removedTaskList = tasksCopy.map((pageTasks) => {
+        return pageTasks.filter((task) => {
+          return task.taskID !== removedTaskId;
+        });
+      });
+      const flatTaskList = removedTaskList.flat(1);
+      const paginatedTasks = paginateTasks(flatTaskList);
+      setTasksAfterFilter(paginatedTasks);
+      setNumTasks(flatTaskList.length);
+    }
+  }, [removedTaskId]);
 
   useEffect(() => {
-    getAllTasks();
-  }, [taskAdded]);
+    const queriedTasks = [...tasksAfterFilter];
+    if (
+      pageNum !== 1 &&
+      pageNum === queriedTasks.length &&
+      tasksAfterFilter[pageNum - 1].length <= 1
+    ) {
+      setPageNum(pageNum - 1);
+      setNumTasks(tasksAfterFilter.flat(1).length - 1);
+    }
+  }, [taskDeleted]);
 
   useEffect(() => {
     queryTasks();
-  }, [searchQuery]);
+    setPageNum(1);
+  }, [searchQuery, taskAdded]);
 
   const modalOpen = () => setOpen(true);
   const modalClose = () => setOpen(false);
@@ -178,23 +124,28 @@ const TasksPage = () => {
   };
 
   const tasksSortHandler = (sortBy) => {
-    let sortedTasks = [...allTasks];
+    // let sortedTasks = [...allTasks];
+    let sortedTasks = [...tasksAfterFilter];
+    const taskList = sortedTasks.flat(1);
     if (sortBy === "Ascending") {
-      sortedTasks = sortTasksAscending(sortedTasks);
+      sortedTasks = sortTasksAscending(taskList);
     } else if (sortBy === "Descending") {
-      sortedTasks = sortTasksDescending(sortedTasks);
+      sortedTasks = sortTasksDescending(taskList);
     } else if (sortBy === "Soonest") {
-      sortedTasks = sortTasksSoonest(sortedTasks);
+      sortedTasks = sortTasksSoonest(taskList);
     } else if (sortBy === "Latest") {
-      sortedTasks = sortTasksLatest(sortedTasks);
+      sortedTasks = sortTasksLatest(taskList);
     } else if (sortBy === "Important") {
-      sortedTasks = sortTasksImportant(sortedTasks);
+      sortedTasks = sortTasksImportant(taskList);
     } else if (sortBy === "LeastImportant") {
-      sortedTasks = sortTasksLeastImportant(sortedTasks);
+      sortedTasks = sortTasksLeastImportant(taskList);
+    } else if (sortBy === "Default") {
+      sortedTasks = sortTasksCreationRecent(taskList);
     }
 
-    setAllTasks(sortedTasks);
-    setTasksAfterFilter(sortedTasks);
+    const paginatedTasks = paginateTasks(sortedTasks);
+    setAllTasks(paginatedTasks);
+    setTasksAfterFilter(paginatedTasks);
   };
 
   const closeModalHandler = () => {
@@ -230,6 +181,7 @@ const TasksPage = () => {
               onClose={modalClose}
               projectId={projectId}
               taskId={clickedTaskId}
+              setRemovedTaskId={setRemovedTaskId}
             />
             <Box
               sx={{
@@ -241,21 +193,25 @@ const TasksPage = () => {
                 height: "90%",
               }}
             >
-              {currPageTasks.map((task, idx) => {
-                return (
-                  <LongTaskCard
-                    key={task.taskID}
-                    id={task.taskID}
-                    title={task.Title}
-                    status={task.Status}
-                    deadline={task.Deadline}
-                    assignees={task.Assignees}
-                    isModalOpen={modalOpen}
-                    projectId={projectId}
-                    clickedTaskHandler={setClickedTaskId}
-                  />
-                );
-              })}
+              {tasksAfterFilter.length > 0 ? (
+                tasksAfterFilter[pageNum - 1].map((task, idx) => {
+                  return (
+                    <LongTaskCard
+                      key={task.taskID}
+                      id={task.taskID}
+                      title={task.Title}
+                      status={task.Status}
+                      deadline={task.Deadline}
+                      assignees={task.Assignees}
+                      isModalOpen={modalOpen}
+                      projectId={projectId}
+                      clickedTaskHandler={setClickedTaskId}
+                    />
+                  );
+                })
+              ) : (
+                <p>Tasks Not Found</p>
+              )}
             </Box>
             <Box
               sx={{
@@ -265,8 +221,6 @@ const TasksPage = () => {
                 height: "10%",
               }}
             >
-              {/* {console.log(pageNum)}
-              {console.log(allTasks)} */}
               <Stack spacing={2}>
                 <Pagination
                   count={Math.ceil(numTasks / 5)}
@@ -275,6 +229,7 @@ const TasksPage = () => {
                   onChange={(e, value) => {
                     setPageNum(value);
                   }}
+                  page={pageNum}
                 />
               </Stack>
             </Box>

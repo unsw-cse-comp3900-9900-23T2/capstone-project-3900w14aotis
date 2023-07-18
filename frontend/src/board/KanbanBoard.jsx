@@ -17,7 +17,7 @@ const KanbanBoard = () => {
   const [loading, setLoading] = useState(true);
 
   const { projectId } = useParams();
-  const taskAdded = useSelector((state) => state.tasksUpdated);
+  const taskAdded = useSelector((state) => state.taskAdded);
 
   const getAllTasks = async () => {
     const allTasksResponse = await allTasksFetch(projectId);

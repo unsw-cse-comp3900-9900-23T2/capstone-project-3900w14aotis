@@ -84,6 +84,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
       priority,
       status
     );
+
     dispatch(addTaskAction());
     closeFunction();
     setAssignees([]);
@@ -109,6 +110,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
           localStorage.setItem("loggedIn", true);
           if (finalAssignees.length === 0) {
             finalAssignees.push(user.email);
+            setAssignees(finalAssignees);
           }
           createTask(convertedDeadline, finalAssignees);
         } else {
