@@ -224,11 +224,14 @@ async def getTaskDetails(projectId: str, taskId: str):
     try:
         taskDetails = getDetails(projectId, taskId, db)
         return {"detail": {"code": 200, "message": taskDetails}}
-    except:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error retrieving data from this task"},
-        )
+    except HTTPException as e:
+        if e.status_code == 404 and e.detail == {"code": "404", "message": "Document doesn't exist"}:
+            raise
+        else:
+            raise HTTPException(
+                status_code=404,
+                detail={"code": "404", "message": "Error retrieving data from this task"},
+            )
 
 
 @app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
@@ -299,7 +302,9 @@ async def addTaskAssignee(assignee: Assignee):
             assignee.projectId, assignee.taskId, assignee.email, assignee.currUser, db
         )
         return {"detail": {"code": 200, "message": assigned}}
-    except:
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error assigning taskmaster"},
@@ -567,12 +572,18 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
     try:
         messageStatus = sendConnection(userEmail, currUser, db)
         return {"detail": {"code": 200, "message": messageStatus}}
-    except:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error sending connection request"},
-        )
-
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
+        elif e.status_code == 409 and e.detail == {"code": "409", "message": "User is already connected!"}:
+            raise
+        elif e.status_code == 409 and e.detail == {"code": "409", "message": "User already sent a request"}:
+            raise
+        else:    
+            raise HTTPException(
+                status_code=404,
+                detail={"code": "404", "message": "Error retrieving data from this user"},
+            )
 
 @app.post(
     "/connections/accept/{currUser}", summary="accepts a connection from given userId"
@@ -699,7 +710,9 @@ async def removeConnection(currUser: str, userId: str):
                 "message": status,
             }
         }
-    except:
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error removing connection"},
