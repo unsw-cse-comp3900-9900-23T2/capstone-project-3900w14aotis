@@ -7,6 +7,7 @@ import { removeConnectionFetch } from "../api/connections";
 import { getAuth } from "firebase/auth";
 import { displaySuccess, displayError } from "../utils/helpers";
 import styles from "./styles/Modal.module.css";
+import RemoveConnectionModal from "./RemoveConnectionModal";
 
 function ConnectionCard({ uId, name, email }) {
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
@@ -22,19 +23,14 @@ function ConnectionCard({ uId, name, email }) {
     },
   }));
 
-  const removeConnectionHandler = async () => {
-    try {
-      const user = getAuth();
-      const res = await removeConnectionFetch(user.currentUser.uid, uId);
-      if (res.detail.code === 200) {
-        displaySuccess(`${res.detail.message}`);
-      } else {
-        displayError(`${res.detail.message}`);
-      }
-    } catch (error) {
-      displayError(`${error.message}`);
-    }
+  const removeButtonStyles = {
+    fontSize: "35px",
+    position: "absolute",
+    top: "5%",
+    right: "5%",
+    borderRadius: "50%",
   };
+
   return (
     <Box
       sx={{
@@ -71,18 +67,7 @@ function ConnectionCard({ uId, name, email }) {
         <p>Workload</p>
         <BorderLinearProgress variant="determinate" value={90} />
       </Box>
-      <Icon
-        icon="mdi:bin-outline"
-        style={{
-          fontSize: "35px",
-          position: "absolute",
-          top: "5%",
-          right: "5%",
-          borderRadius: "50%",
-        }}
-        className={styles.clickButton}
-        onClick={removeConnectionHandler}
-      />
+      <RemoveConnectionModal uId={uId} style={removeButtonStyles} />
     </Box>
   );
 }
