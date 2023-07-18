@@ -77,7 +77,10 @@ const UpdateProfileModal = () => {
     getProfileDetails();
     setOpen(true);
   };
-  const closeModalHandler = () => setOpen(false);
+  const closeModalHandler = () => {
+    setOpen(false);
+    getProfileDetails();
+  };
   const onChangeFirstName = (value) => setFirstName(value);
   const onChangeLastName = (value) => setLastName(value);
   const onChangeEmail = (value) => setEmail(value);
@@ -109,7 +112,7 @@ const UpdateProfileModal = () => {
 
   const onChangeCoverProfileImage = async (event) => {
     // Convert file input to string to store in database
-    const newImage = event.target.files[0];
+    let newImage = event.target.files[0];
     if (newImage === undefined) {
       newImage = "";
     } else {
@@ -170,7 +173,6 @@ const UpdateProfileModal = () => {
               navigate("/login");
             })
             .catch((error) => {
-              console.log(error);
               displayError(error);
             });
         }
@@ -237,15 +239,16 @@ const UpdateProfileModal = () => {
   const modalTitleSx = {
     display: "flex",
     flexDirection: "row",
-    gap: "78%",
-    justifyContent: "center",
+    // gap: "78%",
+    justifyContent: "space-between",
   };
 
   const inputContainerSx = {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: "30px",
+    gap: "2%",
+    margin: "5% 2% 5% 2%",
   };
 
   const saveChangesButtonSx = {
@@ -279,7 +282,7 @@ const UpdateProfileModal = () => {
           <Box sx={modalContainerSx}>
             <PerfectScrollbar>
               <Box sx={modalTitleSx}>
-                <h2>Edit Profile</h2>
+                <h2 className={styles.modalTitle}>Edit Profile</h2>
                 <Icon
                   icon="iconamoon:close-bold"
                   onClick={closeModalHandler}
@@ -361,6 +364,7 @@ const UpdateProfileModal = () => {
                   boxColour={passwordColour}
                 />
               </Box>
+              <h5 className={styles.passwordSubtitle}>Changing your password logs you out!</h5>
               <Box sx={saveChangesButtonSx}>
                 <CustomButton
                   text="Save Changes"

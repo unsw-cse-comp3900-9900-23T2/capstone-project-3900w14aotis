@@ -30,18 +30,27 @@ const ProfileAssignedTasks = ({ tasks }) => {
           <h3 className={styles.statusHeading}>Assigned Tasks</h3>
         </Box>
         <PerfectScrollbar>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              flexWrap: "wrap",
-              padding: "2%",
-            }}
-          >
-            {tasks.map((task) => {
-              return <AssignedTaskCard task={task} />;
-            })}
+          <Box sx={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+            margin: "0 2% 2% 2%",
+          }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                flexWrap: "wrap",
+                padding: "2%",
+              }}
+            >
+              {tasks.map((task) => {
+                return (
+                  <AssignedTaskCard task={task} viewTaskFunction={() => {console.log("VIEW TASK clicked")}}/>
+                )
+              })}
+            </Box>
           </Box>
         </PerfectScrollbar>
       </Box>

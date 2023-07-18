@@ -1,11 +1,12 @@
 import React from "react";
-import { useState } from "react";
-import styles from "./styles/ProfileImage.module.css";
+import { useState, useRef } from "react";
+import styles from "./styles/Profile.module.css";
 import ProfilePicture from "../components/ProfilePicture";
 import CoverPicture from "../profile/CoverPicture";
 import { Box } from "@mui/system";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from '@mui/material/IconButton';
 
 const ImageInput = ({
   type,
@@ -16,6 +17,8 @@ const ImageInput = ({
   onDeleteFunction,
 }) => {
   const [image, setImage] = useState("");
+
+  const fileInput = useRef(null)
 
   return (
     <Box
@@ -47,8 +50,19 @@ const ImageInput = ({
           justifyContent: "center",
         }}
       >
-        <input type="file" onChange={onChangeFunction} />
-        <Button
+        {/* <input type="file" onChange={onChangeFunction} /> */}
+        <input
+          type='file'
+          name='image'
+          ref={fileInput}
+          onChange={onChangeFunction}
+          style={{ display: 'none' }}
+        />
+        <button
+          className={styles.fileInputButton}
+          onClick={() => fileInput.current.click()}
+        >Upload Image</button>
+        {/* <Button
           sx={{
             width: "50%",
           }}
@@ -57,12 +71,11 @@ const ImageInput = ({
           onClick={onDeleteFunction}
         >
           Delete
-        </Button>
-        {/* <button
-          onClick={onDeleteFunction}
-        >
-          Delete Image
-        </button> */}
+        </Button> */}
+        <IconButton aria-label="delete" size="large">
+          <DeleteIcon fontSize="inherit" onClick={onDeleteFunction} />
+          
+        </IconButton>
       </Box>
     </Box>
   );

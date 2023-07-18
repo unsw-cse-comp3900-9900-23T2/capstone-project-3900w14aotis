@@ -11,7 +11,7 @@ const AssignedTaskCard = ({ task, index, viewTaskFunction }) => {
         display: "flex",
         flexDirection: "column",
         borderRadius: "1.25rem",
-        width: "29%",
+        width: "30%",
         height: "7.1875rem",
         background: "#FFF",
         boxShadow: "0px 0px 6px 0px rgba(0, 0, 0, 0.8)",
