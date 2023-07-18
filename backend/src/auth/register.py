@@ -31,10 +31,10 @@ def authRegister(item, db):
             "coverProfileImage": item.coverProfileImage,
         }
     )
-    
+
     parentDocRef = db.collection("achievements").document(item.uid)
     achievementCollection = parentDocRef.collection("achievements")
-    #Initialise innovator achievement
+    # Initialise innovator achievement
     achievementCollection.add(
         {
             "achievement": "Innovator",
@@ -45,7 +45,7 @@ def authRegister(item, db):
         }
     )
 
-    #Initialise New Critic achievement
+    # Initialise New Critic achievement
     achievementCollection.add(
         {
             "achievement": "New Critic",
@@ -56,7 +56,7 @@ def authRegister(item, db):
         }
     )
 
-    #Initialise Connoisseur achievement
+    # Initialise Connoisseur achievement
     achievementCollection.add(
         {
             "achievement": "Connoisseur",
@@ -67,7 +67,7 @@ def authRegister(item, db):
         }
     )
 
-    #Initialise Task Fledgling achievement
+    # Initialise Task Fledgling achievement
     achievementCollection.add(
         {
             "achievement": "Task Fledgling",
@@ -78,7 +78,7 @@ def authRegister(item, db):
         }
     )
 
-    #Initialise Task Master achievement
+    # Initialise Task Master achievement
     achievementCollection.add(
         {
             "achievement": "Task Master",

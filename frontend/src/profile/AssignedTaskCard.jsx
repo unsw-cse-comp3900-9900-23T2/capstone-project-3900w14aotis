@@ -16,7 +16,7 @@ const AssignedTaskCard = ({ task, index, viewTaskFunction }) => {
         background: "#FFF",
         boxShadow: "0px 0px 6px 0px rgba(0, 0, 0, 0.8)",
         justifyContent: "space-between",
-        margin: '1%',
+        margin: "1%",
       }}
       onClick={() => {
         //TODO: view task modal popup

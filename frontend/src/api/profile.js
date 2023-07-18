@@ -16,22 +16,32 @@ export const profileDetailFetch = async (uId) => {
   return profileDetailResponse;
 };
 
-export const profileUpdateFetch = async (uid, firstName,lastName,email, profileImage, coverProfileImage) => {
+export const profileUpdateFetch = async (
+  uid,
+  firstName,
+  lastName,
+  email,
+  profileImage,
+  coverProfileImage
+) => {
   const jsonData = JSON.stringify({
     firstName,
     lastName,
     email,
     profileImage,
-    coverProfileImage
+    coverProfileImage,
   });
-  console.log(jsonData)
+  console.log(jsonData);
   const requestOption = {
     method: "POST",
     headers: { "Content-Type": API_MEDIA_TYPE },
     body: jsonData,
   };
 
-  const profileUpdatePromise = await fetch(`${API_URL}/profile/update/${uid}`, requestOption);
+  const profileUpdatePromise = await fetch(
+    `${API_URL}/profile/update/${uid}`,
+    requestOption
+  );
   const profileUpdateResponse = await profileUpdatePromise.json();
   return profileUpdateResponse;
 };

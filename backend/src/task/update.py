@@ -1,6 +1,7 @@
-from src.serverHelper import getAchievement,findUser
+from src.serverHelper import getAchievement, findUser
 
-def updateTask(projectId,taskId,db, item):
+
+def updateTask(projectId, taskId, db, item):
     """Update task details given project and task Id
 
     Args:
@@ -19,64 +20,58 @@ def updateTask(projectId,taskId,db, item):
         "Task Fledgling": "In Progress",
         "Task Master": "In Progress",
     }
-    #Check if user is part of the task's assignee list
-    userRef = findUser("uid",item.creatorId,db)
+    # Check if user is part of the task's assignee list
+    userRef = findUser("uid", item.creatorId, db)
     userEmail = userRef.get().get("email")
     # If user isnt part of task, return none
     assigneeList = taskDocRef.get().get("Assignees")
     if userEmail not in assigneeList:
         return None
-    
 
-    #If Task Fledgling Achievement is in progress, mark as done
-    achievementDoc = getAchievement(db, "Task Fledgling",item.creatorId)
+    # If Task Fledgling Achievement is in progress, mark as done
+    achievementDoc = getAchievement(db, "Task Fledgling", item.creatorId)
     for achievement in achievementDoc:
         if (achievement.get("status") == "In Progress") and (item.status == "Done"):
             achievement.reference.update(
                 {
-                "currentValue": 1,
-                "status": "Done",
+                    "currentValue": 1,
+                    "status": "Done",
                 }
             )
         taskDict["Task Fledgling"] = "Done"
-    
 
-    #Task Master Achievement
-    taskMasterDoc = getAchievement(db, "Task Master",item.creatorId)
+    # Task Master Achievement
+    taskMasterDoc = getAchievement(db, "Task Master", item.creatorId)
     for achievement in taskMasterDoc:
         goal = achievement.get("target")
         currValue = achievement.get("currentValue")
-        #If Achievement is alrdy done, skip
+        # If Achievement is alrdy done, skip
         if currValue == goal:
             taskDict["Task Master"] = "Done"
             break
-            
+
         else:
             currValue += 1
-            #If current Value meets the goal, update achievement status to done
+            # If current Value meets the goal, update achievement status to done
             if currValue == goal:
                 achievement.reference.update(
-                    {
-                    "currentValue": currValue,
-                    "status": "Done"
-                    }
+                    {"currentValue": currValue, "status": "Done"}
                 )
                 taskDict["Task Master"] = "Done"
             else:
                 achievement.reference.update(
                     {
-                    "currentValue": currValue,
+                        "currentValue": currValue,
                     }
                 )
 
-
     taskDocRef.update(
         {
-        "Title": item.title,
-        "Description": item.description,
-        "Deadline": item.deadline,
-        "Priority": item.priority,
-        "Status":item.status
+            "Title": item.title,
+            "Description": item.description,
+            "Deadline": item.deadline,
+            "Priority": item.priority,
+            "Status": item.status,
         }
     )
     return taskDict

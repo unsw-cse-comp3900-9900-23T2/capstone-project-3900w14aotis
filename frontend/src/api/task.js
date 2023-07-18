@@ -59,6 +59,7 @@ export const createTaskFetch = async (
     assignees,
     priority,
     status,
+    creationTime: new Date().toISOString(),
     creatorId,
   });
 
@@ -85,6 +86,21 @@ export const allTasksFetch = async (projectId) => {
 
   const allTasksPromise = await fetch(
     `${API_URL}/tasks/${projectId}`,
+    requestOption
+  );
+
+  const allTasksResponse = await allTasksPromise.json();
+  return allTasksResponse;
+};
+
+export const paginateTasksFetch = async (projectId, latestTaskId) => {
+  const requestOption = {
+    method: "GET",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+  };
+
+  const allTasksPromise = await fetch(
+    `${API_URL}/tasks/${projectId}/${latestTaskId}`,
     requestOption
   );
 

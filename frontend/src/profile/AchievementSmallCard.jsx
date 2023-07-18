@@ -3,9 +3,14 @@ import React from "react";
 import styles from "./styles/ProfileCard.module.css";
 import ProgressBar from "@ramonak/react-progress-bar";
 
-const AchievementSmallCard = ({ achievementDetails, index, viewTaskFunction }) => {
-  const { achievement, currentValue, description, status, target } = achievementDetails;
-  const completed = currentValue / target * 100;
+const AchievementSmallCard = ({
+  achievementDetails,
+  index,
+  viewTaskFunction,
+}) => {
+  const { achievement, currentValue, description, status, target } =
+    achievementDetails;
+  const completed = (currentValue / target) * 100;
   return (
     <Box
       sx={{
@@ -17,7 +22,7 @@ const AchievementSmallCard = ({ achievementDetails, index, viewTaskFunction }) =
         // borderRadius: "1.25rem",
         // boxShadow: "0px 0px 6px 0px rgba(0, 0, 0, 0.8)",
         justifyContent: "space-between",
-        margin: '1%',
+        margin: "1%",
       }}
     >
       <Box
@@ -27,19 +32,21 @@ const AchievementSmallCard = ({ achievementDetails, index, viewTaskFunction }) =
           width: "80%",
         }}
       >
-        <img src="/Default-Achievement.png" className={styles.achievementImage} />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          width: "100%",
-
-        }}
-      >
-        <h5 className={styles.achievementTitle}>{achievement}</h5>
-        <h6 className={styles.achievementDescription}>{description}</h6>
-        <ProgressBar completed={completed} bgColor="#001AFF" width="100%" />
-      </Box>
+        <img
+          src="/Default-Achievement.png"
+          className={styles.achievementImage}
+        />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
+          <h5 className={styles.achievementTitle}>{achievement}</h5>
+          <h6 className={styles.achievementDescription}>{description}</h6>
+          <ProgressBar completed={completed} bgColor="#001AFF" width="100%" />
+        </Box>
       </Box>
       <Box
         sx={{

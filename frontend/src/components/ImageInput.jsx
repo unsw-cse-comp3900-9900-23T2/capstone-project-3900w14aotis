@@ -4,9 +4,8 @@ import styles from "./styles/ProfileImage.module.css";
 import ProfilePicture from "../components/ProfilePicture";
 import CoverPicture from "../profile/CoverPicture";
 import { Box } from "@mui/system";
-import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
-
+import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const ImageInput = ({
   type,
@@ -19,13 +18,15 @@ const ImageInput = ({
   const [image, setImage] = useState("");
 
   return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '80%',
-    }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "80%",
+      }}
+    >
       {type === "PROFILE" ? (
         <ProfilePicture
           userDetails={userDetails}
@@ -39,18 +40,17 @@ const ImageInput = ({
           imgHeight={height}
         />
       )}
-      <Box sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-      }}>
-        <input
-          type="file"
-          onChange={onChangeFunction}
-        />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        <input type="file" onChange={onChangeFunction} />
         <Button
           sx={{
-            width: '50%',
+            width: "50%",
           }}
           variant="outlined"
           startIcon={<DeleteIcon />}
@@ -65,6 +65,6 @@ const ImageInput = ({
         </button> */}
       </Box>
     </Box>
-  )
-}
+  );
+};
 export default ImageInput;

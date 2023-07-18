@@ -9,4 +9,3 @@ const updateProfileReducer = (state = 0, action) => {
 };
 
 export default updateProfileReducer;
-  

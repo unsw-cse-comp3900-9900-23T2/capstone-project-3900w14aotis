@@ -96,7 +96,9 @@ const ProfilePictureDropdown = () => {
               ) : (
                 <Avatar
                   // src="/Default-Avatar.png"
-                  {...stringAvatar(`${userDetails.firstName} ${userDetails.lastName}`)}
+                  {...stringAvatar(
+                    `${userDetails.firstName} ${userDetails.lastName}`
+                  )}
                   sx={{ width: 50, height: 50 }}
                   alt={`Your Profile`}
                 />
@@ -150,12 +152,14 @@ const ProfilePictureDropdown = () => {
           ) : (
             <Avatar
               // src="/Default-Avatar.png"
-              {...stringAvatar(`${userDetails.firstName} ${userDetails.lastName}`)}
+              {...stringAvatar(
+                `${userDetails.firstName} ${userDetails.lastName}`
+              )}
               sx={{ width: 50, height: 50 }}
               alt={`Your Profile`}
             />
-          )}
-          {" "}Profile
+          )}{" "}
+          Profile
         </MenuItem>
         <Divider />
         <MenuItem onClick={logoutHandler}>

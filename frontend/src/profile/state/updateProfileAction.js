@@ -3,4 +3,3 @@ export const updateProfileAction = () => {
     type: "UPDATE-PROFILE",
   };
 };
-  

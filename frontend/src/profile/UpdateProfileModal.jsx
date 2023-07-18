@@ -7,7 +7,12 @@ import styles from "./styles/ProfileModal.module.css";
 import TextInput from "../components/TextInput";
 // import TextField from "@mui/material/TextField";
 import ImageInput from "../components/ImageInput";
-import { getAuth, onAuthStateChanged, updateEmail, updatePassword } from "firebase/auth";
+import {
+  getAuth,
+  onAuthStateChanged,
+  updateEmail,
+  updatePassword,
+} from "firebase/auth";
 import { displayError, displaySuccess, fileToDataUrl } from "../utils/helpers";
 import { profileDetailFetch, profileUpdateFetch } from "../api/profile.js";
 import CustomButton from "../components/CustomButton";
@@ -25,16 +30,14 @@ const UpdateProfileModal = () => {
   const [email, setEmail] = useState("");
   const [profileImage, setProfileImage] = useState("");
   const [coverProfileImage, setCoverProfileImage] = useState("");
-  const [userId, setUserId] = useState("")
-  
+  const [userId, setUserId] = useState("");
+
   useEffect(() => {
     getProfileDetails();
   }, []);
 
   const profileDetails = async (userId) => {
-    const profileDetailsResponse = await profileDetailFetch(
-      userId
-    );
+    const profileDetailsResponse = await profileDetailFetch(userId);
     // TODO: try catch?
     const profile = profileDetailsResponse.detail.message;
     setUserDetails(profile);
@@ -43,7 +46,7 @@ const UpdateProfileModal = () => {
     setEmail(profile.email);
     setProfileImage(profile.profileImage);
     setCoverProfileImage(profile.coverProfileImage);
-  }
+  };
   // Get profile details
   const getProfileDetails = async () => {
     try {
@@ -51,8 +54,8 @@ const UpdateProfileModal = () => {
       onAuthStateChanged(auth, (user) => {
         if (user) {
           // User is signed in
-          profileDetails(user.uid)
-          setUserId(user.uid)
+          profileDetails(user.uid);
+          setUserId(user.uid);
         } else {
           // User is signed out
           localStorage.removeItem("loggedIn");
@@ -83,15 +86,15 @@ const UpdateProfileModal = () => {
     let newImage = event.target.files[0];
     // console.log("newImage: ", newImage);
     if (newImage === undefined) {
-      newImage = '';
+      newImage = "";
     } else {
       try {
         const fileSize = newImage.size;
         const maxSize = 1024 * 1024;
         if (fileSize > maxSize) {
-          displayError("File size must be less than 1MB")
+          displayError("File size must be less than 1MB");
         } else {
-         newImage = await fileToDataUrl(newImage);
+          newImage = await fileToDataUrl(newImage);
         }
       } catch (error) {
         displayError(error.message);
@@ -108,15 +111,15 @@ const UpdateProfileModal = () => {
     // Convert file input to string to store in database
     const newImage = event.target.files[0];
     if (newImage === undefined) {
-      newImage = '';
+      newImage = "";
     } else {
       try {
         const fileSize = newImage.size;
         const maxSize = 1024 * 1024;
         if (fileSize > maxSize) {
-          displayError("File size must be less than 1MB")
+          displayError("File size must be less than 1MB");
         } else {
-         newImage = await fileToDataUrl(newImage);
+          newImage = await fileToDataUrl(newImage);
         }
       } catch (error) {
         displayError(error.message);
@@ -141,8 +144,6 @@ const UpdateProfileModal = () => {
   //   return !!s.match(regex);
   // }
   // const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
-
-
 
   const profileUpdateButtonHandler = async () => {
     // if (oldPassword === password) {
@@ -193,7 +194,7 @@ const UpdateProfileModal = () => {
         // );
         // API call to backend
         // console.log("profile update body: ", auth.currentUser.uid, firstName, lastName, email, newProfileImage, newCoverProfileImage);
-        console.log(userId,firstName, lastName, email)
+        console.log(userId, firstName, lastName, email);
         const profileUpdateFetchResponse = await profileUpdateFetch(
           userId,
           firstName,
@@ -204,7 +205,10 @@ const UpdateProfileModal = () => {
           // newProfileImage,
           // newCoverProfileImage
         );
-        console.log("profile update fetch response: ", profileUpdateFetchResponse);
+        console.log(
+          "profile update fetch response: ",
+          profileUpdateFetchResponse
+        );
         dispatch(updateProfileAction());
         closeModalHandler();
         displaySuccess(`Profile Updated Successfully!`);
@@ -263,17 +267,16 @@ const UpdateProfileModal = () => {
         className={styles.clickButton}
         onClick={openModalHandler}
       />
-      
 
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={open}
-          onClose={closeModalHandler}
-          closeAfterTransition
-        >
-          <Fade in={open}>
-            <Box sx={modalContainerSx}>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={closeModalHandler}
+        closeAfterTransition
+      >
+        <Fade in={open}>
+          <Box sx={modalContainerSx}>
             <PerfectScrollbar>
               <Box sx={modalTitleSx}>
                 <h2>Edit Profile</h2>
@@ -364,11 +367,10 @@ const UpdateProfileModal = () => {
                   onClickFunction={profileUpdateButtonHandler}
                 />
               </Box>
-              </PerfectScrollbar>
-            </Box>
-          </Fade>
-        </Modal>
-      
+            </PerfectScrollbar>
+          </Box>
+        </Fade>
+      </Modal>
     </>
   );
 };
