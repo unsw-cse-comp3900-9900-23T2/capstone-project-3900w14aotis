@@ -83,7 +83,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
       finalAssignees,
       priority,
       status,
-      creatorId,
+      creatorId
     );
 
     dispatch(addTaskAction());
