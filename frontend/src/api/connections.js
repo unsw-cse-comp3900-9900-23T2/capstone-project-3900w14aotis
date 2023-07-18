@@ -2,14 +2,9 @@ const API_URL = `http://localhost:${8000}`;
 const API_MEDIA_TYPE = "application/json";
 
 export const allConnectionsFetch = async (uId) => {
-  const jsonData = JSON.stringify({
-    uId,
-  });
-
   const requestOption = {
     method: "GET",
     headers: { "Content-Type": API_MEDIA_TYPE },
-    body: jsonData,
   };
 
   const allConnectionsPromise = await fetch(
@@ -21,14 +16,9 @@ export const allConnectionsFetch = async (uId) => {
 };
 
 export const pendingConnectionsFetch = async (uId) => {
-  const jsonData = JSON.stringify({
-    uId,
-  });
-
   const requestOption = {
     method: "GET",
     headers: { "Content-Type": API_MEDIA_TYPE },
-    body: jsonData,
   };
 
   const pendingConnectionsPromise = await fetch(
@@ -59,9 +49,9 @@ export const sendConnectionFetch = async (email, uId) => {
   return sendConnectionResponse;
 };
 
-export const acceptConnectionFetch = async (email, uId) => {
+export const acceptConnectionFetch = async (currUser, uId) => {
   const jsonData = JSON.stringify({
-    email,
+    currUser,
     uId,
   });
 
@@ -71,17 +61,17 @@ export const acceptConnectionFetch = async (email, uId) => {
     body: jsonData,
   };
 
-  const sendConnectionPromise = await fetch(
-    `${API_URL}/connections/send/${uId}?userEmail=${email}&currUser=${uId}`,
+  const acceptConnectionPromise = await fetch(
+    `${API_URL}/connections/accept/${currUser}?userId=${uId}`,
     requestOption
   );
-  const sendConnectionResponse = await sendConnectionPromise.json();
-  return sendConnectionResponse;
+  const acceptConnectionResponse = await acceptConnectionPromise.json();
+  return acceptConnectionResponse;
 };
 
-export const declineConnectionFetch = async (email, uId) => {
+export const declineConnectionFetch = async (currUser, uId) => {
   const jsonData = JSON.stringify({
-    email,
+    currUser,
     uId,
   });
 
@@ -91,10 +81,30 @@ export const declineConnectionFetch = async (email, uId) => {
     body: jsonData,
   };
 
-  const sendConnectionPromise = await fetch(
-    `${API_URL}/connections/send/${uId}?userEmail=${email}&currUser=${uId}`,
+  const declineConnectionPromise = await fetch(
+    `${API_URL}/connections/decline/${currUser}?userId=${uId}`,
     requestOption
   );
-  const sendConnectionResponse = await sendConnectionPromise.json();
-  return sendConnectionResponse;
+  const declineConnectionResponse = await declineConnectionPromise.json();
+  return declineConnectionResponse;
+};
+
+export const removeConnectionFetch = async (currUser, uId) => {
+  const jsonData = JSON.stringify({
+    currUser,
+    uId,
+  });
+
+  const requestOption = {
+    method: "DELETE",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+    body: jsonData,
+  };
+
+  const removeConnectionPromise = await fetch(
+    `${API_URL}/connections/remove/${uId}?currUser=${currUser}`,
+    requestOption
+  );
+  const removeConnectionResponse = await removeConnectionPromise.json();
+  return removeConnectionResponse;
 };

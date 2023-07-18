@@ -2,8 +2,13 @@ import React from "react";
 import ProfilePicture from "./ProfilePicture";
 import { styled } from "@mui/material/styles";
 import { Box, LinearProgress, linearProgressClasses } from "@mui/material";
+import { Icon } from "@iconify/react";
+import { removeConnectionFetch } from "../api/connections";
+import { getAuth } from "firebase/auth";
+import { displaySuccess, displayError } from "../utils/helpers";
+import styles from "./styles/Modal.module.css";
 
-function ConnectionCard() {
+function ConnectionCard({ uId, name, email }) {
   const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
     height: "40%",
     width: "70%",
@@ -17,6 +22,19 @@ function ConnectionCard() {
     },
   }));
 
+  const removeConnectionHandler = async () => {
+    try {
+      const user = getAuth();
+      const res = await removeConnectionFetch(user.currentUser.uid, uId);
+      if (res.detail.code === 200) {
+        displaySuccess(`${res.detail.message}`);
+      } else {
+        displayError(`${res.detail.message}`);
+      }
+    } catch (error) {
+      displayError(`${error.message}`);
+    }
+  };
   return (
     <Box
       sx={{
@@ -28,6 +46,7 @@ function ConnectionCard() {
         width: "18rem",
         alignItems: "center",
         justifyContent: "center",
+        position: "relative",
       }}
     >
       <ProfilePicture
@@ -37,8 +56,8 @@ function ConnectionCard() {
         imgHeight={100}
       />
       <Box>
-        <h2>Calvin Chang</h2>
-        <p>calvoc123@gmail.com</p>
+        <h2>{name}</h2>
+        <p>{email}</p>
       </Box>
       <Box
         sx={{
@@ -52,6 +71,18 @@ function ConnectionCard() {
         <p>Workload</p>
         <BorderLinearProgress variant="determinate" value={90} />
       </Box>
+      <Icon
+        icon="mdi:bin-outline"
+        style={{
+          fontSize: "35px",
+          position: "absolute",
+          top: "5%",
+          right: "5%",
+          borderRadius: "50%",
+        }}
+        className={styles.clickButton}
+        onClick={removeConnectionHandler}
+      />
     </Box>
   );
 }

@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Headerbar from "../components/Headerbar";
 import { getAuth } from "firebase/auth";
 import ConnectionCard from "../components/ConnectionCard";
+import { allConnectionsFetch } from "../api/connections";
+import { displayError } from "../utils/helpers";
 
 function ConnectionsPage() {
+  const [connections, setConnections] = useState([]);
+
+  const getConnections = async () => {
+    try {
+      const user = getAuth();
+
+      const allConnectionsResponse = await allConnectionsFetch(
+        user.currentUser.uid
+      );
+      const details = allConnectionsResponse.detail.message;
+
+      setConnections(details);
+    } catch (error) {
+      displayError(error);
+    }
+  };
+
+  useEffect(() => {
+    getConnections();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -36,14 +59,18 @@ function ConnectionsPage() {
             rowGap: "4vh",
           }}
         >
-          <ConnectionCard />
-          <ConnectionCard />
-          <ConnectionCard />
-          <ConnectionCard />
-          <ConnectionCard />
-          <ConnectionCard />
-          <ConnectionCard />
-          <ConnectionCard />
+          {Array.isArray(connections) ? (
+            connections.map((connection) => (
+              <ConnectionCard
+                key={connection.uid}
+                uId={connection.uid}
+                name={`${connection.firstName} ${connection.lastName}`}
+                email={connection.email}
+              />
+            ))
+          ) : (
+            <p>No current connections.</p>
+          )}
         </Box>
       </Box>
     </Box>

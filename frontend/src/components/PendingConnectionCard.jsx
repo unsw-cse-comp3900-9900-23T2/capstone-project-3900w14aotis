@@ -4,13 +4,32 @@ import ProfilePicture from "./ProfilePicture";
 import { Icon } from "@iconify/react";
 import styles from "./styles/Modal.module.css";
 import { getAuth } from "firebase/auth";
-import { pendingConnectionsFetch } from "../api/connections";
+import {
+  acceptConnectionFetch,
+  declineConnectionFetch,
+} from "../api/connections";
 import { displayError } from "../utils/helpers";
 
-const PendingConnectionCard = () => {
-  const [name, setName] = "";
-  const [email, setEmail] = "";
+const PendingConnectionCard = ({ uId, name, email, closeFunction }) => {
+  const acceptButtonHandler = async () => {
+    const user = getAuth();
+    try {
+      const res = await acceptConnectionFetch(user.currentUser.uid, uId);
+      closeFunction();
+    } catch (error) {
+      displayError(`${error.message}`);
+    }
+  };
 
+  const declineButtonHandler = async () => {
+    const user = getAuth();
+    try {
+      const res = await declineConnectionFetch(user.currentUser.uid, uId);
+      closeFunction();
+    } catch (error) {
+      displayError(`${error.message}`);
+    }
+  };
   return (
     <Box
       sx={{
@@ -38,11 +57,13 @@ const PendingConnectionCard = () => {
           icon="mdi:tick-circle-outline"
           className={styles.clickButton}
           style={{ fontSize: "50px" }}
+          onClick={acceptButtonHandler}
         />
         <Icon
           icon="bx:x-circle"
           className={styles.clickButton}
           style={{ fontSize: "50px" }}
+          onClick={declineButtonHandler}
         />
       </Box>
     </Box>
