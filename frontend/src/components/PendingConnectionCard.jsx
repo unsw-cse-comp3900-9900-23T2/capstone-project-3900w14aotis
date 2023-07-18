@@ -9,12 +9,26 @@ import {
   declineConnectionFetch,
 } from "../api/connections";
 import { displayError } from "../utils/helpers";
+import { useDispatch } from "react-redux";
+import { addConnectionAction } from "../connections/state/addConnectionAction";
+import { removeConnectionAction } from "../connections/state/removeConnectionAction";
 
-const PendingConnectionCard = ({ uId, name, email, closeFunction }) => {
+const PendingConnectionCard = ({
+  uId,
+  firstName,
+  lastName,
+  email,
+  profileImage,
+  closeFunction,
+}) => {
+  const dispatch = useDispatch();
+
   const acceptButtonHandler = async () => {
     const user = getAuth();
     try {
       const res = await acceptConnectionFetch(user.currentUser.uid, uId);
+      dispatch(addConnectionAction());
+      dispatch(removeConnectionAction());
       closeFunction();
     } catch (error) {
       displayError(`${error.message}`);
@@ -25,6 +39,7 @@ const PendingConnectionCard = ({ uId, name, email, closeFunction }) => {
     const user = getAuth();
     try {
       const res = await declineConnectionFetch(user.currentUser.uid, uId);
+      dispatch(removeConnectionAction());
       closeFunction();
     } catch (error) {
       displayError(`${error.message}`);
@@ -42,13 +57,12 @@ const PendingConnectionCard = ({ uId, name, email, closeFunction }) => {
       }}
     >
       <ProfilePicture
-        key={25}
-        userDetails={123}
+        userDetails={{ uid: uId, profileImage, firstName, lastName }}
         imgWidth="50px"
         imgHeight="50px"
       />
       <Box>
-        <p>{name}</p>
+        <h2>{`${firstName} ${lastName}`}</h2>
         <p>{email}</p>
       </Box>
 

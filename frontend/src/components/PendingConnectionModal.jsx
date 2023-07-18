@@ -8,12 +8,15 @@ import PendingConnectionCard from "./PendingConnectionCard";
 import { pendingConnectionsFetch } from "../api/connections";
 import { getAuth } from "firebase/auth";
 import { displayError } from "../utils/helpers";
+import { useSelector } from "react-redux";
 
 const PendingConnectionModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [pendingConnections, setPendingConnections] = useState("");
+
+  const connectionUpdated = useSelector((state) => state.connectionRemoved);
 
   const getPendingConnections = async () => {
     try {
@@ -33,7 +36,7 @@ const PendingConnectionModal = () => {
 
   useEffect(() => {
     getPendingConnections();
-  }, []);
+  }, [connectionUpdated]);
 
   const modalStyle = {
     display: "flex",
@@ -114,8 +117,10 @@ const PendingConnectionModal = () => {
                   <PendingConnectionCard
                     key={connection.uid}
                     uId={connection.uid}
-                    name={`${connection.firstName} ${connection.lastName}`}
+                    firstName={connection.firstName}
+                    lastName={connection.lastName}
                     email={connection.email}
+                    profileImage={connection.profileImage}
                     closeFunction={handleClose}
                   />
                 ))

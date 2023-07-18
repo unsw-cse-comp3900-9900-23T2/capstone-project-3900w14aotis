@@ -10,9 +10,12 @@ import styles from "./styles/Modal.module.css";
 import RemoveConnectionModal from "./RemoveConnectionModal";
 import { workloadFetch } from "../api/workload";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function ConnectionCard({ uId, name, email }) {
-  const [workload, setWorkload] = useState("");
+function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
+  const [workload, setWorkload] = useState(0);
+
+  const navigate = useNavigate();
 
   const getWorkload = async () => {
     try {
@@ -68,13 +71,12 @@ function ConnectionCard({ uId, name, email }) {
       }}
     >
       <ProfilePicture
-        key={25}
-        userDetails={123}
+        userDetails={{ uid: uId, profileImage, firstName, lastName }}
         imgWidth={100}
         imgHeight={100}
       />
       <Box>
-        <h2>{name}</h2>
+        <h2>{`${firstName} ${lastName}`}</h2>
         <p>{email}</p>
       </Box>
       <Box
@@ -87,7 +89,6 @@ function ConnectionCard({ uId, name, email }) {
         }}
       >
         <p>Workload</p>
-        {console.log(workload)}
         <BorderLinearProgress variant="determinate" value={workload} />
       </Box>
       <RemoveConnectionModal uId={uId} style={removeButtonStyles} />

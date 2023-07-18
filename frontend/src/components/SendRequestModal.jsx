@@ -93,7 +93,7 @@ const SendRequestModal = () => {
               <CustomButton
                 text="Send Request"
                 onClickFunction={sendConnectionHandler}
-              ></CustomButton>
+              />
             </Box>
           </Box>
         </Fade>

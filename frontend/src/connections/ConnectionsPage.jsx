@@ -5,9 +5,14 @@ import { getAuth } from "firebase/auth";
 import ConnectionCard from "../components/ConnectionCard";
 import { allConnectionsFetch } from "../api/connections";
 import { displayError } from "../utils/helpers";
+import Loading from "../components/Loading";
+import { useSelector } from "react-redux";
 
 function ConnectionsPage() {
   const [connections, setConnections] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const connectionAdded = useSelector((state) => state.connectionAdded);
 
   const getConnections = async () => {
     try {
@@ -19,6 +24,7 @@ function ConnectionsPage() {
       const details = allConnectionsResponse.detail.message;
 
       setConnections(details);
+      setLoading(false);
     } catch (error) {
       displayError(error);
     }
@@ -26,7 +32,7 @@ function ConnectionsPage() {
 
   useEffect(() => {
     getConnections();
-  }, []);
+  }, [connectionAdded]);
 
   return (
     <Box
@@ -48,30 +54,36 @@ function ConnectionsPage() {
           height: "calc(100vh - 70px - 5rem)",
         }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            flexDirection: "row",
-            height: "91%",
-            width: "93%",
-            columnGap: "4vw",
-            rowGap: "4vh",
-          }}
-        >
-          {Array.isArray(connections) ? (
-            connections.map((connection) => (
-              <ConnectionCard
-                key={connection.uid}
-                uId={connection.uid}
-                name={`${connection.firstName} ${connection.lastName}`}
-                email={connection.email}
-              />
-            ))
-          ) : (
-            <p>No current connections.</p>
-          )}
-        </Box>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              flexDirection: "row",
+              height: "91%",
+              width: "93%",
+              columnGap: "4vw",
+              rowGap: "4vh",
+            }}
+          >
+            {Array.isArray(connections) ? (
+              connections.map((connection) => (
+                <ConnectionCard
+                  key={connection.uid}
+                  uId={connection.uid}
+                  firstName={connection.firstName}
+                  lastName={connection.lastName}
+                  email={connection.email}
+                  profileImage={connection.profileImage}
+                />
+              ))
+            ) : (
+              <p>No current connections.</p>
+            )}
+          </Box>
+        )}
       </Box>
     </Box>
   );

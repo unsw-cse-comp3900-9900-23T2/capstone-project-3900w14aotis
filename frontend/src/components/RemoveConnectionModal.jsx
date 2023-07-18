@@ -8,17 +8,27 @@ import styles from "./styles/Modal.module.css";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import CustomButton from "./CustomButton";
+import { useDispatch } from "react-redux";
+import { addConnectionAction } from "../connections/state/addConnectionAction";
 
 const RemoveConnectionModal = ({ uId, style }) => {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+
+  const dispatch = useDispatch();
+
+  const handleOpen = (event) => {
+    setOpen(true);
+  };
+  const handleClose = (event) => {
+    setOpen(false);
+  };
 
   const removeConnectionHandler = async () => {
     try {
       const user = getAuth();
       const res = await removeConnectionFetch(user.currentUser.uid, uId);
       if (res.detail.code === 200) {
+        dispatch(addConnectionAction());
         displaySuccess(`${res.detail.message}`);
       } else {
         displayError(`${res.detail.message}`);
