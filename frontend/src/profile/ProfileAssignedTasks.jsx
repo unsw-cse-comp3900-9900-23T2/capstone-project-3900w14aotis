@@ -43,6 +43,7 @@ const ProfileAssignedTasks = ({ tasks }) => {
                 justifyContent: "flex-start",
                 flexWrap: "wrap",
                 padding: "2%",
+                width: "100%",
               }}
             >
               {tasks.map((task) => {
