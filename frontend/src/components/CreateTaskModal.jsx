@@ -11,7 +11,7 @@ import TextBox from "./TextBox";
 import Chip from "@mui/material/Chip";
 import { displayError, displaySuccess } from "../utils/helpers";
 import DropDown from "./Dropdown";
-import styles from "./styles/TaskModal.module.css";
+import styles from "./styles/Modal.module.css";
 import CustomButton from "./CustomButton";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { createTaskFetch } from "../api/task.js";
@@ -258,6 +258,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
                   label={"Deadline"}
                   value={deadline}
                   onChange={(deadline) => setDeadline(deadline)}
+                  format="DD-MM-YYYY"
                 />
               </LocalizationProvider>
             </Box>

@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import SearchBar from "./SearchBar";
 import SortTasksDropdown from "./SortTasksDropdown";
 import { Icon } from "@iconify/react";
-import styles from "./styles/TaskModal.module.css";
+import PendingConnectionModal from "./PendingConnectionModal";
+import SendRequestModal from "./SendRequestModal";
+import SearchBar from "./SearchBar";
+import styles from "./styles/Modal.module.css";
 
 const Headerbar = ({
   text,
@@ -63,26 +65,39 @@ const Headerbar = ({
           )}
       </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          flex: "2",
-        }}
-      >
-        {!location.pathname.includes("project") &&
-          location.pathname.includes("tasks") && (
+      {!location.pathname.includes("project") &&
+        location.pathname.includes("tasks") && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flex: 2,
+            }}
+          >
             <SearchBar
               type="text"
               placeholder="Search tasks by name, date or ID"
               onChangeFunction={handleSearchQuery}
             />
-          )}
-        {!location.pathname.includes("project") &&
-          location.pathname.includes("tasks") && (
             <SortTasksDropdown sortTasksFunction={tasksSortFunction} />
-          )}
-      </Box>
+          </Box>
+        )}
+
+      {!location.pathname.includes("project") &&
+        location.pathname.includes("connections") && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              width: "9%",
+              marginRight: "2%",
+              justifyContent: "space-around",
+            }}
+          >
+            <PendingConnectionModal />
+            <SendRequestModal />
+          </Box>
+        )}
     </Box>
   );
 };

@@ -9,7 +9,7 @@ This files contains helper functions to help get a list of connections for a tas
 def getConnections(userId, listType, db):
     doc = getUserDoc("uid", userId, db)
     connectionsList = doc.pop(listType)
-    finalDict = {}
+    finalList = []
     if len(connectionsList) == EMPTY:
         if listType == PENDING_CONNECTION:
             return "No pending connections found"
@@ -19,13 +19,15 @@ def getConnections(userId, listType, db):
         tempdoc = userRef.get()
         if tempdoc.exists:
             userDoc = tempdoc.to_dict()
-            finalDict[id] = {
+            userDict = {
             "firstName": userDoc.get("firstName"),
             "lastName": userDoc.get("lastName"),
             "email": userDoc.get("email"),
-            "profileImage": userDoc.get("profileImage")
+            "profileImage": userDoc.get("profileImage"),
+            "uid": id
             }
+            finalList.append(userDict)
         else:
             return "Could not retrieve connected user's data"
         
-    return finalDict
+    return finalList
