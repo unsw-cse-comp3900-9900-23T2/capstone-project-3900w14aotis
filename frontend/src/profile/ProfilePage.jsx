@@ -78,9 +78,6 @@ const ProfilePage = () => {
       if (user) {
         // User is signed in
         setAuthUserId(user.uid);
-      } else {
-        // User is signed out
-        // localStorage.removeItem("loggedIn");
       }
     });
   }, []);

@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useParams } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import styles from "./styles/ProfileCard.module.css";
 import AchievementSmallCard from "./AchievementSmallCard";
@@ -7,6 +9,8 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 
 const ProfileAchievements = ({ achievements }) => {
 
+  const [authUserId, setAuthUserId] = useState("");
+  const { userId } = useParams();
   const [buttonText, setButtonText] = useState("Hide");
   const [showAchievements, setShowAchievements] = useState(true);
 
@@ -18,6 +22,16 @@ const ProfileAchievements = ({ achievements }) => {
     }
     setShowAchievements(!showAchievements);
   }
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        setAuthUserId(user.uid);
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -47,7 +61,7 @@ const ProfileAchievements = ({ achievements }) => {
           textAlign: "right",
           width: "90%",
         }}>
-          <Button onClick={hideAchievementsHandler}>{buttonText}</Button>
+          {authUserId === userId ? <Button onClick={hideAchievementsHandler}>{buttonText}</Button> : null}
         </Box>
         <PerfectScrollbar>
           <Box
