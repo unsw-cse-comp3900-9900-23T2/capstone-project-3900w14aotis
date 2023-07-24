@@ -19,6 +19,7 @@ from src.profile.getTasks import userTasks
 from src.profile.getProjects import userProjects
 from src.profile.getRatings import userRatings
 from src.profile.getDetails import getProfDetails
+from src.profile.checkAchievements import checkAchievement
 from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
 from src.connections.connectionRespond import acceptConnection, declineConnection
@@ -53,6 +54,7 @@ class TaskMaster(BaseModel):
     pendingConnections: list[str]
     profileImage: str
     coverProfileImage: str
+    achievementHidden: bool
 
 
 class LoginBody(BaseModel):
@@ -818,4 +820,21 @@ async def calculateWorkload(currUser: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error calculating workload"},
+        )
+
+@app.get("/profile/achievement/check/{userId}", summary="checks if achievement for given user is hidden or not")
+async def checkHiddenAchievement(userId: str):
+
+    try:
+        achievementCheck = checkAchievement(userId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": achievementCheck,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error checking achievement"},
         )
