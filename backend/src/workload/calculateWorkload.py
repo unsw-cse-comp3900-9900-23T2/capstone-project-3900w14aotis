@@ -1,4 +1,5 @@
-from src.serverHelper import getUserDoc
+from src.serverHelper import getUserDoc, getProjectID, getTaskDoc
+from src.workload.workloadHelper import usersTaskRating
 """
 This file contains helper functions to calculate workload for a user.
 """
@@ -22,7 +23,7 @@ def calculate(currUser, db):
     for taskId in taskList:
         #2. rating system?
         projectId = getProjectID(taskId, db)
-        moodRating = "happy" #findUserRating(projectId, taskId, currUser, db)
+        moodRating = usersTaskRating(projectId, taskId, currUser, db)
         moodWeight = 1.0
         match moodRating:
             case "Very Happy":
@@ -41,7 +42,7 @@ def calculate(currUser, db):
         
         #3. priority system
         taskDoc = getTaskDoc(projectId, taskId, db)
-        taskPrio = taskDoc.get('priority')
+        taskPrio = taskDoc.get("Priority")
         prioWeight = 1.0
         match taskPrio:
             case "High":
@@ -54,7 +55,7 @@ def calculate(currUser, db):
         totalTaskWeight = DEFAULT_WEIGHT * moodWeight * prioWeight
         totalWorkload += totalTaskWeight
         
-    totalWorkload = taskNum * DEFAULT_WEIGHT
+    # totalWorkload = taskNum * DEFAULT_WEIGHT
     
     if totalWorkload > MAX_WEIGHT:
         return MAX_WEIGHT

@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 """
 This files contains helper functions that will help modularise 
 """
@@ -52,22 +53,24 @@ def getUserDoc(queryField, queryValue, db):
         return "User not found!"
 
 
-def getUserId(queryField, queryValue, db):
+def getFromUser(queryField, queryValue, info, db):
     """
-    Retrieves the user's ID given any relevant information about that user.
+    Retrieves the any of the user's information given 
+    any relevant information about that user.
 
     Args:
         queryField (str): field that you have information for
                         (e.g. email, uid, first/last name) of a user
         queryValue (str): information for the field you declared
+        info (str): information field that you want to extract
         db : database
 
     Returns:
-        userId (str): userid you were looking for
+        userInfo (str): user info you were looking for
     """
     userDict = getUserDoc(queryField, queryValue, db)
-    userId = userDict.pop("uid")
-    return userId
+    userInfo = userDict.pop(info)
+    return userInfo
 
 
 def getAchievement(db, achievementName, uid):
@@ -109,6 +112,20 @@ def getTaskRef(projectId, taskId, db):
 
     return taskDocRef
 
+def getTaskDoc(projectId, taskId, db):
+    taskRef = getTaskRef(projectId, taskId, db)
+    taskDict = {}
+    doc = taskRef.get()
+    
+    if doc.exists:
+        taskDict = doc.to_dict()
+    else: 
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Document doesn't exist"},
+        )
+    return taskDict
+
 
 def isValidUser(queryField, queryValue, db):
     """
@@ -128,3 +145,20 @@ def isValidUser(queryField, queryValue, db):
         if doc.exists:
             return True
     return False
+
+# EXPERIMENTAL
+def getProjectID(taskId, db):
+    """
+    Gets project ID given a taskId.
+    Args:
+        taskId (str): taskId of the task you want to find the project of
+        db (str): database
+    Returns:
+        projectId (str): project ID of the task you were looking for
+    """
+    projects = db.collection("projects").stream()
+    for project in projects:
+        tasks = db.collection("projects").document(project.id).collection('tasks').stream()
+        for task in tasks:
+            if task.id == taskId:
+                return project.id
