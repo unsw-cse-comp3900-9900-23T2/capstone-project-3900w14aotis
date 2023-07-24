@@ -26,7 +26,6 @@ from src.connections.getConnections import getConnections
 from src.rating.addRating import addRating
 from src.connections.connectionRemove import unfriend
 from src.workload.calculateWorkload import calculate
-from src.workload.workloadHelper import usersTaskRating
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -820,20 +819,3 @@ async def calculateWorkload(currUser: str):
             status_code=404,
             detail={"code": "404", "message": "Error calculating workload"},
         )
-    
-# TEST ROUTE
-@app.get("/workload/test/", summary="gets rating list")
-async def getRatingList(projectId: str, taskId: str, currUser: str):
-    try:
-        ratingList = usersTaskRating(projectId, taskId, currUser, db)
-        return {
-            "detail": {
-                "code": 200,
-                "message": ratingList,
-            }
-        }
-    except:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error getting Ratings"},
-        )    

@@ -1,12 +1,11 @@
-from src.serverHelper import getTaskDoc
+from src.serverHelper import getFromTask
 from fastapi import HTTPException
 """
 This file contains helper functions for anything to do with workload calculation.
 """
 
 def usersTaskRating(projectId, taskId, currUser, db):
-    taskDoc = getTaskDoc(projectId, taskId, db)
-    ratingMap = taskDoc.get("Rating")
+    ratingMap = getFromTask(projectId, taskId, "Rating", db)
     for mood, moodList in ratingMap.items():
         if currUser in moodList:
             return mood

@@ -53,7 +53,7 @@ def getUserDoc(queryField, queryValue, db):
         return "User not found!"
 
 
-def getFromUser(queryField, queryValue, info, db):
+def getFromUser(queryField, queryValue, infoField, db):
     """
     Retrieves the any of the user's information given 
     any relevant information about that user.
@@ -63,13 +63,13 @@ def getFromUser(queryField, queryValue, info, db):
                         (e.g. email, uid, first/last name) of a user
         queryValue (str): information for the field you declared
         info (str): information field that you want to extract
-        db : database
+        db: database for the taskmasters.
 
     Returns:
         userInfo (str): user info you were looking for
     """
     userDict = getUserDoc(queryField, queryValue, db)
-    userInfo = userDict.pop(info)
+    userInfo = userDict.get(infoField)
     return userInfo
 
 
@@ -78,9 +78,9 @@ def getAchievement(db, achievementName, uid):
     Finds the achievement according to achievement name
 
     Args:
-        db: database
         achievementName (str): name of the achievement, e.g. Innovator
         uid (str): user id
+        db: database for the achievements
     Returns:
         achievement: achievement returned in the form of a stream containing 1 element
     """
@@ -102,7 +102,7 @@ def getTaskRef(projectId, taskId, db):
     Args:
         projectId (str): project ID of the task you want to access
         taskId (str): task ID of the task you want to get.
-        db: database used
+        db: database for the tasks.
 
     Returns:
         taskRef: reference to task document
@@ -113,6 +113,20 @@ def getTaskRef(projectId, taskId, db):
     return taskDocRef
 
 def getTaskDoc(projectId, taskId, db):
+    """
+    Gets task doc as a dictionary
+
+    Args:
+        projectId (str): ID of the project that the task is in
+        taskId (str): ID of the task you want to get the dictionary document of
+        db: database for the tasks.
+
+    Raises:
+        HTTPException: 404 if the document does not exist
+
+    Returns:
+        taskDict: dictionary form of the document you wanted
+    """
     taskRef = getTaskRef(projectId, taskId, db)
     taskDict = {}
     doc = taskRef.get()
@@ -126,6 +140,22 @@ def getTaskDoc(projectId, taskId, db):
         )
     return taskDict
 
+def getFromTask(projectId, taskId, infoField, db):
+    """
+    Gets a specific field from the task specified
+
+    Args:
+        projectId (str): ID of the project that the task is in
+        taskId (str): ID of the task you want to get the dictionary document of
+        infoField (str): name of the field you want to extract
+    """
+    taskDict = getTaskDoc(projectId, taskId, db)
+    taskInfo = taskDict.get(infoField)
+    return taskInfo
+
+
+
+
 
 def isValidUser(queryField, queryValue, db):
     """
@@ -134,7 +164,7 @@ def isValidUser(queryField, queryValue, db):
     Args:
         queryField (str): field for the information you have
         queryValue (str): information you have of the user
-        db: database
+        db: database for the taskmasters.
 
     Returns:
         bool: returns True if a user exists with that, or False otherwise
@@ -146,7 +176,6 @@ def isValidUser(queryField, queryValue, db):
             return True
     return False
 
-# EXPERIMENTAL
 def getProjectID(taskId, db):
     """
     Gets project ID given a taskId.
