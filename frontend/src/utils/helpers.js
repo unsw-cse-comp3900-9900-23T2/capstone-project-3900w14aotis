@@ -72,6 +72,12 @@ export const sortTasksLatest = (tasksList) => {
   return tasksList.sort((a, b) => new Date(b.Deadline) - new Date(a.Deadline));
 };
 
+export const sortTasksCreationRecent = (tasksList) => {
+  return tasksList.sort(
+    (a, b) => new Date(b.CreationTime) - new Date(a.CreationTime)
+  );
+};
+
 export const sortTasksImportant = (tasksList) => {
   const priorityMapping = {
     Low: 0,
@@ -124,4 +130,14 @@ export const stringAvatar = (name) => {
     },
     children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
   };
+};
+
+export const paginateTasks = (taskList) => {
+  const paginatedTasks = [];
+  const chunkSize = 5;
+  for (let i = 0; i < taskList.length; i += chunkSize) {
+    const chunk = taskList.slice(i, i + chunkSize);
+    paginatedTasks.push(chunk);
+  }
+  return paginatedTasks;
 };

@@ -1,5 +1,4 @@
-from src.serverHelper import getUserDoc, getProjectID, getTaskDoc
-from src.rating.ratingHelper import findUserRating
+from src.serverHelper import getUserDoc
 """
 This file contains helper functions to calculate workload for a user.
 """
@@ -55,6 +54,8 @@ def calculate(currUser, db):
         totalTaskWeight = DEFAULT_WEIGHT * moodWeight * prioWeight
         totalWorkload += totalTaskWeight
         
+    totalWorkload = taskNum * DEFAULT_WEIGHT
+    
     if totalWorkload > MAX_WEIGHT:
         return MAX_WEIGHT
 

@@ -1,3 +1,6 @@
+from src.serverHelper import getAchievement, findUser
+from google.cloud import firestore
+
 """
 This file contains helper functions to create a new task within a project.
 """
@@ -17,6 +20,18 @@ def createNewTask(newTask, projectId, db):
     Returns:
         obj: this contains the document reference number if succesfully added
     """
+
+    # If Innovator Achievement is in progress, mark as done
+    docs = getAchievement(db, "Innovator", newTask.creatorId)
+    for achievement in docs:
+        if achievement.get("status") == "In Progress":
+            achievement.reference.update(
+                {
+                    "currentValue": 1,
+                    "status": "Done",
+                }
+            )
+
     parentDocId = projectId
     subCollection = "tasks"
     parentDocRef = db.collection("projects").document(parentDocId)
@@ -36,7 +51,13 @@ def createNewTask(newTask, projectId, db):
                 "Sad": [],
                 "Very Sad": [],
             },
+            "CreationTime": newTask.creationTime,
         }
     )
 
-    return taskRef
+    # Assigns task to taskmasters in given newTask object
+    for email in newTask.assignees:
+        taskmasterRef = findUser("email", email.lower(), db)
+        taskmasterRef.update({"tasks": firestore.ArrayUnion([taskRef[1].id])})
+
+    return taskRef[1].id

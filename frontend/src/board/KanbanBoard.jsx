@@ -3,6 +3,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { allTasksFetch } from "../api/task";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 import { useSelector } from "react-redux";
 import ColumnStatus from "./ColumnStatus";
 import { columns } from "./ColumnData";
@@ -17,7 +18,7 @@ const KanbanBoard = () => {
   const [loading, setLoading] = useState(true);
 
   const { projectId } = useParams();
-  const taskAdded = useSelector((state) => state.tasksUpdated);
+  const taskAdded = useSelector((state) => state.taskAdded);
 
   const getAllTasks = async () => {
     const allTasksResponse = await allTasksFetch(projectId);
@@ -52,6 +53,8 @@ const KanbanBoard = () => {
         : newStatus === "DONE"
         ? "Done"
         : "To Do";
+
+    const auth = getAuth();
     const updateTaskPromise = await updateTaskFetch(
       projectId,
       draggableId,
@@ -59,7 +62,8 @@ const KanbanBoard = () => {
       task.Description,
       task.Deadline,
       task.Priority,
-      status
+      status,
+      auth.currentUser.uid
     );
   };
 

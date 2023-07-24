@@ -1,5 +1,6 @@
 from google.cloud import firestore
-from src.serverHelper import findUser, getUserId
+from fastapi import HTTPException
+from src.serverHelper import findUser
 from src.connections.connectionHelper import isConnectedTo
 
 """
@@ -31,7 +32,10 @@ def addAssignee(projectId, taskId, email, currUser, db):
 
     # check if users are connected
     if not isConnectedTo(currUser, "email", userEmail, db):
-        return "Users are not connected!"
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "400", "message": "User is not a connection!"},
+        )
 
     # adds task in taskmaster's task list
     taskmasterRef.update({"tasks": firestore.ArrayUnion([taskId])})

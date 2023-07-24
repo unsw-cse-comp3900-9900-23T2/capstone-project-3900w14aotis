@@ -61,10 +61,36 @@ def getUserId(queryField, queryValue, db):
                         (e.g. email, uid, first/last name) of a user
         queryValue (str): information for the field you declared
         db : database
+
+    Returns:
+        userId (str): userid you were looking for
     """
     userDict = getUserDoc(queryField, queryValue, db)
     userId = userDict.pop("uid")
     return userId
+
+
+def getAchievement(db, achievementName, uid):
+    """
+    Finds the achievement according to achievement name
+
+    Args:
+        db: database
+        achievementName (str): name of the achievement, e.g. Innovator
+        uid (str): user id
+    Returns:
+        achievement: achievement returned in the form of a stream containing 1 element
+    """
+    achievementDocRef = db.collection("achievements").document(uid)
+    achievementCollection = achievementDocRef.collection("achievements")
+    achievement = (
+        achievementCollection.where("achievement", "==", achievementName)
+        .limit(1)
+        .stream()
+    )
+
+    return achievement
+
 
 def getTaskRef(projectId, taskId, db):
     """
@@ -74,48 +100,31 @@ def getTaskRef(projectId, taskId, db):
         projectId (str): project ID of the task you want to access
         taskId (str): task ID of the task you want to get.
         db: database used
+
+    Returns:
+        taskRef: reference to task document
     """
     projectDocRef = db.collection("projects").document(projectId)
     taskDocRef = projectDocRef.collection("tasks").document(taskId)
 
     return taskDocRef
 
-def getTaskDoc(projectId, taskId, db):
+
+def isValidUser(queryField, queryValue, db):
     """
-    Retrieves doc (in dictionary form) of the task.
+    Checks if user is valid given any information of a user.
 
     Args:
-        projectId (str): project ID of the task you want to access
-        taskId (str): task ID of the task you want to get.
-        db: database used
-    """
-    projectDocRef = db.collection("projects").document(projectId)
-    taskDocRef = projectDocRef.collection("tasks").document(taskId)
-    taskDict = {}
-    doc = taskDocRef.get()
-
-    if doc.exists:
-        taskDict = doc.to_dict()
-    else:
-        return "No document found!"
-    
-    return taskDict
-
-# EXPERIMENTAL
-def getProjectID(taskId, db):
-    """
-    Gets project ID given a taskId.
-
-    Args:
-        taskId (str): taskId of the task you want to find the project of
-        db (str): database
+        queryField (str): field for the information you have
+        queryValue (str): information you have of the user
+        db: database
 
     Returns:
-        projectId (str): project ID of the task you were looking for
+        bool: returns True if a user exists with that, or False otherwise
     """
-    projects = db.collection("projects").stream()
-    for project in projects:
-        tasks = db.collection("projects").document(project).collection('tasks').stream()
-        for task in tasks:
-            if task.id == taskId:
-                return project
+    docs = db.collection("taskmasters").where(queryField, "==", queryValue).stream()
+
+    for doc in docs:
+        if doc.exists:
+            return True
+    return False

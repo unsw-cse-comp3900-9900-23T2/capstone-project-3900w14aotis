@@ -6,7 +6,7 @@ from src.auth.login import authLogin
 from datetime import datetime
 from src.task.createTask import createNewTask
 from src.task.createProject import createNewProject
-from src.task.getTasks import listTasks
+from src.task.getTasks import listTasks, listPaginatedTasks
 from src.task.createProject import joinExistingProject
 from fastapi.middleware.cors import CORSMiddleware
 from src.task.assignTask import addAssignee
@@ -67,6 +67,8 @@ class Task(BaseModel):
     assignees: list[str]
     priority: str
     status: str
+    creationTime: datetime
+    creatorId: str
 
 
 class NewProject(BaseModel):
@@ -99,6 +101,7 @@ class UpdateTask(BaseModel):
     deadline: datetime
     priority: str
     status: str
+    creatorId: str
 
 
 class TaskRatingBody(BaseModel):
@@ -171,7 +174,7 @@ async def createTask(task: Task, projectId: str):
         return {
             "detail": {
                 "code": 200,
-                "message": f"Task {taskId[1].id} created successfully",
+                "message": f"Task {taskId} created successfully",
             }
         }
     except:
@@ -224,14 +227,23 @@ async def getTaskDetails(projectId: str, taskId: str):
     try:
         taskDetails = getDetails(projectId, taskId, db)
         return {"detail": {"code": 200, "message": taskDetails}}
-    except:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error retrieving data from this task"},
-        )
+    except HTTPException as e:
+        if e.status_code == 404 and e.detail == {
+            "code": "404",
+            "message": "Document doesn't exist",
+        }:
+            raise
+        else:
+            raise HTTPException(
+                status_code=404,
+                detail={
+                    "code": "404",
+                    "message": "Error retrieving data from this task",
+                },
+            )
 
 
-@app.get("/tasks/{projectId}", summary="Lists the tasks of given project")
+@app.get("/tasks/{projectId}", summary="Lists all tasks of given project")
 async def getTasks(projectId: str):
     """get tasks of a project
 
@@ -250,6 +262,36 @@ async def getTasks(projectId: str):
             "detail": {
                 "code": 200,
                 "message": taskList,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error getting tasks"},
+        )
+
+
+@app.get(
+    "/tasks/{projectId}/{latestTaskId}", summary="Paginates the tasks of given project"
+)
+async def getPaginatedTasks(projectId: str, latestTaskId: str):
+    """get tasks of a project
+
+    Args:
+        projectId (str): project Id
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        taskList: list of tasks including assignee details
+    """
+    try:
+        taskDict = listPaginatedTasks(projectId, latestTaskId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": taskDict,
             }
         }
     except:
@@ -299,7 +341,9 @@ async def addTaskAssignee(assignee: Assignee):
             assignee.projectId, assignee.taskId, assignee.email, assignee.currUser, db
         )
         return {"detail": {"code": 200, "message": assigned}}
-    except:
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error assigning taskmaster"},
@@ -374,10 +418,8 @@ async def updateTaskDetails(item: UpdateTask, projectId: str, taskId: str):
     """
 
     try:
-        taskId = updateTask(projectId, taskId, db, item)
-        return {
-            "detail": {"code": 200, "message": f"Task {taskId} updated successfully"}
-        }
+        taskDict = updateTask(projectId, taskId, db, item)
+        return {"detail": {"code": 200, "message": taskDict}}
 
     except:
         raise HTTPException(
@@ -567,11 +609,27 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
     try:
         messageStatus = sendConnection(userEmail, currUser, db)
         return {"detail": {"code": 200, "message": messageStatus}}
-    except:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error sending connection request"},
-        )
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
+        elif e.status_code == 409 and e.detail == {
+            "code": "409",
+            "message": "User is already connected!",
+        }:
+            raise
+        elif e.status_code == 409 and e.detail == {
+            "code": "409",
+            "message": "User already sent a request",
+        }:
+            raise
+        else:
+            raise HTTPException(
+                status_code=404,
+                detail={
+                    "code": "404",
+                    "message": "Error retrieving data from this user",
+                },
+            )
 
 
 @app.post(
@@ -699,7 +757,9 @@ async def removeConnection(currUser: str, userId: str):
                 "message": status,
             }
         }
-    except:
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error removing connection"},
@@ -720,11 +780,11 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
         userId (str): uID if the user is successfully added
     """
     try:
-        assigned = addRating(rating.projectId, rating.taskId, userId, rating.mood, db)
+        task = addRating(rating.projectId, rating.taskId, userId, rating.mood, db)
         return {
             "detail": {
                 "code": 200,
-                "message": f"User: {assigned} successfully rated task",
+                "message": task,
             }
         }
     except:
@@ -733,7 +793,8 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
             detail={"code": "404", "message": "Error rating task"},
         )
 
-@app.post("/workload/calculate/{currUser}", summary="calculate workload for a person")
+
+@app.get("/workload/calculate/{currUser}", summary="calculate workload for a person")
 async def calculateWorkload(currUser: str):
     """
     Calculates workload for a given user
@@ -745,14 +806,14 @@ async def calculateWorkload(currUser: str):
         workload (float): a number that is <100 which shows how much workload they have
                         this can be taken as a percentage
     """
-    try: 
+    try:
         workload = calculate(currUser, db)
         return {
             "detail": {
                 "code": 200,
                 "message": workload,
             }
-        } 
+        }
     except:
         raise HTTPException(
             status_code=404,

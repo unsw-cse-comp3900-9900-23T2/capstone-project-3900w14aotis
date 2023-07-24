@@ -1,24 +1,83 @@
 import React from "react";
-import { useState } from "react";
-import styles from "./styles/ProfileImage.module.css";
+import { useState, useRef } from "react";
+import styles from "./styles/Profile.module.css";
+import ProfilePicture from "../components/ProfilePicture";
+import CoverPicture from "../profile/CoverPicture";
+import { Box } from "@mui/system";
+import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from '@mui/material/IconButton';
 
-
-const ImageInput = () => {
+const ImageInput = ({
+  type,
+  userDetails,
+  width,
+  height,
+  onChangeFunction,
+  onDeleteFunction,
+}) => {
   const [image, setImage] = useState("");
 
-  const handleChange = (image) => {
-    console.log(image.target.files);
-    setImage(URL.createObjectURL(image.target.files[0]));
-  }
+  const fileInput = useRef(null)
 
   return (
-    <div>
-      <img src={image} className={styles.imageInput} />
-      <input
-        type="file"
-        onChange={handleChange}
-      />
-    </div>
-  )
-}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "80%",
+      }}
+    >
+      {type === "PROFILE" ? (
+        <ProfilePicture
+          userDetails={userDetails}
+          imgWidth={width}
+          imgHeight={height}
+        />
+      ) : (
+        <CoverPicture
+          userDetails={userDetails}
+          imgWidth={width}
+          imgHeight={height}
+        />
+      )}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        {/* <input type="file" onChange={onChangeFunction} /> */}
+        <input
+          type='file'
+          name='image'
+          ref={fileInput}
+          onChange={onChangeFunction}
+          style={{ display: 'none' }}
+        />
+        <button
+          className={styles.fileInputButton}
+          onClick={() => fileInput.current.click()}
+        >Upload Image</button>
+        {/* <Button
+          sx={{
+            width: "50%",
+          }}
+          variant="outlined"
+          startIcon={<DeleteIcon />}
+          onClick={onDeleteFunction}
+        >
+          Delete
+        </Button> */}
+        <IconButton aria-label="delete" size="large">
+          <DeleteIcon fontSize="inherit" onClick={onDeleteFunction} />
+          
+        </IconButton>
+      </Box>
+    </Box>
+  );
+};
 export default ImageInput;

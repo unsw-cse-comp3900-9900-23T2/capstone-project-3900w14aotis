@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 """
 This files contains helper functions to help retrieve details of a task
 """
@@ -23,7 +24,10 @@ def getDetails(projectId, taskId, db):
     if doc.exists:
         taskDict = doc.to_dict()
     else:
-        return "No document found!"
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Document doesn't exist"},
+        )
 
     assigneeList = taskDict.pop("Assignees")
     assigneeDictList = makeAssigneeList(db, assigneeList)

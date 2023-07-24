@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import { Icon } from "@iconify/react";
-import styles from "./styles/TaskModal.module.css";
+import styles from "./styles/Modal.module.css";
 import ProfilePicture from "./ProfilePicture";
 import DeadlineBox from "./DeadlineBox";
 import TaskUsers from "../components/TaskUsers";
@@ -16,15 +16,20 @@ import TaskRatingIcon from "../components/TaskRatingIcon";
 import { taskDetailFetch } from "../api/task";
 import Loading from "./Loading";
 import { useDispatch } from "react-redux";
-import { addTaskAction } from "../tasks/state/addTaskAction";
+import { deleteTaskAction } from "../tasks/state/deleteTaskAction";
 
-const ViewTaskModal = ({ isOpen, onClose, projectId, taskId }) => {
+const ViewTaskModal = ({
+  isOpen,
+  onClose,
+  projectId,
+  taskId,
+  setRemovedTaskId,
+}) => {
   // TODO: rating options are skewed (more negatives, add a neutral option)
   const ratingMapping = [
     { mood: "Very Sad", iconName: "fa-regular:sad-cry" },
     { mood: "Sad", iconName: "akar-icons:face-sad" },
-    { mood: "Angry", iconName: "uil:angry" },
-    { mood: "Tiring", iconName: "fa6-regular:face-tired" },
+    { mood: "Neutral", iconName: "akar-icons:face-neutral" },
     { mood: "Happy", iconName: "akar-icons:face-happy" },
     { mood: "Very Happy", iconName: "tabler:mood-happy" },
   ];
@@ -37,9 +42,11 @@ const ViewTaskModal = ({ isOpen, onClose, projectId, taskId }) => {
   const dispatch = useDispatch();
 
   const getTaskDetails = async () => {
-    if (taskId) {
+    if (isOpen && taskId) {
       const taskDetailsResponse = await taskDetailFetch(projectId, taskId);
-      setDetails(taskDetailsResponse.detail.message);
+      if (taskDetailsResponse.detail.code === 200) {
+        setDetails(taskDetailsResponse.detail.message);
+      }
       setLoading(false);
     }
   };
@@ -64,7 +71,8 @@ const ViewTaskModal = ({ isOpen, onClose, projectId, taskId }) => {
     if (deleteTaskResponse.detail.code !== 200) {
       displayError(deleteTaskResponse.detail.message);
     } else {
-      dispatch(addTaskAction());
+      setRemovedTaskId(taskId);
+      dispatch(deleteTaskAction());
       displaySuccess(deleteTaskResponse.detail.message);
     }
     onClose();
@@ -208,27 +216,29 @@ const ViewTaskModal = ({ isOpen, onClose, projectId, taskId }) => {
                         width: "100%",
                       }}
                     >
-                      {ratingMapping.map((rating, idx) => {
-                        let rated = false;
-                        if (details) {
-                          const ratingList = details.Rating[rating.mood];
-                          for (const userRating of ratingList) {
-                            if (userRating.uid === userId) {
-                              rated = true;
+                      {ratingMapping.length > 0 &&
+                        ratingMapping.map((rating, idx) => {
+                          let rated = false;
+                          if (details) {
+                            const ratingList = details.Rating[rating.mood];
+
+                            for (const userRating of ratingList) {
+                              if (userRating.uid === userId) {
+                                rated = true;
+                              }
                             }
+                            return (
+                              <TaskRatingIcon
+                                key={idx}
+                                rated={rated}
+                                iconName={rating.iconName}
+                                mood={rating.mood}
+                                addRatingFunction={addRatingHandler}
+                                userRatings={details.Rating[rating.mood]}
+                              />
+                            );
                           }
-                          return (
-                            <TaskRatingIcon
-                              key={idx}
-                              rated={rated}
-                              iconName={rating.iconName}
-                              mood={rating.mood}
-                              addRatingFunction={addRatingHandler}
-                              userRatings={details.Rating[rating.mood]}
-                            />
-                          );
-                        }
-                      })}
+                        })}
                     </Box>
                   </Box>
                   <Box sx={displayBoxStyle}>
