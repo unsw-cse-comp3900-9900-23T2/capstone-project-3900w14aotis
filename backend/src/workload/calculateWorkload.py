@@ -20,7 +20,7 @@ def calculate(currUser, db):
     totalTaskWeight = DEFAULT_WEIGHT
 
     for taskId in taskList:
-        #2. rating system?
+        #2. rating system adjustments
         projectId = getProjectID(taskId, db)
         moodRating = usersTaskRating(projectId, taskId, currUser, db)
         moodWeight = 1.0
@@ -39,7 +39,7 @@ def calculate(currUser, db):
                 moodWeight = 1
         
         
-        #3. priority system
+        #3. priority system adjustments
         taskPrio = getFromTask(projectId, taskId, "Priority", db)
         prioWeight = 1.0
         match taskPrio:

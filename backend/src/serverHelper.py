@@ -136,7 +136,7 @@ def getTaskDoc(projectId, taskId, db):
     else: 
         raise HTTPException(
             status_code=404,
-            detail={"code": "404", "message": "Document doesn't exist"},
+            detail={"code": "404", "message": "Task doesn't exist"},
         )
     return taskDict
 

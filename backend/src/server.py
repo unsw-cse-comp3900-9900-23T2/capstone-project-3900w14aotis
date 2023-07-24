@@ -814,7 +814,9 @@ async def calculateWorkload(currUser: str):
                 "message": workload,
             }
         }
-    except:
+    except HTTPException as e:
+        if e.status_code == 404:
+            raise
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error calculating workload"},

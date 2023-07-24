@@ -11,6 +11,6 @@ def usersTaskRating(projectId, taskId, currUser, db):
             return mood
 
     raise HTTPException(
-            status_code=400,
-            detail={"code": "400", "message": "Rating doesn't exist"},
+            status_code=404,
+            detail={"code": "404", "message": "Rating doesn't exist"},
         )
