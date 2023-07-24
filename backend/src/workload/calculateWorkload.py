@@ -52,8 +52,6 @@ def calculate(currUser, db):
 
         totalTaskWeight = DEFAULT_WEIGHT * moodWeight * prioWeight
         totalWorkload += totalTaskWeight
-        
-    # totalWorkload = taskNum * DEFAULT_WEIGHT
     
     if totalWorkload > MAX_WEIGHT:
         return MAX_WEIGHT
