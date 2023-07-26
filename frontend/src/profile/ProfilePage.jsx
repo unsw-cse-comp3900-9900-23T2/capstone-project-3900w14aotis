@@ -10,12 +10,14 @@ import {
   profileAchievementsFetch,
   profileDetailFetch,
 } from "../api/profile.js";
+import { allRatingsFetch } from "../api/rating.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";
 import { useSelector } from "react-redux";
 import { allTasksFetch } from "../api/task";
 import { allProjectsFetch } from "../api/project";
+import ProfileRatings from "./ProfileRatings";
 import ProfileAssignedTasks from "./ProfileAssignedTasks";
 import ProfileAchievements from "./ProfileAchievements";
 import styles from "./styles/ProfileCard.module.css";
@@ -254,7 +256,7 @@ const ProfilePage = () => {
                   </>
                 )}
               </Box>
-              <ProfileCard title={"Ratings"} />
+              <ProfileRatings />
               <ProfileAchievements achievements={achievements} />
               <ProfileAssignedTasks tasks={allTasks} />
             </Box>

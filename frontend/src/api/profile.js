@@ -46,36 +46,6 @@ export const profileUpdateFetch = async (
   return profileUpdateResponse;
 };
 
-// export const profileUpdateFetch = async (
-//   uId,
-//   firstName,
-//   lastName,
-//   email,
-//   profileImage,
-//   coverProfileImage
-// ) => {
-//   const jsonData = JSON.stringify({
-//     firstName,
-//     lastName,
-//     email,
-//     profileImage,
-//     coverProfileImage,
-//   })
-//   const requestOption = {
-//     method: "POST",
-//     headers: { "Content-Type": API_MEDIA_TYPE },
-//     body: jsonData,
-//   };
-
-//   const profileUpdatePromise = await fetch(
-//     `${API_URL}/profile/update/${uId}`,
-//     requestOption
-//   );
-
-//   const profileUpdateResponse = await profileUpdatePromise.json();
-//   return profileUpdateResponse;
-// };
-
 export const profileAchievementsFetch = async (uId) => {
   const requestOption = {
     method: "GET",
