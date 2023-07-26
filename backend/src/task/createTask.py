@@ -36,16 +36,6 @@ def createNewTask(newTask, projectId, db):
     subCollection = "tasks"
     parentDocRef = db.collection("projects").document(parentDocId)
 
-    # Assigns task to taskmasters in given newTask object
-    ratingList = []
-    for email in newTask.assignees:
-        emailLower = email.lower()
-        taskmasterRef = findUser("email", emailLower, db)
-        taskmasterRef.update({"tasks": firestore.ArrayUnion([taskRef[1].id])})
-
-        userId = getFromUser("email", emailLower, db)
-        ratingList.append(userId)
-
     taskRef = parentDocRef.collection(subCollection).add(
         {
             "Title": newTask.title,
@@ -57,13 +47,18 @@ def createNewTask(newTask, projectId, db):
             "Rating": {
                 "Very Happy": [],
                 "Happy": [],
-                "Neutral": ratingList,
+                "Neutral": [],
                 "Sad": [],
                 "Very Sad": [],
             },
             "CreationTime": newTask.creationTime,
         }
     )
-        
 
+    # Assigns task to taskmasters in given newTask object
+    for email in newTask.assignees:
+        emailLower = email.lower()
+        taskmasterRef = findUser("email", emailLower, db)
+        taskmasterRef.update({"tasks": firestore.ArrayUnion([taskRef[1].id])})
+        
     return taskRef[1].id
