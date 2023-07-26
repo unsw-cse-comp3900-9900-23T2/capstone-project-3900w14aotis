@@ -9,8 +9,6 @@ def usersTaskRating(projectId, taskId, currUser, db):
     for mood, moodList in ratingMap.items():
         if currUser in moodList:
             return mood
-
-    raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Rating doesn't exist"},
-        )
+        
+    # if mood not returned, return default "Neutral" mood
+    return "Neutral"

@@ -154,9 +154,6 @@ def getFromTask(projectId, taskId, infoField, db):
     return taskInfo
 
 
-
-
-
 def isValidUser(queryField, queryValue, db):
     """
     Checks if user is valid given any information of a user.
