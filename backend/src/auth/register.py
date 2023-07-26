@@ -35,6 +35,7 @@ def authRegister(item, db):
     parentDocRef = db.collection("achievements").document(item.uid)
     achievementCollection = parentDocRef.collection("achievements")
     # Initialise innovator achievement
+    # Add extra field for image, set it to be link of the image 
     achievementCollection.add(
         {
             "achievement": "Innovator",
@@ -84,6 +85,17 @@ def authRegister(item, db):
             "achievement": "Task Master",
             "description": "Complete 5 tasks",
             "target": 5,
+            "currentValue": 0,
+            "status": "In Progress",
+        }
+    )
+
+    # Initialise Task Wizard achievement
+    achievementCollection.add(
+        {
+            "achievement": "Task Wizard",
+            "description": "Complete 100 tasks",
+            "target": 100,
             "currentValue": 0,
             "status": "In Progress",
         }
