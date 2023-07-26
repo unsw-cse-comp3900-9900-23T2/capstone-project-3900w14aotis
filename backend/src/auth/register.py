@@ -29,6 +29,7 @@ def authRegister(item, db):
             "pendingConnections": item.pendingConnections,
             "profileImage": item.profileImage,
             "coverProfileImage": item.coverProfileImage,
+            "achievementHidden": False,
         }
     )
 
