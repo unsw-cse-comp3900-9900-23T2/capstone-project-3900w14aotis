@@ -21,6 +21,7 @@ import ProfileAchievements from "./ProfileAchievements";
 import styles from "./styles/ProfileCard.module.css";
 import CustomButton from "../components/CustomButton";
 import Loading from "../components/Loading";
+import { sendConnectionFetch } from "../api/connections";
 
 const ProfilePage = () => {
   // Initialise profile details
@@ -35,11 +36,28 @@ const ProfilePage = () => {
   const [authUserId, setAuthUserId] = useState("");
   const [allTasks, setAllTasks] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [pendingConnection, setPendingConnection] = useState(false);
+  const [connected, setConnected] = useState(false);
 
   const navigate = useNavigate();
   const { userId } = useParams();
 
   const profileUpdated = useSelector((state) => state.profileUpdated);
+
+  const sendConnectionHandler = async () => {
+    console.log("gwef");
+    try {
+      const user = getAuth();
+      const res = await sendConnectionFetch(email, user.currentUser.uid);
+      if (res.detail.code === 200) {
+        displaySuccess(`${res.detail.message}`);
+      } else {
+        displayError(`${res.detail.message}`);
+      }
+    } catch (error) {
+      displayError(`${error.message}`);
+    }
+  };
 
   const backButtonHandler = () => {
     try {
@@ -250,7 +268,10 @@ const ProfilePage = () => {
                 ) : (
                   <>
                     <h4 className={styles.email}>{`${email}`}</h4>
-                    <CustomButton text="Connect" />
+                    <CustomButton
+                      text="Connect"
+                      onClickFunction={sendConnectionHandler}
+                    />
                   </>
                 )}
               </Box>
