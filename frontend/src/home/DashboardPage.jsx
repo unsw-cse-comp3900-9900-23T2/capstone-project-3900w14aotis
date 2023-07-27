@@ -53,11 +53,7 @@ const DashboardPage = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        localStorage.setItem("loggedIn", true);
         getAllProjects(user.uid);
-      } else {
-        // User is signed out
-        localStorage.removeItem("loggedIn");
       }
     });
   }, []);

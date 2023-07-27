@@ -25,7 +25,6 @@ const ViewTaskModal = ({
   taskId,
   setRemovedTaskId,
 }) => {
-  // TODO: rating options are skewed (more negatives, add a neutral option)
   const ratingMapping = [
     { mood: "Very Sad", iconName: "fa-regular:sad-cry" },
     { mood: "Sad", iconName: "akar-icons:face-sad" },
@@ -56,12 +55,8 @@ const ViewTaskModal = ({
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        localStorage.setItem("loggedIn", true);
         setUserId(user.uid);
         getTaskDetails();
-      } else {
-        // User is signed out
-        localStorage.removeItem("loggedIn");
       }
     });
   }, [isOpen, ratingUpdated]);
@@ -71,7 +66,9 @@ const ViewTaskModal = ({
     if (deleteTaskResponse.detail.code !== 200) {
       displayError(deleteTaskResponse.detail.message);
     } else {
-      setRemovedTaskId(taskId);
+      if (setRemovedTaskId) {
+        setRemovedTaskId(taskId);
+      }
       dispatch(deleteTaskAction());
       displaySuccess(deleteTaskResponse.detail.message);
     }
@@ -93,13 +90,9 @@ const ViewTaskModal = ({
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        localStorage.setItem("loggedIn", true);
         const userId = user.uid;
         ratingFetch(userId, mood);
         setRatingUpdated(ratingUpdated + 1);
-      } else {
-        // User is signed out
-        localStorage.removeItem("loggedIn");
       }
     });
   };
@@ -268,20 +261,22 @@ const ViewTaskModal = ({
                       height={"2.49rem"}
                     />
                   )}
-                  <Box
-                    onClick={deleteTaskHandler}
-                    sx={{
-                      "&:hover": {
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    <Icon
-                      icon="mingcute:delete-line"
-                      style={{
-                        fontSize: "50px",
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Box
+                      onClick={deleteTaskHandler}
+                      sx={{
+                        "&:hover": {
+                          cursor: "pointer",
+                        },
                       }}
-                    />
+                    >
+                      <Icon
+                        icon="mingcute:delete-line"
+                        style={{
+                          fontSize: "50px",
+                        }}
+                      />
+                    </Box>
                   </Box>
                 </>
               )}

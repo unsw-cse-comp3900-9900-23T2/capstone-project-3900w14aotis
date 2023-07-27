@@ -56,9 +56,6 @@ const UpdateProfileModal = () => {
           // User is signed in
           profileDetails(user.uid);
           setUserId(user.uid);
-        } else {
-          // User is signed out
-          localStorage.removeItem("loggedIn");
         }
       });
     } catch (error) {
@@ -364,7 +361,9 @@ const UpdateProfileModal = () => {
                   boxColour={passwordColour}
                 />
               </Box>
-              <h5 className={styles.passwordSubtitle}>Changing your password logs you out!</h5>
+              <h5 className={styles.passwordSubtitle}>
+                Changing your password logs you out!
+              </h5>
               <Box sx={saveChangesButtonSx}>
                 <CustomButton
                   text="Save Changes"

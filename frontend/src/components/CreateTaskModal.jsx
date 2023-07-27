@@ -247,6 +247,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
                 options={["To Do", "In Progress", "Done"]}
                 onChangeFunction={onChangeStatus}
                 defaultStatus={defaultStatus}
+                isRequired={true}
               ></DropDown>
             </Box>
 

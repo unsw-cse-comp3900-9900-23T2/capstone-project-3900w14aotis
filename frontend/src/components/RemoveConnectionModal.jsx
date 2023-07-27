@@ -47,7 +47,7 @@ const RemoveConnectionModal = ({ uId, style }) => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 800,
+    width: "clamp(35rem, 40vw, 45vw)",
     bgcolor: "background.paper",
     boxShadow: "0px 0px 10px 10px rgba(0, 0, 0, 0.25)",
     p: 4,
