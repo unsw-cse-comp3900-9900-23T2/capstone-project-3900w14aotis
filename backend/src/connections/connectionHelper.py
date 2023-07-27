@@ -1,4 +1,4 @@
-from src.serverHelper import getUserDoc, getUserId
+from src.serverHelper import getUserDoc, getFromUser
 """
 This files contains helper functions to help send a connection to a taskmaster
 """
@@ -16,7 +16,7 @@ def isConnectedTo(currUser, queryField, queryValue, db):
     Returns:
         bool: returns true or false depending on if the patron is connected
     """
-    userId = getUserId(queryField, queryValue, db)
+    userId = getFromUser(queryField, queryValue, "uid", db)
     doc = getUserDoc("uid", currUser, db)
     connectionsList = doc.pop("connectedTo")
     if userId in connectionsList:
