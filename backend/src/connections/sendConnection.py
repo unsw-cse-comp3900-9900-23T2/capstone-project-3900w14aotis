@@ -21,6 +21,13 @@ def sendConnection(userEmail, userId, db):
         message (str): a message to show it was successful
     """
     lowerEmail = userEmail.lower()
+    receivingUser = getFromUser(EMAIL_FIELD, lowerEmail, "uid", db)
+
+    if receivingUser == userId:
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "400", "message": "User cannot send a request to themselves"}
+        )
 
     if not isValidUser(EMAIL_FIELD, lowerEmail, db):
         raise HTTPException(
@@ -34,12 +41,12 @@ def sendConnection(userEmail, userId, db):
             detail={"code": "409", "message": "User is already connected!"},
         )
     
-    receivingUser = getFromUser(EMAIL_FIELD, lowerEmail, "uid", db)
-    if isRequestPending(receivingUser, userId, db) or isRequestPending(userId, receivingUser, db):
+    if isRequestPending(receivingUser, userId, db):
         raise HTTPException(
             status_code=409,
             detail={"code": "409", "message": "Connection request is already pending"},
         )
+        
 
     taskmasterRef = findUser(EMAIL_FIELD, lowerEmail, db)
     

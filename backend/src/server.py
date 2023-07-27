@@ -23,6 +23,7 @@ from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
 from src.connections.connectionRespond import acceptConnection, declineConnection
 from src.connections.getConnections import getConnections
+from src.connections.connectionHelper import isRequestPending, isConnectedTo
 from src.rating.addRating import addRating
 from src.connections.connectionRemove import unfriend
 from src.workload.calculateWorkload import calculate
@@ -756,6 +757,48 @@ async def removeConnection(currUser: str, userId: str):
             detail={"code": "404", "message": "Error removing connection"},
         )
 
+@app.get("/connections/checkPending/{userId}/{sendingUserId}", summary="Checks if a connection request has been sent")
+async def checkPending(userId: str, sendingUserId: str):
+    """
+    Checks if the first user has already sent a connection request to the second user.
+    Checks both user's pending connections
+
+    Args:
+        firstUser (str): the user you want to check pending connections for
+        secondUser (str): the user you want to check if they've sent the connection
+        db: database
+
+    Returns:
+        bool: true if request is already pending, false otherwise
+    """
+    try:
+        return isRequestPending(userId, sendingUserId, db)
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error checking pending connections"},
+        )
+
+@app.get("/connections/checkConnected/{currUser}/{otherUserId}", summary="Checks if the users are connected")
+async def checkConnected(currUser: str, otherUserId: str):
+    """
+    Returns true if the current user and user given are connected
+
+    Args:
+        currUser (str): current user's ID
+        otherUserId (str): second user's ID
+        db: database
+
+    Returns:
+        bool: returns true or false depending on if the patron is connected
+    """
+    try: 
+        return isConnectedTo(currUser, "uid", otherUserId, db)
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error checking connection"},
+        )        
 
 @app.post("/task/rate/{userId}", summary="Rate a task")
 async def addTaskRating(rating: TaskRatingBody, userId: str):
