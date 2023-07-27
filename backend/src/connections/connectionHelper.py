@@ -24,10 +24,21 @@ def isConnectedTo(currUser, queryField, queryValue, db):
         return True
     return False
 
-def isRequestPending(senderId, receiverId, db):
-    userDoc = getUserDoc("uid", senderId, db)
+def isRequestPending(firstUser, secondUser, db):
+    """
+    Checks if the first user has already sent a connection request to the second user
+
+    Args:
+        firstUser (str): the user you want to check pending connections for
+        secondUser (str): the user you want to check if they've sent the connection
+        db: database
+
+    Returns:
+        bool: true if request is already pending, false otherwise
+    """
+    userDoc = getUserDoc("uid", firstUser, db)
     pendingList = userDoc.pop("pendingConnections")
-    if receiverId in pendingList:
+    if secondUser in pendingList:
         return True
     return False
     
