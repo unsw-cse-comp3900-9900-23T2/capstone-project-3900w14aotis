@@ -1,5 +1,6 @@
 from src.serverHelper import getFromUser, getProjectID, getFromTask
-from src.workload.workloadHelper import usersTaskRating
+from src.workload.workloadHelper import usersTaskRating, checkDeadline
+from datetime import timedelta
 """
 This file contains helper functions to calculate workload for a user.
 """
@@ -8,6 +9,8 @@ DEFAULT_WEIGHT = 10.0
 MAX_WEIGHT = 100.0
 OVERLOADED = -1
 DONE_STATUS = "Done"
+
+
 
 def calculate(currUser, db):
     #1. basic weighted task out of total tasks
@@ -47,13 +50,23 @@ def calculate(currUser, db):
         prioWeight = 1.0
         match taskPrio:
             case "High":
-                prioWeight = 1.5
+                prioWeight = 1.25
             case "Low":
-                prioWeight = 0.5
+                prioWeight = 0.75
             case _:
                 prioWeight = 1
+  
+        #4. time pressure adjustments
+        timeDiff = checkDeadline(projectId, taskId, db)
+        deadlineWeight = 1.0
+        if timeDiff <= timedelta(days=3):
+            deadlineWeight = 1.25
+        elif timeDiff >= timedelta(days=7):
+            deadlineWeight = 0.75
+        else:
+            deadlineWeight = 1.0
 
-        totalTaskWeight = DEFAULT_WEIGHT * moodWeight * prioWeight
+        totalTaskWeight = DEFAULT_WEIGHT * moodWeight * prioWeight * deadlineWeight
         totalWorkload += totalTaskWeight
 
     # If workload is greater than 100%, workload is overloaded
