@@ -1,4 +1,5 @@
 from src.serverHelper import getUserDoc, getFromUser
+from fastapi import HTTPException
 """
 This files contains helper functions to help send a connection to a taskmaster
 """
@@ -22,3 +23,11 @@ def isConnectedTo(currUser, queryField, queryValue, db):
     if userId in connectionsList:
         return True
     return False
+
+def isRequestPending(senderId, receiverId, db):
+    userDoc = getUserDoc("uid", senderId, db)
+    pendingList = userDoc.pop("pendingConnections")
+    if receiverId in pendingList:
+        return True
+    return False
+    

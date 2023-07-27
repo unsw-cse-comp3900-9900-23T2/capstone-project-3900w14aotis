@@ -600,9 +600,8 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
     "pending connections".
 
     Args:
-        currUser (str): ID of user that is sending the request
         userEmail (str): email of the user that you're sending a request to
-
+        currUser (str): ID of user that is sending the request
     Returns:
         message (str): a message to show it was successful
     """
@@ -612,15 +611,7 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
     except HTTPException as e:
         if e.status_code == 400:
             raise
-        elif e.status_code == 409 and e.detail == {
-            "code": "409",
-            "message": "User is already connected!",
-        }:
-            raise
-        elif e.status_code == 409 and e.detail == {
-            "code": "409",
-            "message": "User already sent a request",
-        }:
+        elif e.status_code == 409:
             raise
         else:
             raise HTTPException(
