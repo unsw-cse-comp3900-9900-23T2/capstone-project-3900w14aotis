@@ -31,6 +31,13 @@ a change to the database structure for easier access (removing collection for co
 
 Week 7: did connections (respond, send, get, helper). added helper functions for serverHelper.
 
-Week 8:  Found issues with exceptions and handled it, learned about how to catch and raise
+Week 8: Found issues with exceptions and handled it, learned about how to catch and raise
 httpExceptions. Did bugfixes for other team members, to rectify backend (returns and also any 
 changes they needed e.g. assign task when creating.). Finished basic implementation of calculate workload.
+Had project demo involving our sprint 2. It went well, and in my opinion, better than sprint 1.
+We our retrospective meeting right after the demo, allowing for us to submit it by Friday.
+
+Week 9: Workload calculate is finished, taking into account mood and priority rating. We also had a meeting
+on Wednesday to discuss what we need done this sprint by the final demo next Wednesday in week 10. During this
+meeting and in the retrospective, it has become clear that the code style has become a problem in our codebase.
+I (and Winston when he's available) will attempt to rectify it this week, before we make final tests on our virtual machine.
