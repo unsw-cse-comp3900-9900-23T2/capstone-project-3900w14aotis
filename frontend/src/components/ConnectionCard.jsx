@@ -6,11 +6,12 @@ import { Icon } from "@iconify/react";
 import { removeConnectionFetch } from "../api/connections";
 import { getAuth } from "firebase/auth";
 import { displaySuccess, displayError } from "../utils/helpers";
-import styles from "./styles/Modal.module.css";
 import RemoveConnectionModal from "./RemoveConnectionModal";
 import { workloadFetch } from "../api/workload";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ProgressBar from "@ramonak/react-progress-bar";
+import styles from "./styles/Connections.module.css";
 
 function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
   const [workload, setWorkload] = useState(0);
@@ -34,19 +35,6 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
   useEffect(() => {
     getWorkload();
   }, []);
-
-  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-    height: "40%",
-    width: "70%",
-    borderRadius: "10px",
-    [`&.${linearProgressClasses.colorPrimary}`]: {
-      backgroundColor: theme.palette.grey[200],
-    },
-    [`& .${linearProgressClasses.bar}`]: {
-      borderRadius: "10px",
-      backgroundColor: "#1a90ff",
-    },
-  }));
 
   const removeButtonStyles = {
     fontSize: "35px",
@@ -75,7 +63,15 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
         imgWidth={100}
         imgHeight={100}
       />
-      <Box>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <h2>{`${firstName} ${lastName}`}</h2>
         <p>{email}</p>
       </Box>
@@ -89,7 +85,20 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
         }}
       >
         <p>Workload</p>
-        <BorderLinearProgress variant="determinate" value={workload} />
+        <Box
+          sx={{
+            alignItems: "center",
+            width: "70%",
+            height: "30%",
+          }}
+        >
+          <ProgressBar
+            completed={workload}
+            bgColor="#001AFF"
+            width="100%"
+            height="100%"
+          />
+        </Box>
       </Box>
       <RemoveConnectionModal uId={uId} style={removeButtonStyles} />
     </Box>

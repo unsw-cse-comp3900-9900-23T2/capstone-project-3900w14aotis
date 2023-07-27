@@ -45,7 +45,6 @@ const ProfilePage = () => {
   const profileUpdated = useSelector((state) => state.profileUpdated);
 
   const sendConnectionHandler = async () => {
-    console.log("gwef");
     try {
       const user = getAuth();
       const res = await sendConnectionFetch(email, user.currentUser.uid);
