@@ -2,15 +2,14 @@ import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { displayError, displaySuccess, fileToDataUrl } from "../utils/helpers";
 import Box from "@mui/material/Box";
-import BackButton from "../components/BackButton";
-import { Button } from "@mui/material";
+// import BackButton from "../components/BackButton";
+// import { Button } from "@mui/material";
 import UpdateProfileModal from "./UpdateProfileModal";
-import ProfileCard from "./ProfileCard";
 import {
   profileAchievementsFetch,
   profileDetailFetch,
 } from "../api/profile.js";
-import { allRatingsFetch } from "../api/rating.js";
+// import { allRatingsFetch } from "../api/rating.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";

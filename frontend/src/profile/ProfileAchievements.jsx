@@ -6,29 +6,56 @@ import styles from "./styles/ProfileCard.module.css";
 import AchievementSmallCard from "./AchievementSmallCard";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import {
+  checkHiddenAchievementsFetch,
+  setHiddenAchievementsFetch
+} from "../api/profile.js";
 
 const ProfileAchievements = ({ achievements }) => {
 
   const [authUserId, setAuthUserId] = useState("");
   const { userId } = useParams();
-  const [buttonText, setButtonText] = useState("Hide");
-  const [showAchievements, setShowAchievements] = useState(true);
+  const [buttonText, setButtonText] = useState();
+  const [hideAchievements, setHideAchievements] = useState();
 
-  const hideAchievementsHandler = () => {
+  const hideAchievementsHandler = async () => {
     if (buttonText === "Hide") {
       setButtonText("Show");
+      console.log("line 24");
     } else {
       setButtonText("Hide");
+      console.log("line 27");
     }
-    setShowAchievements(!showAchievements);
+    // Set both local variable and database variable
+    const achievementState = await checkHiddenAchievementsAPI(userId);
+    setHideAchievements(!hideAchievements);
+    setHiddenAchievementsAPI(userId, !achievementState);
   }
 
+  // API call to check achievements hidden status
+  const checkHiddenAchievementsAPI = async (userId) => {
+    const checkHiddenAchievementsResponse = await checkHiddenAchievementsFetch(userId);
+    const achievementStatus = checkHiddenAchievementsResponse.detail.message;
+    setHideAchievements(achievementStatus);
+    return achievementStatus;
+  };
+  
+  // API call to set achievements hidden status
+  const setHiddenAchievementsAPI = async (userId, hidden) => {
+    const setHiddenAchievementsResponse = await setHiddenAchievementsFetch(userId, hidden);
+  }
+  
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
         setAuthUserId(user.uid);
+        // Check if achievements of current user's profile should be hidden or shown
+        checkHiddenAchievementsAPI(userId).then(response => {
+          const btnText = response ? "Show" : "Hide";
+          setButtonText(btnText);
+        });
       }
     });
   }, []);
@@ -74,14 +101,15 @@ const ProfileAchievements = ({ achievements }) => {
             }}
           >
             {achievements.map((achievement) => {
-              { return showAchievements ? <AchievementSmallCard achievementDetails={achievement} /> : null }
+              { return hideAchievements ? null : <AchievementSmallCard achievementDetails={achievement} /> }
             })}
-            {showAchievements ? null :
+            {hideAchievements ?
               <Box sx={{
                 justifyContent: "center",
               }}>
                 Achievements are hidden.
               </Box>
+              : null
             }
           </Box>
         </PerfectScrollbar>

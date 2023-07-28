@@ -5,7 +5,6 @@ import { Box, Button } from "@mui/material";
 import styles from "./styles/ProfileCard.module.css";
 import Chart from "react-apexcharts";
 import "react-perfect-scrollbar/dist/css/styles.css";
-import PerfectScrollbar from "react-perfect-scrollbar";
 import { allRatingsFetch } from "../api/rating.js";
 import { displayError } from "../utils/helpers";
 
@@ -56,46 +55,44 @@ const ProfileRatings = () => {
         >
           <h3 className={styles.statusHeading}>Ratings</h3>
         </Box>
-        <PerfectScrollbar>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              padding: "2%",
-              paddingLeft: "5%",
-              paddingRight: "5%",
-              height: "80%",
-            }}
-          >
-            <Chart
-              options={{
-                chart: {
-                  type: "bar",
-                },
-                plotOptions: {
-                  bar: {
-                    borderRadius: 4,
-                    horizontal: true,
-                  }
-                },
-                dataLabels: {
-                  enabled: false
-                },
-                xaxis: {
-                  categories: ratingNames,
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            padding: "2%",
+            paddingLeft: "5%",
+            paddingRight: "5%",
+            height: "80%",
+          }}
+        >
+          <Chart
+            options={{
+              chart: {
+                type: "bar",
+              },
+              plotOptions: {
+                bar: {
+                  borderRadius: 4,
+                  horizontal: true,
                 }
-              }}
-              series={[{
-                data: ratingValues
-              }]}
-              type="bar"
-              width="100%"
-              height="100%"
-              className={styles.ratingsChart}
-            />
-          </Box>
-        </PerfectScrollbar>
+              },
+              dataLabels: {
+                enabled: false
+              },
+              xaxis: {
+                categories: ratingNames,
+              }
+            }}
+            series={[{
+              data: ratingValues
+            }]}
+            type="bar"
+            width="100%"
+            height="100%"
+            className={styles.ratingsChart}
+          />
+        </Box>
       </Box>
     </>
   );
