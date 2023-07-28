@@ -31,9 +31,18 @@ const JoinProject = () => {
         projectId,
         user.currentUser.uid
       );
-      console.log(joinProjectFetchResponse);
-      navigate(`/otis/${joinProjectFetchResponse.detail.message}/tasks`);
-      displaySuccess(`Successfully joined project ${projectId}`);
+
+      if (joinProjectFetchResponse.code === "200") {
+        console.log(joinProjectFetchResponse);
+        navigate(`/otis/${joinProjectFetchResponse.detail.message}/tasks`);
+        displaySuccess(`Successfully joined project ${projectId}`);
+      } else {
+        if (joinProjectFetchResponse.detail === "Not Found") {
+          displayError(`${joinProjectFetchResponse.detail}`);
+        } else {
+          displayError(`${joinProjectFetchResponse.detail.message}`);
+        }
+      }
     } catch (error) {
       displayError(`${error.message}`);
     }

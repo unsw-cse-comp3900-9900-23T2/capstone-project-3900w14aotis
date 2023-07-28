@@ -6,6 +6,7 @@ import { allTasksFetch } from "../api/task";
 import { allProjectsFetch } from "../api/project";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { sortTasksSoonest } from "../utils/helpers";
+import SummaryAchievements from "./SummaryAchievements";
 
 const DashboardPage = () => {
   const [todoTasks, setTodoTasks] = useState([]);
@@ -92,15 +93,20 @@ const DashboardPage = () => {
             tasks={todoTasks}
             isLoading={loading}
           />
-          <SummaryTaskCards status={"IN PROGRESS"} tasks={doingTasks} />
+          <SummaryTaskCards
+            status={"IN PROGRESS"}
+            tasks={doingTasks}
+            isLoading={loading}
+          />
         </Box>
         <Box
           sx={{
             display: "flex",
             flex: "1",
+            alignItems: "center",
           }}
         >
-          Achievements
+          <SummaryAchievements />
         </Box>
       </Box>
     </Box>
