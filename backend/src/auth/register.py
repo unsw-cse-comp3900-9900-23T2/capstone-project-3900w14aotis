@@ -1,6 +1,7 @@
 from src.config.firestoreUtils import initialiseFirestore
 from src.config.firestoreUtils import auth
 from src.auth.login import signInWithEmailAndPassword
+from src.serverHelper import convertImageToBase64
 
 
 # authRegister takes in 2 parameters, item (representing the taskMaster class) and db(the database). It
@@ -43,9 +44,9 @@ def authRegister(item, db):
             "target": 1,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/innovatorImage.png")
         }
     )
-
     # Initialise New Critic achievement
     achievementCollection.add(
         {
@@ -54,6 +55,7 @@ def authRegister(item, db):
             "target": 1,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/newCriticImage.png")
         }
     )
 
@@ -65,6 +67,7 @@ def authRegister(item, db):
             "target": 5,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/connoisseur.png")
         }
     )
 
