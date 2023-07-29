@@ -1,4 +1,4 @@
-from src.serverHelper import getAchievement, findUser
+from src.serverHelper import getAchievement, findUser, getFromUser
 from google.cloud import firestore
 
 """
@@ -57,7 +57,8 @@ def createNewTask(newTask, projectId, db):
 
     # Assigns task to taskmasters in given newTask object
     for email in newTask.assignees:
-        taskmasterRef = findUser("email", email.lower(), db)
+        emailLower = email.lower()
+        taskmasterRef = findUser("email", emailLower, db)
         taskmasterRef.update({"tasks": firestore.ArrayUnion([taskRef[1].id])})
-
+        
     return taskRef[1].id
