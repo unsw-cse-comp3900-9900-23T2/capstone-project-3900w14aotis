@@ -27,6 +27,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   const [assignees, setAssignees] = useState([]);
   const [priority, setPriority] = useState("");
   const [status, setStatus] = useState(defaultStatus);
+  const [emptyDeadline, setEmptyDeadline] = useState(true);
 
   const onChangeTitle = (value) => setTitle(value);
   const onChangeDescription = (value) => setDescription(value);
@@ -48,6 +49,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
       }
     }
   };
+
   const handleDelete = (deleteEmail) => {
     setAssignees(assignees.filter((email) => email !== deleteEmail));
   };
@@ -75,6 +77,11 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   };
 
   const createTask = async (creatorId, convertedDeadline, finalAssignees) => {
+    if (!status) {
+      displayError("Please select a status");
+      setAssignees([]);
+      return;
+    }
     const createTaskFetchResponse = await createTaskFetch(
       projectId,
       title,
@@ -85,23 +92,26 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
       status,
       creatorId
     );
-
     dispatch(addTaskAction());
     closeFunction();
     setAssignees([]);
     setDeadline("");
+    setStatus(defaultStatus);
+    setPriority("");
+    setTitle("");
+    setDescription("");
+    setEmail("");
     displaySuccess("Successfully created task!");
   };
 
   const createTaskButtonHandler = async () => {
     // TODO: CONSIDER OPTIONAL EMPTY DEADLINE
-    if (deadline.length === 0) {
-      displayError("Please select a deadline");
-      return;
+    // console.log(Date.parse(new Date(0)));
+    let convertedDeadline = null;
+    if (!emptyDeadline) {
+      const date = new Date(deadline);
+      convertedDeadline = date.toISOString();
     }
-    const date = new Date(deadline);
-    const convertedDeadline = date.toISOString();
-
     try {
       const finalAssignees = [...assignees];
       const auth = getAuth();
@@ -258,7 +268,10 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
                 <DatePicker
                   label={"Deadline"}
                   value={deadline}
-                  onChange={(deadline) => setDeadline(deadline)}
+                  onChange={(deadline) => {
+                    setEmptyDeadline(false);
+                    setDeadline(deadline);
+                  }}
                   format="DD-MM-YYYY"
                 />
               </LocalizationProvider>

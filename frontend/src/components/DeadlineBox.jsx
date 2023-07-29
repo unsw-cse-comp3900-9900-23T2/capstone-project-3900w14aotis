@@ -5,7 +5,6 @@ const DeadlineBox = ({ deadline, status, width, height }) => {
   const [color, setColor] = useState("#E5E5E5");
   const [deadlineString, setDeadlineString] = useState("");
   const [borderColor, setBorderColor] = useState("#8A8A8A");
-
   useEffect(() => {
     const date = new Date(deadline).toString().split(" ");
     setDeadlineString(`${date[1]} ${date[2]}, ${date[3]}`);
@@ -33,7 +32,9 @@ const DeadlineBox = ({ deadline, status, width, height }) => {
     }
   }, []);
 
-  return (
+  return Date.parse(deadline) === 0 ? (
+    <></>
+  ) : (
     <Box
       sx={{
         backgroundColor: color,
