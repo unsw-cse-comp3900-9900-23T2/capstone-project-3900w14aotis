@@ -100,16 +100,18 @@ const ProfileAchievements = ({ achievements }) => {
               padding: "2%",
             }}
           >
-            {achievements.map((achievement) => {
+            {/* {achievements.map((achievement) => {
               { return hideAchievements ? null : <AchievementSmallCard achievementDetails={achievement} /> }
-            })}
+            })} */}
             {hideAchievements ?
               <Box sx={{
                 justifyContent: "center",
               }}>
                 Achievements are hidden.
               </Box>
-              : null
+              : achievements.map((achievement) => {
+                { return <AchievementSmallCard achievementDetails={achievement} /> }
+              })
             }
           </Box>
         </PerfectScrollbar>

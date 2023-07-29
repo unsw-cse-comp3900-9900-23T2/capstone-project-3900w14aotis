@@ -104,7 +104,6 @@ const ProfilePage = () => {
 
   // Get all projects
   const getAllProjects = async (uid) => {
-    // console.log("uid", uid);
     const userProjectsPromise = await allProjectsFetch(uid);
     const projects = userProjectsPromise.detail.message;
     setProjects(projects);
@@ -257,7 +256,7 @@ const ProfilePage = () => {
               </Box>
               <ProfileRatings />
               <ProfileAchievements achievements={achievements} />
-              <ProfileAssignedTasks tasks={allTasks} />
+              <ProfileAssignedTasks projectId={projects[0]} tasks={allTasks} />
             </Box>
           </Box>
         </>

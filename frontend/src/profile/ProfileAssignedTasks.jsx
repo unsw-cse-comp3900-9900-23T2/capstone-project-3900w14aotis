@@ -1,13 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/ProfileCard.module.css";
 import AssignedTaskCard from "./AssignedTaskCard";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import ViewTaskModal from "../components/ViewTaskModal";
 
-const ProfileAssignedTasks = ({ tasks }) => {
+const ProfileAssignedTasks = ({ projectId, tasks }) => {
+
+  // const [isOpen, setIsOpen] = useState(false);
+  const [viewTaskModalOpen, setViewTaskModalOpen] = useState(false);
+  const [taskId, setTaskId] = useState("");
+
+  const closeModalHandler = () => {
+    // setIsOpen(false);
+    setViewTaskModalOpen(false);
+  };
+
+  const viewTaskHandler = (taskId) => {
+    setTaskId(taskId);
+    setViewTaskModalOpen(true);
+  };
+
+
   return (
     <>
+      <ViewTaskModal
+        isOpen={viewTaskModalOpen}
+        onClose={closeModalHandler}
+        projectId={projectId}
+        taskId={taskId}
+        setRemovedTaskId={() => {console.log("Remove task bin clicked! Remove task from profile functionality not implemented.")}}
+      />
       <Box
         sx={{
           width: "90%",
@@ -46,9 +70,14 @@ const ProfileAssignedTasks = ({ tasks }) => {
                 width: "100%",
               }}
             >
-              {tasks.map((task) => {
+              {tasks.length == 0 ?
+                <Box>
+                  No assigned tasks.
+                </Box>
+              :
+              tasks.map((task) => {
                 return (
-                  <AssignedTaskCard task={task} viewTaskFunction={() => {console.log("VIEW TASK clicked")}}/>
+                  <AssignedTaskCard task={task} viewTaskFunction={() => viewTaskHandler(task.taskID)}/>
                 )
               })}
             </Box>
