@@ -21,7 +21,7 @@ const ProfileAchievements = ({ achievements }) => {
   const hideAchievementsHandler = async () => {
     if (buttonText === "Hide") {
       setButtonText("Show");
-      console.log("line 24");
+      console.log("24");
     } else {
       setButtonText("Hide");
       console.log("line 27");
