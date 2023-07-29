@@ -108,3 +108,31 @@ export const removeConnectionFetch = async (currUser, uId) => {
   const removeConnectionResponse = await removeConnectionPromise.json();
   return removeConnectionResponse;
 };
+
+export const checkConnectionFetch = async (currUser, otherUser) => {
+  const requestOption = {
+    method: "GET",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+  };
+
+  const checkConnectionPromise = await fetch(
+    `${API_URL}/connections/checkConnected/${currUser}/${otherUser}`,
+    requestOption
+  );
+  const checkConnectionResponse = await checkConnectionPromise.json();
+  return checkConnectionResponse;
+};
+
+export const checkPendingFetch = async (uId, sendingUser) => {
+  const requestOption = {
+    method: "GET",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+  };
+
+  const checkPendingPromise = await fetch(
+    `${API_URL}/connections/checkPending/${uId}/${sendingUser}`,
+    requestOption
+  );
+  const checkPendingResponse = await checkPendingPromise.json();
+  return checkPendingResponse;
+};

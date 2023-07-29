@@ -44,6 +44,14 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
     borderRadius: "50%",
   };
 
+  const getColor = () => {
+    if (workload === -1) return "red";
+    if (workload >= 0 && workload <= 30) return "green";
+    if (workload > 30 && workload <= 70) return "blue";
+    if (workload > 70 && workload <= 100) return "orange";
+    return "#001AFF"; // Default color
+  };
+
   return (
     <Box
       sx={{
@@ -93,10 +101,11 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
           }}
         >
           <ProgressBar
-            completed={workload}
-            bgColor="#001AFF"
+            completed={workload === -1 ? 100 : workload}
+            bgColor={getColor()}
             width="100%"
             height="100%"
+            customLabel={workload === -1 ? "OVERLOADED" : undefined}
           />
         </Box>
       </Box>

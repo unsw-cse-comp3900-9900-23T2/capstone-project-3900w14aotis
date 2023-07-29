@@ -22,6 +22,7 @@ import styles from "./styles/ProfileCard.module.css";
 import CustomButton from "../components/CustomButton";
 import Loading from "../components/Loading";
 import { sendConnectionFetch } from "../api/connections";
+import { checkPendingFetch, checkConnectionFetch } from "../api/connections";
 
 const ProfilePage = () => {
   // Initialise profile details
@@ -36,13 +37,14 @@ const ProfilePage = () => {
   const [authUserId, setAuthUserId] = useState("");
   const [allTasks, setAllTasks] = useState([]);
   const [projects, setProjects] = useState([]);
-  const [pendingConnection, setPendingConnection] = useState(false);
+  const [pending, setPending] = useState(false);
   const [connected, setConnected] = useState(false);
 
   const navigate = useNavigate();
   const { userId } = useParams();
 
   const profileUpdated = useSelector((state) => state.profileUpdated);
+  const connectionSent = useSelector((state) => state.connectionSent);
 
   const sendConnectionHandler = async () => {
     try {
@@ -57,6 +59,45 @@ const ProfilePage = () => {
       displayError(`${error.message}`);
     }
   };
+
+  const getConnectedStatus = async () => {
+    try {
+      const user = getAuth();
+
+      const checkConnectedResponse = await checkConnectionFetch(
+        user.currentUser.uid,
+        userId
+      );
+
+      const isConnected = !!checkConnectedResponse; // Check if response is truthy (connected) or falsy (not connected)
+
+      setConnected(isConnected);
+    } catch (error) {
+      displayError(error);
+    }
+  };
+
+  const getPendingStatus = async () => {
+    try {
+      const user = getAuth();
+
+      const checkPendingResponse = await checkPendingFetch(
+        user.currentUser.uid,
+        userId
+      );
+
+      const isPending = !!checkPendingResponse; // Check if response is truthy (pending) or falsy (not pending)
+
+      setPending(isPending);
+    } catch (error) {
+      displayError(error);
+    }
+  };
+
+  useEffect(() => {
+    getConnectedStatus();
+    getPendingStatus();
+  }, [userId, profileUpdated]);
 
   const backButtonHandler = () => {
     try {
@@ -267,10 +308,33 @@ const ProfilePage = () => {
                 ) : (
                   <>
                     <h4 className={styles.email}>{`${email}`}</h4>
-                    <CustomButton
-                      text="Connect"
-                      onClickFunction={sendConnectionHandler}
-                    />
+
+                    {pending || connected ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          width: "75%",
+                          height: "60px",
+                          background: "#4857DE",
+                          borderRadius: "10px",
+                          fontFamily: "Capriola",
+                          textTransform: "none",
+                          boxShadow: "0px 4px 10px 0px #7EB6FF",
+                          padding: "1.5% 4%",
+                          maxWidth: "70%",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          color: "#FFF",
+                        }}
+                      >
+                        <h4>{pending ? "Pending" : "Connected"}</h4>
+                      </Box>
+                    ) : (
+                      <CustomButton
+                        text="Connect"
+                        onClickFunction={sendConnectionHandler}
+                      />
+                    )}
                   </>
                 )}
               </Box>

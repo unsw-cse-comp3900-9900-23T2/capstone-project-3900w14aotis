@@ -1,11 +1,11 @@
 // Reducer that changes the state of whether profile has been updated
-const updateProfileReducer = (state = 0, action) => {
+const sendConnectionReducer = (state = 0, action) => {
   switch (action.type) {
-    case "UPDATE-PROFILE":
+    case "SEND-CONNECTION":
       return state + 1;
     default:
       return state;
   }
 };
 
-export default updateProfileReducer;
+export default sendConnectionReducer;
