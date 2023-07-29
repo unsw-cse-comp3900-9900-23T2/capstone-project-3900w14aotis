@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+// import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import styles from "./styles/ProfileCard.module.css";
 import Chart from "react-apexcharts";
 import "react-perfect-scrollbar/dist/css/styles.css";

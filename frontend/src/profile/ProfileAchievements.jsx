@@ -52,7 +52,7 @@ const ProfileAchievements = ({ achievements }) => {
         // User is signed in
         setAuthUserId(user.uid);
         // Check if achievements of current user's profile should be hidden or shown
-        checkHiddenAchievementsAPI(userId).then(response => {
+        checkHiddenAchievementsAPI(user.uid).then(response => {
           const btnText = response ? "Show" : "Hide";
           setButtonText(btnText);
         });
