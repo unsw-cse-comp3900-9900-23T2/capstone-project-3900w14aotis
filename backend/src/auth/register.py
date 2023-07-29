@@ -29,6 +29,13 @@ def authRegister(item, db):
             "pendingConnections": item.pendingConnections,
             "profileImage": item.profileImage,
             "coverProfileImage": item.coverProfileImage,
+            "Rating": {
+                "Very Happy": [],
+                "Happy": [],
+                "Neutral": [],
+                "Sad": [],
+                "Very Sad": [],
+            },
         }
     )
 
