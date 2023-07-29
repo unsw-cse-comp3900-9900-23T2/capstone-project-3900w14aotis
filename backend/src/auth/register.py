@@ -30,6 +30,13 @@ def authRegister(item, db):
             "profileImage": item.profileImage,
             "coverProfileImage": item.coverProfileImage,
             "achievementHidden": False,
+            "Rating": {
+                "Very Happy": [],
+                "Happy": [],
+                "Neutral": [],
+                "Sad": [],
+                "Very Sad": [],
+            },
         }
     )
 
