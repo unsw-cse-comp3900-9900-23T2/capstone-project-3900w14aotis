@@ -67,7 +67,7 @@ def authRegister(item, db):
             "target": 5,
             "currentValue": 0,
             "status": "In Progress",
-            "image": convertImageToBase64("./src/auth/images/connoisseur.png")
+            "image": convertImageToBase64("./src/auth/images/connoisseurImage.png")
         }
     )
 
@@ -79,6 +79,7 @@ def authRegister(item, db):
             "target": 1,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/taskFledglingImage.jpg")     
         }
     )
 
@@ -90,6 +91,7 @@ def authRegister(item, db):
             "target": 5,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/taskMasterImage.png") 
         }
     )
 
@@ -101,6 +103,7 @@ def authRegister(item, db):
             "target": 100,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/taskWizardImage.png") 
         }
     )
 
