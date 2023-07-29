@@ -45,6 +45,10 @@ const ProfileAssignedTasks = ({ tasks }) => {
   };
 
   useEffect(() => {
+    setTasksAfterSearch(tasks);
+  }, [tasks]);
+
+  useEffect(() => {
     queryTasks();
   }, [searchQuery]);
 
@@ -109,6 +113,7 @@ const ProfileAssignedTasks = ({ tasks }) => {
               {tasksAfterSearch.map((task) => {
                 return (
                   <AssignedTaskCard
+                    key={task.taskID}
                     task={task}
                     viewTaskFunction={() => {
                       console.log("VIEW TASK clicked");

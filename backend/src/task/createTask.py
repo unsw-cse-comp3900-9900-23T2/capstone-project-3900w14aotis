@@ -60,5 +60,5 @@ def createNewTask(newTask, projectId, db):
         emailLower = email.lower()
         taskmasterRef = findUser("email", emailLower, db)
         taskmasterRef.update({"tasks": firestore.ArrayUnion([taskRef[1].id])})
-        
+
     return taskRef[1].id
