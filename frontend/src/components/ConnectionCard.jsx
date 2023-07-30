@@ -12,9 +12,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProgressBar from "@ramonak/react-progress-bar";
 import styles from "./styles/Connections.module.css";
+import Loading from "../components/Loading";
 
 function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
   const [workload, setWorkload] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
@@ -27,6 +29,7 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
       const workload = workloadResponse.detail.message;
 
       setWorkload(workload);
+      setLoading(false);
     } catch (error) {
       displayError(error);
     }
@@ -93,21 +96,27 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
         }}
       >
         <p>Workload</p>
-        <Box
-          sx={{
-            alignItems: "center",
-            width: "70%",
-            height: "30%",
-          }}
-        >
-          <ProgressBar
-            completed={workload === -1 ? 100 : workload}
-            bgColor={getColor()}
-            width="100%"
-            height="100%"
-            customLabel={workload === -1 ? "OVERLOADED" : undefined}
-          />
-        </Box>
+        {loading ? (
+          <Loading />
+        ) : (
+          <Box
+            sx={{
+              alignItems: "center",
+              width: "70%",
+              height: "30%",
+            }}
+          >
+            <ProgressBar
+              completed={workload === -1 ? 100 : workload}
+              bgColor={getColor()}
+              width="100%"
+              height="100%"
+              customLabel={workload === -1 ? "OVERLOADED" : undefined}
+              labelAlignment="outside "
+              baseBgColor="#B6B6B6"
+            />
+          </Box>
+        )}
       </Box>
       <RemoveConnectionModal uId={uId} style={removeButtonStyles} />
     </Box>

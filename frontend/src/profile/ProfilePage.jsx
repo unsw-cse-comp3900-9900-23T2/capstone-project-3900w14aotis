@@ -24,6 +24,7 @@ import Loading from "../components/Loading";
 import CircleLoading from "../components/CircleLoading";
 import { sendConnectionFetch } from "../api/connections";
 import { checkPendingFetch, checkConnectionFetch } from "../api/connections";
+import RemoveConnectionModal from "../components/RemoveConnectionModal";
 
 const ProfilePage = () => {
   // Initialise profile details
@@ -47,7 +48,6 @@ const ProfilePage = () => {
   const { userId } = useParams();
 
   const profileUpdated = useSelector((state) => state.profileUpdated);
-  const connectionSent = useSelector((state) => state.connectionSent);
 
   const sendConnectionHandler = async () => {
     try {
@@ -65,6 +65,7 @@ const ProfilePage = () => {
     }
   };
 
+  const removeConnectionHandler = async () => {};
   const getConnectedStatus = async () => {
     try {
       const user = getAuth();
@@ -78,8 +79,9 @@ const ProfilePage = () => {
 
       setConnected(isConnected);
       if (isConnected) {
-        setConnectText("connected");
+        setConnectText("remove");
       }
+      setCircleLoading(false);
     } catch (error) {
       displayError(error);
     }
@@ -100,6 +102,7 @@ const ProfilePage = () => {
       if (isPending) {
         setConnectText("pending");
       }
+      setCircleLoading(false);
     } catch (error) {
       displayError(error);
     }
@@ -319,12 +322,22 @@ const ProfilePage = () => {
                   <></>
                 ) : (
                   <>
-                    <h4 className={styles.email}>{`${email}`}</h4>
-                    <CustomButton
-                      text={connectText}
-                      onClickFunction={sendConnectionHandler}
-                      disabled={pending || connected}
-                    />
+                    {circleLoading ? (
+                      <CircleLoading />
+                    ) : (
+                      <>
+                        <h4 className={styles.email}>{`${email}`}</h4>
+                        <CustomButton
+                          text={connectText}
+                          onClickFunction={
+                            connected
+                              ? removeConnectionHandler
+                              : sendConnectionHandler
+                          }
+                          disabled={pending}
+                        />
+                      </>
+                    )}
                   </>
                 )}
               </Box>
