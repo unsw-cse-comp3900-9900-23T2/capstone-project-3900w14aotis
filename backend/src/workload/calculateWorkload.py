@@ -83,3 +83,7 @@ def calculate(currUser, db):
         return OVERLOADED
 
     return totalWorkload
+
+def getWorkloadValue(currUser, db):
+    workloadStored = getFromUser("uid", currUser, "workload", db)
+    return workloadStored

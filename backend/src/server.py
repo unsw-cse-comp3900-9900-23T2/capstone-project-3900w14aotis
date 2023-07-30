@@ -26,7 +26,7 @@ from src.connections.getConnections import getConnections
 from src.connections.connectionHelper import isRequestPending, isConnectedTo
 from src.rating.addRating import addRating
 from src.connections.connectionRemove import unfriend
-from src.workload.calculateWorkload import calculate, updateWorkload
+from src.workload.calculateWorkload import updateWorkload, getWorkloadValue
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -828,7 +828,7 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
         )
 
 
-@app.get("/workload/calculate/{currUser}", summary="calculate workload for a person")
+@app.post("/workload/calculate/{currUser}", summary="calculate workload for a person")
 async def calculateWorkload(currUser: str):
     """
     Calculates workload for a given user
@@ -837,8 +837,8 @@ async def calculateWorkload(currUser: str):
         currUser (str): user Id for the user you want to calculate workload
 
     Returns:
-        workload (float): a number that is <100 which shows how much workload they have
-                        this can be taken as a percentage
+        workload (float): success message with a number that is <100 which shows 
+                how much workload they have (this can be taken as a percentage)
     """
     try:
         workload = updateWorkload(currUser, db)
@@ -854,4 +854,30 @@ async def calculateWorkload(currUser: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error calculating workload"},
+        )
+
+@app.get("/workload/get/{currUser}", summary="Gets the workload of a user")
+async def getWorkload(currUser: str):
+    """
+    Gets the workload stored for a given user
+
+    Args:
+        currUser (str): user Id for the user you want to get the workload % of
+    
+    Returns:
+        workloadValue (float): number that is a percentage of their workload out
+                        of 100. A value of -1 means overloaded (>100%).
+    """
+    try: 
+        workloadValue = getWorkloadValue(currUser, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": workloadValue,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error retrieving workload value"},
         )
