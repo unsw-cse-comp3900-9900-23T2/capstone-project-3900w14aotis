@@ -24,3 +24,7 @@
 .modalTitle {
   width: 50%;
 }
+
+.profilePicture {
+  border-radius: 50%;
+}

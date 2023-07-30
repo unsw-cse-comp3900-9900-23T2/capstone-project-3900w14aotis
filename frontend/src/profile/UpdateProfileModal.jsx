@@ -1,7 +1,7 @@
 import { Modal, Fade, Box } from "@mui/material";
 // import EditIcon from "@mui/icons-material/Edit";
 import { Icon } from "@iconify/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/ProfileModal.module.css";
 import TextInput from "../components/TextInput";
@@ -21,8 +21,13 @@ import { useDispatch } from "react-redux";
 import { updateProfileAction } from "../profile/state/updateProfileAction";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import UploadImageButton from "./UploadImageButton";
+import Avatar from "@mui/material/Avatar";
 
 const UpdateProfileModal = () => {
+
+  const fileInput = useRef(null);
+
   // Initialise profile details
   const [userDetails, setUserDetails] = useState({});
   const [firstName, setFirstName] = useState("");
@@ -292,14 +297,30 @@ const UpdateProfileModal = () => {
               </Box>
               <Box sx={inputContainerSx}>
                 <h3>Profile Image:</h3>
-                <ImageInput
+                {/* <ImageInput
                   type="PROFILE"
                   userDetails={userDetails}
                   width={"200px"}
                   height={"200px"}
                   onChangeFunction={onChangeProfileImage}
                   onDeleteFunction={onDeleteProfileImage}
+                /> */}
+                
+                <input
+                  type="image"
+                  src={profileImage ? profileImage : "/Default-Avatar.png"}
+                  width={"200px"}
+                  height={"200px"}
+                  className={styles.profilePicture}
                 />
+                <input
+                  type='file'
+                  name='image'
+                  ref={fileInput}
+                  onChange={onChangeProfileImage}
+                  style={{ display: 'none' }}
+                />
+                <UploadImageButton fileInput={fileInput}/>
               </Box>
               <Box sx={inputContainerSx}>
                 <h3>Cover Photo:</h3>

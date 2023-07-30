@@ -7,6 +7,7 @@ import { Box } from "@mui/system";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from '@mui/material/IconButton';
+import Avatar from "@mui/material/Avatar";
 
 const ImageInput = ({
   type,
@@ -18,7 +19,7 @@ const ImageInput = ({
 }) => {
   const [image, setImage] = useState("");
 
-  const fileInput = useRef(null)
+  const fileInput = useRef(null);
 
   return (
     <Box
@@ -31,11 +32,34 @@ const ImageInput = ({
       }}
     >
       {type === "PROFILE" ? (
-        <ProfilePicture
-          userDetails={userDetails}
-          imgWidth={width}
-          imgHeight={height}
+        // <ProfilePicture
+        //   userDetails={userDetails}
+        //   imgWidth={width}
+        //   imgHeight={height}
+        // />
+
+
+        <Avatar
+          sx={{
+            width: `${width} !important`,
+            height: `${height} !important`,
+            // "&:hover": {
+            //   cursor: "pointer",
+            // },
+          }}
+          // src="/Jira-Emblem.png"
+          src={userDetails.profileImage}
+          alt={`${userDetails.firstName} ${userDetails.lastName}`}
+          // onClick={() => {
+          //   handleClick();
+          // }}
+          className={styles.profilePicture}
         />
+
+
+        // <input type="image" src={userDetails.profileImage} width={width} height={height} />
+        
+        
       ) : (
         <CoverPicture
           userDetails={userDetails}
