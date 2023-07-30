@@ -77,5 +77,9 @@ def deleteAssignee(projectId, taskId, email, db):
 
     # remove task from taskmaster's task list
     taskmasterRef.update({"tasks": firestore.ArrayRemove([taskId])})
+    
+    # update workload value:
+    userId = getFromUser("email", userEmail, "uid", db)
+    updateWorkload(userId, db)
 
     return email

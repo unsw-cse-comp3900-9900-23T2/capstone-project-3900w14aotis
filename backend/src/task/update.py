@@ -1,4 +1,5 @@
-from src.serverHelper import getAchievement, findUser
+from src.serverHelper import getAchievement, findUser, getFromUser
+from src.workload.calculateWorkload import updateWorkload
 
 
 def updateTask(projectId, taskId, db, item):
@@ -65,6 +66,10 @@ def updateTask(projectId, taskId, db, item):
                     }
                 )
 
+    initialStatus = taskDocRef.get().get("Status")
+    initialPriority = taskDocRef.get().get("Priority")
+    initialDeadline = taskDocRef.get().get("Deadline")
+
     taskDocRef.update(
         {
             "Title": item.title,
@@ -74,4 +79,12 @@ def updateTask(projectId, taskId, db, item):
             "Status": item.status,
         }
     )
+
+    # if status changed:
+    if (initialStatus != item.status or initialPriority != item.priority or initialDeadline != item.deadline):
+        # update workload value
+        for assigneeEmail in assigneeList:
+            assigneeId = getFromUser("email", assigneeEmail, "uid", db)
+            updateWorkload(assigneeId, db)
+
     return taskDict
