@@ -828,20 +828,20 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
         )
 
 
-@app.post("/workload/calculate/{currUser}", summary="calculate workload for a person")
-async def calculateWorkload(currUser: str):
+@app.post("/workload/calculate/{userId}", summary="calculate workload for a person")
+async def calculateWorkload(userId: str):
     """
     Calculates workload for a given user
 
     Args:
-        currUser (str): user Id for the user you want to calculate workload
+        userId (str): user Id for the user you want to calculate workload
 
     Returns:
         workload (float): success message with a number that is <100 which shows 
                 how much workload they have (this can be taken as a percentage)
     """
     try:
-        workload = updateWorkload(currUser, db)
+        workload = updateWorkload(userId, db)
         return {
             "detail": {
                 "code": 200,
@@ -856,20 +856,20 @@ async def calculateWorkload(currUser: str):
             detail={"code": "404", "message": "Error calculating workload"},
         )
 
-@app.get("/workload/get/{currUser}", summary="Gets the workload of a user")
-async def getWorkload(currUser: str):
+@app.get("/workload/get/{userId}", summary="Gets the workload of a user")
+async def getWorkload(userId: str):
     """
     Gets the workload stored for a given user
 
     Args:
-        currUser (str): user Id for the user you want to get the workload % of
+        userId (str): user Id for the user you want to get the workload % of
     
     Returns:
         workloadValue (float): number that is a percentage of their workload out
                         of 100. A value of -1 means overloaded (>100%).
     """
     try: 
-        workloadValue = getWorkloadValue(currUser, db)
+        workloadValue = getWorkloadValue(userId, db)
         return {
             "detail": {
                 "code": 200,

@@ -14,9 +14,9 @@ DONE_STATUS = "Done"
 # or: "1970-01-01T00:00:00+00:00"
 NO_DATE = datetime.fromtimestamp(0, timezone.utc)
 
-def updateWorkload(currUser, db):
-    workloadValue = calculate(currUser, db)
-    userRef = findUser("uid", currUser, db)
+def updateWorkload(userId, db):
+    workloadValue = calculate(userId, db)
+    userRef = findUser("uid", userId, db)
     userRef.update({"workload": workloadValue})
     return f"Workload updated with value {workloadValue}"
 
@@ -84,6 +84,6 @@ def calculate(currUser, db):
 
     return totalWorkload
 
-def getWorkloadValue(currUser, db):
-    workloadStored = getFromUser("uid", currUser, "workload", db)
+def getWorkloadValue(userId, db):
+    workloadStored = getFromUser("uid", userId, "workload", db)
     return workloadStored
