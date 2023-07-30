@@ -1,4 +1,4 @@
-from src.serverHelper import getAchievement, findUser, getFromUser
+from src.serverHelper import getAchievement, findUser, getFromUser, getTaskDoc
 from src.workload.calculateWorkload import updateWorkload
 
 
@@ -16,6 +16,7 @@ def updateTask(projectId, taskId, db, item):
     """
     projectDocRef = db.collection("projects").document(projectId)
     taskDocRef = projectDocRef.collection("tasks").document(taskId)
+    taskDoc = getTaskDoc(projectId, taskId, db)
     taskDict = {
         "TaskID": taskId,
         "Task Fledgling": "In Progress",
@@ -25,7 +26,7 @@ def updateTask(projectId, taskId, db, item):
     userRef = findUser("uid", item.creatorId, db)
     userEmail = userRef.get().get("email")
     # If user isnt part of task, return none
-    assigneeList = taskDocRef.get().get("Assignees")
+    assigneeList = taskDoc.get("Assignees")
     if userEmail not in assigneeList:
         return None
 
@@ -66,9 +67,9 @@ def updateTask(projectId, taskId, db, item):
                     }
                 )
 
-    initialStatus = taskDocRef.get().get("Status")
-    initialPriority = taskDocRef.get().get("Priority")
-    initialDeadline = taskDocRef.get().get("Deadline")
+    initialStatus = taskDoc["Status"]
+    initialPriority = taskDoc["Priority"]
+    initialDeadline = taskDoc["Deadline"]
 
     taskDocRef.update(
         {
