@@ -60,7 +60,8 @@ const TasksPage = () => {
       task.Title.toLowerCase().includes(lowerCaseQuery) ||
       task.Description.toLowerCase().includes(lowerCaseQuery) ||
       task.taskID.toLowerCase().includes(lowerCaseQuery) ||
-      date.toLowerCase().includes(lowerCaseQuery)
+      (Date.parse(task.Deadline) !== 0 &&
+        date.toLowerCase().includes(lowerCaseQuery))
     ) {
       return true;
     }

@@ -105,8 +105,6 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   };
 
   const createTaskButtonHandler = async () => {
-    // TODO: CONSIDER OPTIONAL EMPTY DEADLINE
-    // console.log(Date.parse(new Date(0)));
     let convertedDeadline = null;
     if (!emptyDeadline) {
       const date = new Date(deadline);

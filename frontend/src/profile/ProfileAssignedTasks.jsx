@@ -6,6 +6,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import SearchBar from "../components/SearchBar";
 import moment from "moment";
+import { emptyDeadlinesSort } from "../utils/helpers";
 
 const ProfileAssignedTasks = ({ tasks }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,7 +24,8 @@ const ProfileAssignedTasks = ({ tasks }) => {
       task.Title.toLowerCase().includes(lowerCaseQuery) ||
       task.Description.toLowerCase().includes(lowerCaseQuery) ||
       task.taskID.toLowerCase().includes(lowerCaseQuery) ||
-      date.toLowerCase().includes(lowerCaseQuery)
+      (Date.parse(task.Deadline) !== 0 &&
+        date.toLowerCase().includes(lowerCaseQuery))
     ) {
       return true;
     }
@@ -45,7 +47,8 @@ const ProfileAssignedTasks = ({ tasks }) => {
   };
 
   useEffect(() => {
-    setTasksAfterSearch(tasks);
+    const sortedTasks = emptyDeadlinesSort(tasks);
+    setTasksAfterSearch(sortedTasks);
   }, [tasks]);
 
   useEffect(() => {

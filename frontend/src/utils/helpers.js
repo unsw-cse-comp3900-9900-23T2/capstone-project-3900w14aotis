@@ -102,6 +102,19 @@ export const sortTasksLeastImportant = (tasksList) => {
   );
 };
 
+export const emptyDeadlinesSort = (tasksList) => {
+  const sortedTasks = tasksList.sort((a, b) => {
+    if (Date.parse(a.Deadline) === 0) {
+      return 1;
+    } else if (Date.parse(b.Deadline) === 0) {
+      return -1;
+    } else {
+      return new Date(a.Deadline) - new Date(b.Deadline);
+    }
+  });
+  return sortedTasks;
+};
+
 export const stringToColor = (string) => {
   let hash = 0;
   let i;
