@@ -26,7 +26,7 @@ from src.connections.getConnections import getConnections
 from src.connections.connectionHelper import isRequestPending, isConnectedTo
 from src.rating.addRating import addRating
 from src.connections.connectionRemove import unfriend
-from src.workload.calculateWorkload import calculate
+from src.workload.calculateWorkload import calculate, updateWorkload
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -841,7 +841,7 @@ async def calculateWorkload(currUser: str):
                         this can be taken as a percentage
     """
     try:
-        workload = calculate(currUser, db)
+        workload = updateWorkload(currUser, db)
         return {
             "detail": {
                 "code": 200,

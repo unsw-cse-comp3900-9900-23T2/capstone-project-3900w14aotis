@@ -1,4 +1,4 @@
-from src.serverHelper import getFromUser, getProjectID, getFromTask
+from src.serverHelper import getFromUser, getProjectID, getFromTask, findUser
 from src.workload.workloadHelper import usersTaskRating, checkDeadline
 from datetime import timedelta, datetime, timezone
 """
@@ -14,7 +14,11 @@ DONE_STATUS = "Done"
 # or: "1970-01-01T00:00:00+00:00"
 NO_DATE = datetime.fromtimestamp(0, timezone.utc)
 
-
+def updateWorkload(currUser, db):
+    workloadValue = calculate(currUser, db)
+    userRef = findUser("uid", currUser, db)
+    userRef.update({"workload": workloadValue})
+    return f"Workload updated with value {workloadValue}"
 
 def calculate(currUser, db):
     #1. basic weighted task out of total tasks
