@@ -1,8 +1,11 @@
 from src.serverHelper import getFromTask
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 """
 This file contains helper functions for anything to do with workload calculation.
 """
+# Date_Zero is Jan 1, 1970
+# or: "1970-01-01T00:00:00+00:00"
+DATE_ZERO = datetime.fromtimestamp(0, timezone.utc)
 
 def usersTaskRating(projectId, taskId, currUser, db):
     """
@@ -40,7 +43,9 @@ def checkDeadline(projectId, taskId, db):
     """
     taskDeadline = str(getFromTask(projectId, taskId, "Deadline", db))
     dtDeadline = datetime.fromisoformat(taskDeadline)
-    timeNow = datetime.now(timezone.utc)
-    timeDiff = dtDeadline - timeNow
-    
-    return timeDiff
+    if dtDeadline == DATE_ZERO:
+        return dtDeadline
+    else:
+        timeNow = datetime.now(timezone.utc)
+        timeDiff = dtDeadline - timeNow
+        return timeDiff
