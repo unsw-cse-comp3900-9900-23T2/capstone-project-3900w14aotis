@@ -1,6 +1,6 @@
 from google.cloud import firestore
 from fastapi import HTTPException
-from src.serverHelper import findUser, isValidUser, getFromUser
+from src.serverHelper import findUser, isValidUser, getFromUser,getAchievement
 from src.connections.connectionHelper import isConnectedTo, isRequestPending
 """
 This files contains helper functions to help send a connection to a taskmaster
@@ -20,6 +20,10 @@ def sendConnection(userEmail, userId, db):
     Returns:
         message (str): a message to show it was successful
     """
+    connectionDict = {
+        "UserId": userId,
+        "Social Butterfly": "In Progress"
+    }
     lowerEmail = userEmail.lower()
     receivingUser = getFromUser(EMAIL_FIELD, lowerEmail, "uid", db)
 
@@ -47,10 +51,25 @@ def sendConnection(userEmail, userId, db):
             detail={"code": "409", "message": "Connection request is already pending"},
         )
         
+    #If Social Butterfly Achievement is in progress, mark as done
+    socialButterflyAchievement = getAchievement(db, "Social Butterfly", userId)
+    for achievement in socialButterflyAchievement:
+        if achievement.get("status") == "In Progress":
+            achievement.reference.update(
+                {
+                    "currentValue": 1,
+                    "status": "Done",
+                }
+            )
+        connectionDict["Social Butterfly"] = "Done"
+
+
 
     taskmasterRef = findUser(EMAIL_FIELD, lowerEmail, db)
-    
     taskmasterRef.update(
         {"pendingConnections": firestore.ArrayUnion([userId])}
     )
-    return "Connection request successfully sent!"
+
+    
+
+    return connectionDict

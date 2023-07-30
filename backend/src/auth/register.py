@@ -107,6 +107,18 @@ def authRegister(item, db):
         }
     )
 
+    # Initialise Social Butterfly achievement
+    achievementCollection.add(
+        {
+            "achievement": "Social Butterfly",
+            "description": "Send your first connection",
+            "target": 1,
+            "currentValue": 0,
+            "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/socialButterflyImage.png") 
+        }
+    )
+
     token = signInWithEmailAndPassword(email=item.email, password=item.password)
 
     return token
