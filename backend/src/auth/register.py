@@ -119,6 +119,18 @@ def authRegister(item, db):
         }
     )
 
+    # Initialise BNOC achievement
+    achievementCollection.add(
+        {
+            "achievement": "BNOC",
+            "description": "Send 5 connections",
+            "target": 5,
+            "currentValue": 0,
+            "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/bnocImage.png") 
+        }
+    )
+
     token = signInWithEmailAndPassword(email=item.email, password=item.password)
 
     return token

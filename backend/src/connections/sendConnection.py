@@ -22,7 +22,8 @@ def sendConnection(userEmail, userId, db):
     """
     connectionDict = {
         "UserId": userId,
-        "Social Butterfly": "In Progress"
+        "Social Butterfly": "In Progress",
+        "BNOC": "In Progress",
     }
     lowerEmail = userEmail.lower()
     receivingUser = getFromUser(EMAIL_FIELD, lowerEmail, "uid", db)
@@ -62,6 +63,34 @@ def sendConnection(userEmail, userId, db):
                 }
             )
         connectionDict["Social Butterfly"] = "Done"
+    
+    #If BNOC Achievement is in progress, increment by 1, if it reaches the goal
+    #mark as done
+    bnocAchievement = getAchievement(db, "BNOC", userId)
+    for achievement in bnocAchievement:
+        goal = achievement.get("target")
+        currValue = achievement.get("currentValue")
+        #If Achievement is complete, skip
+        if currValue == goal:
+            connectionDict["BNOC"] = "Done"
+            break
+        else:
+            currValue += 1
+            if currValue == goal:
+                achievement.reference.update(
+                    {
+                        "currentValue": currValue,
+                        "status": "Done",
+                    }
+                )
+                connectionDict["BNOC"] = "Done"
+            #Otherwise, only increment by 1
+            else:
+                achievement.reference.update(
+                    {
+                        "currentValue": currValue,
+                    }
+                )
 
 
 
