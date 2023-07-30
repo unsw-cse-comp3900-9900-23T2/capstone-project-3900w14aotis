@@ -1,6 +1,5 @@
-from google.cloud import firestore
 from src.serverHelper import getUserDoc, getAchievement, findUser
-
+from src.workload.calculateWorkload import updateWorkload
 """
 This files contains helper functions to help remove a rating from a task
 """
@@ -99,5 +98,8 @@ def addRating(projectId, taskId, uid, mood, db):
     ratingDict[mood].append(addTaskUserObj)
 
     taskDocRef.update({"Rating": ratingDict})
+
+    # updates workload when rating is changed
+    updateWorkload(uid, db)
 
     return taskDict
