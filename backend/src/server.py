@@ -19,6 +19,8 @@ from src.profile.getTasks import userTasks
 from src.profile.getProjects import userProjects
 from src.profile.getRatings import userRatings
 from src.profile.getDetails import getProfDetails
+from src.profile.checkAchievements import checkAchievement
+from src.profile.setAchievements import setAchievement
 from src.achievement.getAchievements import listAchievements
 from src.connections.sendConnection import sendConnection
 from src.connections.connectionRespond import acceptConnection, declineConnection
@@ -26,7 +28,7 @@ from src.connections.getConnections import getConnections
 from src.connections.connectionHelper import isRequestPending, isConnectedTo
 from src.rating.addRating import addRating
 from src.connections.connectionRemove import unfriend
-from src.workload.calculateWorkload import calculate
+from src.workload.calculateWorkload import updateWorkload, getWorkloadValue
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -827,31 +829,78 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
             detail={"code": "404", "message": "Error rating task"},
         )
 
-
-@app.get("/workload/calculate/{currUser}", summary="calculate workload for a person")
-async def calculateWorkload(currUser: str):
+@app.get("/workload/get/{userId}", summary="Gets the workload of a user")
+async def getWorkload(userId: str):
     """
-    Calculates workload for a given user
+    Gets the workload stored for a given user
 
     Args:
-        currUser (str): user Id for the user you want to calculate workload
-
+        userId (str): user Id for the user you want to get the workload % of
+    
     Returns:
-        workload (float): a number that is <100 which shows how much workload they have
-                        this can be taken as a percentage
+        workloadValue (float): number that is a percentage of their workload out
+                        of 100. A value of -1 means overloaded (>100%).
     """
-    try:
-        workload = calculate(currUser, db)
+    try: 
+        workloadValue = getWorkloadValue(userId, db)
         return {
             "detail": {
                 "code": 200,
-                "message": workload,
+                "message": workloadValue,
             }
         }
-    except HTTPException as e:
-        if e.status_code == 404:
-            raise
+    except:
         raise HTTPException(
             status_code=404,
-            detail={"code": "404", "message": "Error calculating workload"},
+            detail={"code": "404", "message": "Error retrieving workload value"},
+        )
+
+@app.get("/profile/achievement/check/{userId}", summary="checks if achievement for given user is hidden or not")
+async def checkHiddenAchievement(userId: str):
+    """
+    Checks a users achievement hidden status
+    Args:
+        userId (str): user Id 
+
+    Returns:
+        achievementCheck (bool): boolean showing if the achievement is hidden or not, true meaning it is hidden
+    """
+
+    try:
+        achievementCheck = checkAchievement(userId, db)
+        return {
+            "detail": {
+                "code": 200,
+                "message": achievementCheck,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error checking achievement"},
+        )
+
+@app.post("/profile/achievement/set/{userId}", summary="sets the hidden status of a user's achievements")
+async def setHiddenAchievement(userId: str, hidden: bool):
+    """
+    Sets a users achievement hidden status
+    Args:
+        userId (str): user Id 
+
+    Returns:
+        userId (str): user Id
+    """
+
+    try:
+        userId = setAchievement(userId, db, hidden)
+        return {
+            "detail": {
+                "code": 200,
+                "message": userId,
+            }
+        }
+    except:
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "Error setting achievement"},
         )

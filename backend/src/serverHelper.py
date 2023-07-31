@@ -140,20 +140,6 @@ def getTaskDoc(projectId, taskId, db):
         )
     return taskDict
 
-def getFromTask(projectId, taskId, infoField, db):
-    """
-    Gets a specific field from the task specified
-
-    Args:
-        projectId (str): ID of the project that the task is in
-        taskId (str): ID of the task you want to get the dictionary document of
-        infoField (str): name of the field you want to extract
-    """
-    taskDict = getTaskDoc(projectId, taskId, db)
-    taskInfo = taskDict.get(infoField)
-    return taskInfo
-
-
 def isValidUser(queryField, queryValue, db):
     """
     Checks if user is valid given any information of a user.

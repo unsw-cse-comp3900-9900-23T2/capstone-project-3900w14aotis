@@ -31,7 +31,6 @@ export const profileUpdateFetch = async (
     profileImage,
     coverProfileImage,
   });
-  console.log(jsonData);
   const requestOption = {
     method: "POST",
     headers: { "Content-Type": API_MEDIA_TYPE },
@@ -45,36 +44,6 @@ export const profileUpdateFetch = async (
   const profileUpdateResponse = await profileUpdatePromise.json();
   return profileUpdateResponse;
 };
-
-// export const profileUpdateFetch = async (
-//   uId,
-//   firstName,
-//   lastName,
-//   email,
-//   profileImage,
-//   coverProfileImage
-// ) => {
-//   const jsonData = JSON.stringify({
-//     firstName,
-//     lastName,
-//     email,
-//     profileImage,
-//     coverProfileImage,
-//   })
-//   const requestOption = {
-//     method: "POST",
-//     headers: { "Content-Type": API_MEDIA_TYPE },
-//     body: jsonData,
-//   };
-
-//   const profileUpdatePromise = await fetch(
-//     `${API_URL}/profile/update/${uId}`,
-//     requestOption
-//   );
-
-//   const profileUpdateResponse = await profileUpdatePromise.json();
-//   return profileUpdateResponse;
-// };
 
 export const profileAchievementsFetch = async (uId) => {
   const requestOption = {
@@ -90,3 +59,33 @@ export const profileAchievementsFetch = async (uId) => {
   const profileAchievementsResponse = await profileAchievementsPromise.json();
   return profileAchievementsResponse;
 };
+
+export const checkHiddenAchievementsFetch = async (uid) => {
+  const requestOption = {
+    method: "GET",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+  };
+
+  const checkHiddenAchievementsPromise = await fetch(
+    `${API_URL}/profile/achievement/check/${uid}`,
+    requestOption
+  );
+
+  const checkHiddenAchievementsResponse = await checkHiddenAchievementsPromise.json();
+  return checkHiddenAchievementsResponse;
+}
+
+export const setHiddenAchievementsFetch = async (uid, hidden) => {
+  const requestOption = {
+    method: "POST",
+    headers: { "Content-Type": API_MEDIA_TYPE },
+  };
+
+  const setHiddenAchievementsPromise = await fetch(
+    `${API_URL}/profile/achievement/set/${uid}?hidden=${hidden}`,
+    requestOption
+  );
+
+  const setHiddenAchievementsResponse = await setHiddenAchievementsPromise.json();
+  return setHiddenAchievementsResponse;
+}

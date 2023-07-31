@@ -1,5 +1,6 @@
 from src.serverHelper import findUser
 from google.cloud import firestore
+from src.workload.calculateWorkload import updateWorkload
 
 def taskRemove(projectId,taskId,db):
     """removes task from projects and removes task ID from assignees
@@ -22,6 +23,11 @@ def taskRemove(projectId,taskId,db):
         user.update(
             {"tasks": firestore.ArrayRemove([taskId])}
         )
+        # update workload when task is removed
+        userId = user.get().get("uid")
+        updateWorkload(userId, db)
+        
+
 
 
     # remove task from projects collection

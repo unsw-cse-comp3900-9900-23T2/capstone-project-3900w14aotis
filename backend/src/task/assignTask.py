@@ -1,7 +1,8 @@
 from google.cloud import firestore
 from fastapi import HTTPException
-from src.serverHelper import findUser
+from src.serverHelper import findUser, getFromUser
 from src.connections.connectionHelper import isConnectedTo
+from src.workload.calculateWorkload import updateWorkload
 
 """
 This files contains helper functions to help assign a task to any taskmaster
@@ -43,6 +44,10 @@ def addAssignee(projectId, taskId, email, currUser, db):
     # adds taskmaster in assignees array for the task
     taskRef.update({"Assignees": firestore.ArrayUnion([userEmail])})
 
+    # update workload value:
+    userId = getFromUser("email", userEmail, "uid", db)
+    updateWorkload(userId, db)
+
     return f"User: {email} successfully added"
 
 
@@ -72,5 +77,9 @@ def deleteAssignee(projectId, taskId, email, db):
 
     # remove task from taskmaster's task list
     taskmasterRef.update({"tasks": firestore.ArrayRemove([taskId])})
+    
+    # update workload value:
+    userId = getFromUser("email", userEmail, "uid", db)
+    updateWorkload(userId, db)
 
     return email
