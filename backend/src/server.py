@@ -827,35 +827,6 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
             detail={"code": "404", "message": "Error rating task"},
         )
 
-
-@app.post("/workload/calculate/{userId}", summary="calculate workload for a person")
-async def calculateWorkload(userId: str):
-    """
-    Calculates workload for a given user
-
-    Args:
-        userId (str): user Id for the user you want to calculate workload
-
-    Returns:
-        workload (float): success message with a number that is <100 which shows 
-                how much workload they have (this can be taken as a percentage)
-    """
-    try:
-        workload = updateWorkload(userId, db)
-        return {
-            "detail": {
-                "code": 200,
-                "message": workload,
-            }
-        }
-    except HTTPException as e:
-        if e.status_code == 404:
-            raise
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error calculating workload"},
-        )
-
 @app.get("/workload/get/{userId}", summary="Gets the workload of a user")
 async def getWorkload(userId: str):
     """
