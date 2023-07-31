@@ -11,7 +11,7 @@ import CustomButton from "./CustomButton";
 import { useDispatch } from "react-redux";
 import { addConnectionAction } from "../connections/state/addConnectionAction";
 
-const RemoveConnectionModal = ({ uId, style }) => {
+const RemoveConnectionModal = ({ uId, isOpen, closeModal }) => {
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const RemoveConnectionModal = ({ uId, style }) => {
     setOpen(true);
   };
   const handleClose = (event) => {
-    setOpen(false);
+    closeModal();
   };
 
   const removeConnectionHandler = async () => {
@@ -62,22 +62,14 @@ const RemoveConnectionModal = ({ uId, style }) => {
 
   return (
     <Box>
-      <Box sx={style}>
-        <Icon
-          icon="mdi:bin-outline"
-          style={{ fontSize: "35px" }}
-          className={styles.clickButton}
-          onClick={handleOpen}
-        />
-      </Box>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open}
+        open={isOpen}
         onClose={handleClose}
         closeAfterTransition
       >
-        <Fade in={open}>
+        <Fade in={isOpen}>
           <Box sx={modalStyle}>
             <Box sx={titleStyle}>
               <h2>Remove Connection</h2>

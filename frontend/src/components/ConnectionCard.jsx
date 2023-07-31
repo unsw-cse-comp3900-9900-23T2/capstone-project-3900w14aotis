@@ -17,6 +17,7 @@ import Loading from "../components/Loading";
 function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
   const [workload, setWorkload] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -53,6 +54,14 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
     if (workload > 30 && workload <= 70) return "blue";
     if (workload > 70 && workload <= 100) return "orange";
     return "#001AFF"; // Default color
+  };
+
+  const closeModalHandler = () => {
+    setIsOpen(false);
+  };
+
+  const openModalHandler = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -118,7 +127,19 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
           </Box>
         )}
       </Box>
-      <RemoveConnectionModal uId={uId} style={removeButtonStyles} />
+      <Box sx={removeButtonStyles}>
+        <Icon
+          icon="mdi:bin-outline"
+          style={{ fontSize: "35px" }}
+          className={styles.clickButton}
+          onClick={openModalHandler}
+        />
+      </Box>
+      <RemoveConnectionModal
+        uId={uId}
+        isOpen={isOpen}
+        closeModal={closeModalHandler}
+      />
     </Box>
   );
 }

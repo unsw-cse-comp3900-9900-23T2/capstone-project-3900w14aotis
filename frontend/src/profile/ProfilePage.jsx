@@ -43,11 +43,20 @@ const ProfilePage = () => {
   const [pending, setPending] = useState(false);
   const [connected, setConnected] = useState(false);
   const [connectText, setConnectText] = useState("connect");
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
   const { userId } = useParams();
 
   const profileUpdated = useSelector((state) => state.profileUpdated);
+
+  const closeModalHandler = () => {
+    setIsOpen(false);
+  };
+
+  const removeConnectionHandler = () => {
+    setIsOpen(true);
+  };
 
   const sendConnectionHandler = async () => {
     try {
@@ -65,7 +74,6 @@ const ProfilePage = () => {
     }
   };
 
-  const removeConnectionHandler = async () => {};
   const getConnectedStatus = async () => {
     try {
       const user = getAuth();
@@ -348,6 +356,11 @@ const ProfilePage = () => {
           </Box>
         </>
       )}
+      <RemoveConnectionModal
+        uId={userId}
+        isOpen={isOpen}
+        closeModal={closeModalHandler}
+      />
     </>
   );
 };
