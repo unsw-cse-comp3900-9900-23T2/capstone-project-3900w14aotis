@@ -5,8 +5,10 @@ import ProgressBar from "@ramonak/react-progress-bar";
 
 const AchievementSmallCard = ({
   achievementDetails,
+  index,
+  viewTaskFunction,
 }) => {
-  const { achievement, currentValue, description, image, target } =
+  const { achievement, currentValue, description, status, target } =
     achievementDetails;
   const completed = (currentValue / target) * 100;
   return (
@@ -29,7 +31,7 @@ const AchievementSmallCard = ({
         }}
       >
         <img
-          src={`data:image/jpeg;base64,${image}`}
+          src="/Default-Achievement.png"
           className={styles.achievementImage}
         />
         <Box
