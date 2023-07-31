@@ -21,6 +21,7 @@ def updateTask(projectId, taskId, db, item):
         "TaskID": taskId,
         "Task Fledgling": "In Progress",
         "Task Master": "In Progress",
+        "Task Wizard" : "In Progress",
     }
     # Check if user is part of the task's assignee list
     userRef = findUser("uid", item.creatorId, db)
@@ -70,7 +71,7 @@ def updateTask(projectId, taskId, db, item):
         for assigneeEmail in assigneeList:
             assigneeId = getFromUser("email", assigneeEmail, "uid", db)
             updateWorkload(assigneeId, db)
-            
+
     return taskDict
 
 
@@ -98,4 +99,3 @@ def incrementAchievement(achievementDoc, dict, achievementName):
                     }
                 )
     return
-

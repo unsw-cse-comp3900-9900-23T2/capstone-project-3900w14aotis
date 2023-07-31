@@ -8,6 +8,7 @@ const AchievementSmallCard = ({
 }) => {
   const { achievement, currentValue, description, image, target } =
     achievementDetails;
+
   const completed = (currentValue / target) * 100;
   return (
     <Box
