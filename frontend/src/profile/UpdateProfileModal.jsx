@@ -230,6 +230,18 @@ const UpdateProfileModal = () => {
     margin: "5% 2% 5% 2%",
   };
 
+  const imageSectionContainerSx = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "2%",
+    margin: "5% 2% 5% 2%",
+  };
+
+  const imageHeaderContainerSx = {
+    
+  };
+
   const saveChangesButtonSx = {
     display: "flex",
     justifyContent: "center",
@@ -237,10 +249,11 @@ const UpdateProfileModal = () => {
 
   const imageContainerSx = {
     display: "flex",
-    flexDirection: "row",
+    // flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: "80%",
+    width: "60%",
+    // marginTop: "100px",
   };
 
   const editFileContainer = {
@@ -283,18 +296,9 @@ const UpdateProfileModal = () => {
                   className={styles.clickButton}
                 />
               </Box>
-              <Box sx={inputContainerSx}>
-                <h3>Profile Image:</h3>
-                <Box
-                  sx={imageContainerSx}
-                >
-                  <input
-                    type="image"
-                    src={profileImage ? profileImage : "/Default-Avatar.png"}
-                    width={"200px"}
-                    height={"200px"}
-                    className={styles.profilePicture}
-                  />
+              <Box sx={imageSectionContainerSx}>
+                <Box sx={imageHeaderContainerSx}>
+                  <h3 className={styles.imageText}>Profile Image:</h3>
                   <Box
                     sx={editFileContainer}
                   >
@@ -308,9 +312,20 @@ const UpdateProfileModal = () => {
                     <UploadImageButton fileInput={profileInput} onDeleteFunction={onDeleteProfileImage} />
                   </Box>
                 </Box>
+                <Box
+                  sx={imageContainerSx}
+                >
+                  <input
+                    type="image"
+                    src={profileImage ? profileImage : "/Default-Avatar.png"}
+                    width={"200px"}
+                    height={"200px"}
+                    className={styles.profilePicture}
+                  />
+                </Box>
               </Box>
               <Box sx={inputContainerSx}>
-                <h3>Cover Photo:</h3>
+                <h3 className={styles.imageText}>Cover Photo:</h3>
                 <Box
                   sx={imageContainerSx}
                 >
@@ -319,19 +334,20 @@ const UpdateProfileModal = () => {
                     src={coverProfileImage ? coverProfileImage : "/Default-Cover.jpg"}
                     width={"400px"}
                     height={"auto"}
+                    className={styles.coverPicture}
                   />
-                  <Box
-                    sx={editFileContainer}
-                  >
-                    <input
-                      type='file'
-                      name='image'
-                      ref={coverProfileInput}
-                      onChange={onChangeCoverProfileImage}
-                      style={{ display: 'none' }}
-                    />
-                    <UploadImageButton fileInput={coverProfileInput} onDeleteFunction={onDeleteCoverProfileImage} />
-                  </Box>
+                </Box>
+                <Box
+                  sx={editFileContainer}
+                >
+                  <input
+                    type='file'
+                    name='image'
+                    ref={coverProfileInput}
+                    onChange={onChangeCoverProfileImage}
+                    style={{ display: 'none' }}
+                  />
+                  <UploadImageButton fileInput={coverProfileInput} onDeleteFunction={onDeleteCoverProfileImage} />
                 </Box>
               </Box>
               <Box sx={inputContainerSx}>

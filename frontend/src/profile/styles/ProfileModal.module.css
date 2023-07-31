@@ -28,6 +28,9 @@
 .profilePicture {
   border-radius: 50%;
 }
+.coverPicture {
+  border-radius: 6%;
+}
 
 .fileInputButton {
   color:#fff;
@@ -35,4 +38,8 @@
   border-color: #81CAEA;
   border-radius: 12%;
   
+}
+
+.imageText {
+  width: 20%;
 }
