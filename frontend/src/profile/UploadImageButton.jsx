@@ -7,7 +7,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from '@mui/icons-material/Add';
 import UploadIcon from '@mui/icons-material/Upload';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import styles from "./styles/ProfileModal.module.css";
 
 const UploadImageButton = ({ fileInput, onDeleteFunction }) => {
   
@@ -71,7 +70,7 @@ const UploadImageButton = ({ fileInput, onDeleteFunction }) => {
   
 
   return (
-    <div className={styles.editImage}>
+    <>
       <Button
         id="demo-customized-button"
         aria-controls={open ? 'demo-customized-menu' : undefined}
@@ -102,7 +101,7 @@ const UploadImageButton = ({ fileInput, onDeleteFunction }) => {
           Delete Image
         </MenuItem>
       </StyledMenu>
-    </div>
+    </>
   );
 };
 export default UploadImageButton;
