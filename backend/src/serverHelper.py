@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+import base64
 """
 This files contains helper functions that will help modularise 
 """
@@ -174,3 +175,11 @@ def getProjectID(taskId, db):
         for task in tasks:
             if task.id == taskId:
                 return project.id
+            
+def convertImageToBase64(path):
+    with open(path,"rb") as imageFile:
+        base64File = base64.b64encode(imageFile.read())
+        return base64File
+
+
+

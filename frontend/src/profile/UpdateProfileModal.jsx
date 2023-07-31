@@ -305,7 +305,10 @@ const UpdateProfileModal = () => {
                       onChange={onChangeProfileImage}
                       style={{ display: 'none' }}
                     />
-                    <UploadImageButton fileInput={profileInput} onDeleteFunction={onDeleteProfileImage} />
+                    <UploadImageButton
+                      fileInput={profileInput}
+                      onDeleteFunction={onDeleteProfileImage}
+                    />
                   </Box>
                 </Box>
               </Box>

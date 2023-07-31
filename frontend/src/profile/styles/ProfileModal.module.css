@@ -29,10 +29,26 @@
   border-radius: 50%;
 }
 
+/* .profilePicture:hover {
+  cursor: grab;
+}
+
+.profilePicture:hover .editImage {
+  cursor: grab;
+  display: block;
+}
+
+
 .fileInputButton {
   color:#fff;
   background-color: #81CAEA;
   border-color: #81CAEA;
   border-radius: 12%;
-  
+  width: 100%;
 }
+
+.editImage {
+  display: none;
+  position: absolute;
+  z-index: 1;
+} */
