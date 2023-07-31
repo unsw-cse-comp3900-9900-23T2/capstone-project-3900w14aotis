@@ -21,7 +21,6 @@ def updateTask(projectId, taskId, db, item):
         "TaskID": taskId,
         "Task Fledgling": "In Progress",
         "Task Master": "In Progress",
-        "Task Wizard" : "In Progress",
     }
     # Check if user is part of the task's assignee list
     userRef = findUser("uid", item.creatorId, db)
@@ -45,31 +44,12 @@ def updateTask(projectId, taskId, db, item):
 
     # Task Master Achievement
     taskMasterDoc = getAchievement(db, "Task Master", item.creatorId)
-    incrementAchievement(taskMasterDoc, taskDict, "Task Master")
-
-    # Task Wizard Achievement
-    taskWizardDoc = getAchievement(db, "Task Wizard", item.creatorId)
-    incrementAchievement(taskWizardDoc, taskDict, "Task Wizard")
-
-    taskDocRef.update(
-        {
-            "Title": item.title,
-            "Description": item.description,
-            "Deadline": item.deadline,
-            "Priority": item.priority,
-            "Status": item.status,
-        }
-    )
-    return taskDict
-
-
-def incrementAchievement(achievementDoc, dict, achievementName):
-    for achievement in achievementDoc:
+    for achievement in taskMasterDoc:
         goal = achievement.get("target")
         currValue = achievement.get("currentValue")
         # If Achievement is alrdy done, skip
         if currValue == goal:
-            dict[achievementName] = "Done"
+            taskDict["Task Master"] = "Done"
             break
 
         else:
@@ -79,16 +59,13 @@ def incrementAchievement(achievementDoc, dict, achievementName):
                 achievement.reference.update(
                     {"currentValue": currValue, "status": "Done"}
                 )
-                dict[achievementName] = "Done"
+                taskDict["Task Master"] = "Done"
             else:
                 achievement.reference.update(
                     {
                         "currentValue": currValue,
                     }
                 )
-<<<<<<< HEAD
-    return
-=======
 
     initialStatus = taskDoc["Status"]
     initialPriority = taskDoc["Priority"]
@@ -112,4 +89,3 @@ def incrementAchievement(achievementDoc, dict, achievementName):
             updateWorkload(assigneeId, db)
 
     return taskDict
->>>>>>> main

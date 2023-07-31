@@ -1,6 +1,6 @@
 from google.cloud import firestore
 from fastapi import HTTPException
-from src.serverHelper import findUser, isValidUser, getFromUser,getAchievement
+from src.serverHelper import findUser, isValidUser, getFromUser
 from src.connections.connectionHelper import isConnectedTo, isRequestPending
 """
 This files contains helper functions to help send a connection to a taskmaster
@@ -20,11 +20,6 @@ def sendConnection(userEmail, userId, db):
     Returns:
         message (str): a message to show it was successful
     """
-    connectionDict = {
-        "UserId": userId,
-        "Social Butterfly": "In Progress",
-        "BNOC": "In Progress",
-    }
     lowerEmail = userEmail.lower()
     receivingUser = getFromUser(EMAIL_FIELD, lowerEmail, "uid", db)
 
@@ -52,53 +47,10 @@ def sendConnection(userEmail, userId, db):
             detail={"code": "409", "message": "Connection request is already pending"},
         )
         
-    #If Social Butterfly Achievement is in progress, mark as done
-    socialButterflyAchievement = getAchievement(db, "Social Butterfly", userId)
-    for achievement in socialButterflyAchievement:
-        if achievement.get("status") == "In Progress":
-            achievement.reference.update(
-                {
-                    "currentValue": 1,
-                    "status": "Done",
-                }
-            )
-        connectionDict["Social Butterfly"] = "Done"
-    
-    #If BNOC Achievement is in progress, increment by 1, if it reaches the goal
-    #mark as done
-    bnocAchievement = getAchievement(db, "BNOC", userId)
-    for achievement in bnocAchievement:
-        goal = achievement.get("target")
-        currValue = achievement.get("currentValue")
-        #If Achievement is complete, skip
-        if currValue == goal:
-            connectionDict["BNOC"] = "Done"
-            break
-        else:
-            currValue += 1
-            if currValue == goal:
-                achievement.reference.update(
-                    {
-                        "currentValue": currValue,
-                        "status": "Done",
-                    }
-                )
-                connectionDict["BNOC"] = "Done"
-            #Otherwise, only increment by 1
-            else:
-                achievement.reference.update(
-                    {
-                        "currentValue": currValue,
-                    }
-                )
-
-
 
     taskmasterRef = findUser(EMAIL_FIELD, lowerEmail, db)
+    
     taskmasterRef.update(
         {"pendingConnections": firestore.ArrayUnion([userId])}
     )
-
-    
-
-    return connectionDict
+    return "Connection request successfully sent!"
