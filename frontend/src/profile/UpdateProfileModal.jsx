@@ -233,13 +233,8 @@ const UpdateProfileModal = () => {
   const imageSectionContainerSx = {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
     gap: "2%",
     margin: "5% 2% 5% 2%",
-  };
-
-  const imageHeaderContainerSx = {
-    
   };
 
   const saveChangesButtonSx = {
@@ -249,11 +244,10 @@ const UpdateProfileModal = () => {
 
   const imageContainerSx = {
     display: "flex",
-    // flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     width: "60%",
-    // marginTop: "100px",
+    width: "100%",
   };
 
   const editFileContainer = {
@@ -288,7 +282,7 @@ const UpdateProfileModal = () => {
           <Box sx={modalContainerSx}>
             <PerfectScrollbar>
               <Box sx={modalTitleSx}>
-                <h2 className={styles.modalTitle}>Edit Profile</h2>
+                <h2>Edit Profile</h2>
                 <Icon
                   icon="iconamoon:close-bold"
                   onClick={closeModalHandler}
@@ -297,7 +291,7 @@ const UpdateProfileModal = () => {
                 />
               </Box>
               <Box sx={imageSectionContainerSx}>
-                <Box sx={imageHeaderContainerSx}>
+                <Box sx={modalTitleSx}>
                   <h3 className={styles.imageText}>Profile Image:</h3>
                   <Box
                     sx={editFileContainer}
@@ -327,30 +321,35 @@ const UpdateProfileModal = () => {
                   />
                 </Box>
               </Box>
-              <Box sx={inputContainerSx}>
-                <h3 className={styles.imageText}>Cover Photo:</h3>
+              <Box sx={imageSectionContainerSx}>
+                <Box sx={modalTitleSx}>
+                  <h3 className={styles.imageText}>Cover Photo:</h3>
+                  <Box
+                    sx={editFileContainer}
+                  >
+                    <input
+                      type='file'
+                      name='image'
+                      ref={coverProfileInput}
+                      onChange={onChangeCoverProfileImage}
+                      style={{ display: 'none' }}
+                    />
+                    <UploadImageButton
+                      fileInput={coverProfileInput}
+                      onDeleteFunction={onDeleteCoverProfileImage}
+                    />
+                  </Box>
+                </Box>
                 <Box
                   sx={imageContainerSx}
                 >
                   <input
-                    type="image"
-                    src={coverProfileImage ? coverProfileImage : "/Default-Cover.jpg"}
-                    width={"400px"}
-                    height={"auto"}
-                    className={styles.coverPicture}
-                  />
-                </Box>
-                <Box
-                  sx={editFileContainer}
-                >
-                  <input
-                    type='file'
-                    name='image'
-                    ref={coverProfileInput}
-                    onChange={onChangeCoverProfileImage}
-                    style={{ display: 'none' }}
-                  />
-                  <UploadImageButton fileInput={coverProfileInput} onDeleteFunction={onDeleteCoverProfileImage} />
+                      type="image"
+                      src={coverProfileImage ? coverProfileImage : "/Default-Cover.jpg"}
+                      width={"400px"}
+                      height={"auto"}
+                      className={styles.coverPicture}
+                    />
                 </Box>
               </Box>
               <Box sx={inputContainerSx}>
