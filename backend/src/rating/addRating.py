@@ -47,13 +47,22 @@ def addRating(projectId, taskId, uid, mood, db):
             )
         taskDict["New Critic"] = "Done"
 
-    # If task has alrdy been rated the specified mood, remove the mood
+    # If task has alrdy been rated the specified mood, remove 
+    # the mood in both the task and the user
     ratingDict = taskDocRef.get().to_dict()["Rating"]
+    userRatingDict = userRef.get().get("Rating")
     for user in ratingDict[mood]:
         if len(user) > 0 and user["uid"] == uid:
             ratingDict[mood].remove(user)
             taskDocRef.update({"Rating": ratingDict})
+            break
+
+    for task in userRatingDict[mood]:
+        if len(task) > 0 and task == taskId:
+            userRatingDict[mood].remove(task)
+            userRef.update({"Rating": userRatingDict})
             return None
+
 
     # Connoisser Achievement
     connoisseurAchievement = getAchievement(db, "Connoisseur", uid)
@@ -94,10 +103,18 @@ def addRating(projectId, taskId, uid, mood, db):
             if user["uid"] == uid:
                 value.remove(user)
                 break
+    
+    for moodRating, list in userRatingDict.items():
+        for task in list:
+            if task == taskId:
+                list.remove(task)
+                break
 
     ratingDict[mood].append(addTaskUserObj)
-
     taskDocRef.update({"Rating": ratingDict})
+
+    userRatingDict[mood].append(taskId)
+    userRef.update({"Rating": userRatingDict})
 
     # updates workload when rating is changed
     updateWorkload(uid, db)

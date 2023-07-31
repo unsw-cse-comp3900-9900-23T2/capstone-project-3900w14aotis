@@ -30,7 +30,15 @@ def authRegister(item, db):
             "pendingConnections": item.pendingConnections,
             "profileImage": item.profileImage,
             "coverProfileImage": item.coverProfileImage,
-            "workload": INITIAL_WORKLOAD
+            "workload": INITIAL_WORKLOAD,
+            "achievementHidden": False,
+            "Rating": {
+                "Very Happy": [],
+                "Happy": [],
+                "Neutral": [],
+                "Sad": [],
+                "Very Sad": [],
+            },
         }
     )
 

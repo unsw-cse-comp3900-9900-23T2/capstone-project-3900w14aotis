@@ -2,20 +2,21 @@ import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { displayError, displaySuccess, fileToDataUrl } from "../utils/helpers";
 import Box from "@mui/material/Box";
-import BackButton from "../components/BackButton";
-import { Button } from "@mui/material";
+// import BackButton from "../components/BackButton";
+// import { Button } from "@mui/material";
 import UpdateProfileModal from "./UpdateProfileModal";
-import ProfileCard from "./ProfileCard";
 import {
   profileAchievementsFetch,
   profileDetailFetch,
 } from "../api/profile.js";
+// import { allRatingsFetch } from "../api/rating.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";
 import { useSelector } from "react-redux";
 import { allTasksFetch } from "../api/task";
 import { allProjectsFetch } from "../api/project";
+import ProfileRatings from "./ProfileRatings";
 import ProfileAssignedTasks from "./ProfileAssignedTasks";
 import ProfileAchievements from "./ProfileAchievements";
 import styles from "./styles/ProfileCard.module.css";
@@ -103,7 +104,6 @@ const ProfilePage = () => {
 
   // Get all projects
   const getAllProjects = async (uid) => {
-    // console.log("uid", uid);
     const userProjectsPromise = await allProjectsFetch(uid);
     const projects = userProjectsPromise.detail.message;
     setProjects(projects);
@@ -254,9 +254,9 @@ const ProfilePage = () => {
                   </>
                 )}
               </Box>
-              <ProfileCard title={"Ratings"} />
+              <ProfileRatings />
               <ProfileAchievements achievements={achievements} />
-              <ProfileAssignedTasks tasks={allTasks} />
+              <ProfileAssignedTasks projectId={projects[0]} tasks={allTasks} />
             </Box>
           </Box>
         </>
