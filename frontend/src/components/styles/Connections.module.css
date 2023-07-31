@@ -1,3 +1,13 @@
 h2 {
   margin-bottom: 0;
 }
+
+.clickButton {
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  font-size: "36px";
+}
+
+.clickButton:hover {
+  transform: scale(1.2);
+}

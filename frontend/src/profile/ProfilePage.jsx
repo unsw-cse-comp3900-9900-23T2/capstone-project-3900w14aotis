@@ -55,8 +55,13 @@ const ProfilePage = () => {
     setIsOpen(false);
   };
 
-  const removeConnectionHandler = () => {
+  const removeConnectionModal = () => {
     setIsOpen(true);
+  };
+
+  const handleRemoveConnection = () => {
+    setConnected(false);
+    setConnectText("connect");
   };
 
   const sendConnectionHandler = async () => {
@@ -339,7 +344,7 @@ const ProfilePage = () => {
                           text={connectText}
                           onClickFunction={
                             connected
-                              ? removeConnectionHandler
+                              ? removeConnectionModal
                               : sendConnectionHandler
                           }
                           disabled={pending}
@@ -360,6 +365,7 @@ const ProfilePage = () => {
         uId={userId}
         isOpen={isOpen}
         closeModal={closeModalHandler}
+        onRemoveConnection={handleRemoveConnection}
       />
     </>
   );

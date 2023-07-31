@@ -11,7 +11,12 @@ import CustomButton from "./CustomButton";
 import { useDispatch } from "react-redux";
 import { addConnectionAction } from "../connections/state/addConnectionAction";
 
-const RemoveConnectionModal = ({ uId, isOpen, closeModal }) => {
+const RemoveConnectionModal = ({
+  uId,
+  isOpen,
+  closeModal,
+  onRemoveConnection,
+}) => {
   const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -34,6 +39,10 @@ const RemoveConnectionModal = ({ uId, isOpen, closeModal }) => {
         displayError(`${res.detail.message}`);
       }
       handleClose();
+      // This is really shit lol
+      if (onRemoveConnection) {
+        onRemoveConnection();
+      }
     } catch (error) {
       displayError(`${error.message}`);
     }
