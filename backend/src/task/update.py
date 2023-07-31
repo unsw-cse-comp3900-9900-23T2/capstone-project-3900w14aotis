@@ -51,6 +51,10 @@ def updateTask(projectId, taskId, db, item):
     taskWizardDoc = getAchievement(db, "Task Wizard", item.creatorId)
     incrementAchievement(taskWizardDoc, taskDict, "Task Wizard")
 
+    initialStatus = taskDoc["Status"]
+    initialPriority = taskDoc["Priority"]
+    initialDeadline = taskDoc["Deadline"]
+
     taskDocRef.update(
         {
             "Title": item.title,
@@ -60,6 +64,14 @@ def updateTask(projectId, taskId, db, item):
             "Status": item.status,
         }
     )
+
+    # if status changed:
+    if (initialStatus != item.status or initialPriority != item.priority or initialDeadline != item.deadline):
+        # update workload value
+        for assigneeEmail in assigneeList:
+            assigneeId = getFromUser("email", assigneeEmail, "uid", db)
+            updateWorkload(assigneeId, db)
+
     return taskDict
 
 
@@ -86,30 +98,4 @@ def incrementAchievement(achievementDoc, dict, achievementName):
                         "currentValue": currValue,
                     }
                 )
-<<<<<<< HEAD
     return
-=======
-
-    initialStatus = taskDoc["Status"]
-    initialPriority = taskDoc["Priority"]
-    initialDeadline = taskDoc["Deadline"]
-
-    taskDocRef.update(
-        {
-            "Title": item.title,
-            "Description": item.description,
-            "Deadline": item.deadline,
-            "Priority": item.priority,
-            "Status": item.status,
-        }
-    )
-
-    # if status changed:
-    if (initialStatus != item.status or initialPriority != item.priority or initialDeadline != item.deadline):
-        # update workload value
-        for assigneeEmail in assigneeList:
-            assigneeId = getFromUser("email", assigneeEmail, "uid", db)
-            updateWorkload(assigneeId, db)
-
-    return taskDict
->>>>>>> main
