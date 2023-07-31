@@ -1,5 +1,3 @@
-from src.config.firestoreUtils import initialiseFirestore
-from src.config.firestoreUtils import auth
 import json
 import requests
 import os
@@ -8,30 +6,32 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def authLogin(item, db):
-    """_summary_
+def authLogin(item):
+    """
+    Logs in the user given an item involving email and password
 
     Args:
-        item (_type_): _description_
-        db (_type_): _description_
+        item (LoginBody): item containing email and password
+        db: database
 
     Returns:
-        _type_: _description_
+        token: returns an authentication token for the login
     """
     token = signInWithEmailAndPassword(item.email, item.password)
     return token
 
 
 def signInWithEmailAndPassword(email, password, return_secure_token=True):
-    """_summary_
+    """
+    Helper function that does the login 
 
     Args:
-        email (_type_): _description_
-        password (_type_): _description_
-        return_secure_token (bool, optional): _description_. Defaults to True.
+        email (str): email of the user
+        password (str): password of the user
+        return_secure_token (bool, optional): flag to secure token. Defaults to True.
 
     Returns:
-        _type_: _description_
+        r.json: json payload with token (essentially the auth token)
     """
     payload = json.dumps(
         {

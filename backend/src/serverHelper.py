@@ -51,7 +51,10 @@ def getUserDoc(queryField, queryValue, db):
         userDict = userDoc.to_dict()
         return userDict
     else:
-        return "User not found!"
+        raise HTTPException(
+            status_code=404,
+            detail={"code": "404", "message": "User doesn't exist"},
+        )
 
 
 def getFromUser(queryField, queryValue, infoField, db):
@@ -134,12 +137,12 @@ def getTaskDoc(projectId, taskId, db):
     
     if doc.exists:
         taskDict = doc.to_dict()
+        return taskDict
     else: 
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Task doesn't exist"},
         )
-    return taskDict
 
 def isValidUser(queryField, queryValue, db):
     """

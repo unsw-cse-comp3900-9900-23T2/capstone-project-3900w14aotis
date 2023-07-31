@@ -7,6 +7,16 @@ PENDING_CONNECTION = "pendingConnections"
 This files contains helper functions to help get a list of connections for a taskmaster
 """
 def getConnections(userId, listType, db):
+    """
+    Gets all connections of user.
+
+    Args:
+        userId (str): user Id of the user you want connections from
+        db: database
+
+    Returns:
+        finalList (List): list of all connections, as well as their basic details
+    """
     doc = getUserDoc("uid", userId, db)
     connectionsList = doc.pop(listType)
     finalList = []

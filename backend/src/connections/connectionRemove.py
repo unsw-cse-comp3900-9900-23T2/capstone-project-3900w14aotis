@@ -6,6 +6,17 @@ from src.connections.connectionHelper import isConnectedTo
 This files contains helper functions to help send a connection to a taskmaster
 """
 def unfriend(currUser, userId, db):
+    """
+    Removes a connection from current user.
+
+    Args:
+        currUser (str): user Id of the current user
+        userId (str): user Id of the user you want to remove
+        db: database
+
+    Returns:
+        a status message outline if it was successful.
+    """
     # check if users are connected
     if not isConnectedTo(currUser, "uid", userId, db):
         raise HTTPException(

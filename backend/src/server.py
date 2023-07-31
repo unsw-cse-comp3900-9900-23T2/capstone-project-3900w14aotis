@@ -1,5 +1,5 @@
 from src.config.firestoreUtils import initialiseFirestore
-from fastapi import FastAPI, HTTPException, Depends, Header
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from src.auth.register import authRegister
 from src.auth.login import authLogin
@@ -28,7 +28,7 @@ from src.connections.getConnections import getConnections
 from src.connections.connectionHelper import isRequestPending, isConnectedTo
 from src.rating.addRating import addRating
 from src.connections.connectionRemove import unfriend
-from src.workload.calculateWorkload import updateWorkload, getWorkloadValue
+from src.workload.calculateWorkload import getWorkloadValue
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -43,7 +43,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 class TaskMaster(BaseModel):
     uid: str
     firstName: str
@@ -57,11 +56,9 @@ class TaskMaster(BaseModel):
     profileImage: str
     coverProfileImage: str
 
-
 class LoginBody(BaseModel):
     email: str
     password: str
-
 
 class Task(BaseModel):
     title: str
@@ -73,11 +70,9 @@ class Task(BaseModel):
     creationTime: datetime
     creatorId: str
 
-
 class NewProject(BaseModel):
     title: str
     user: str
-
 
 class Assignee(BaseModel):
     projectId: str
@@ -85,10 +80,8 @@ class Assignee(BaseModel):
     email: str
     currUser: str
 
-
 class JoinProject(BaseModel):
     user: str
-
 
 class UpdateBody(BaseModel):
     firstName: str
@@ -96,7 +89,6 @@ class UpdateBody(BaseModel):
     email: str
     profileImage: str
     coverProfileImage: str
-
 
 class UpdateTask(BaseModel):
     title: str
@@ -106,12 +98,10 @@ class UpdateTask(BaseModel):
     status: str
     creatorId: str
 
-
 class TaskRatingBody(BaseModel):
     projectId: str
     taskId: str
     mood: str
-
 
 # Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
 # the user whilst also adding a slot in the authentication section of firebase. Returns the

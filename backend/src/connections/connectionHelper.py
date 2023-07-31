@@ -1,5 +1,4 @@
 from src.serverHelper import getUserDoc, getFromUser
-from fastapi import HTTPException
 """
 This files contains helper functions to help send a connection to a taskmaster
 """

@@ -92,13 +92,9 @@ def sendConnection(userEmail, userId, db):
                     }
                 )
 
-
-
     taskmasterRef = findUser(EMAIL_FIELD, lowerEmail, db)
     taskmasterRef.update(
         {"pendingConnections": firestore.ArrayUnion([userId])}
     )
-
-    
 
     return connectionDict

@@ -1,22 +1,19 @@
-
+from src.serverHelper import getFromUser
 """
 This file contains helper functions to get a list of tasks within a project.
 """
 def userTasks(uid, db):
-    """_summary_
+    """
+    Gets all tasks of a user
 
     Args:
-        uid (_type_): user Id
-        db (_type_): database
+        uid (str): user Id of the user
+        db: database
 
     Returns:
-        _type_: full details of the tasks given a user id
+        taskListDoc: full details of the tasks given a user id
     """
-    taskList = []
-    docs = db.collection("taskmasters").where("uid", "==",uid).limit(1).stream()
-
-    for doc in docs:
-        taskList = doc.get("tasks")
+    taskList = getFromUser("uid", uid, "tasks", db)
 
     taskListDoc = []
     parentDocRef = db.collection("projects").get()

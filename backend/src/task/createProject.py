@@ -9,9 +9,10 @@ def createNewProject(project, db):
     """
     The user that creates the project is automatically added to the project.
     Args:
-        ?user id (str): reference ID of user creating task
+        project (NewProject): Project class that contains the details of the project
 
     Returns:
+        projectRef: reference to the project
 
     """
     projectRef = db.collection("projects").add(
@@ -21,7 +22,6 @@ def createNewProject(project, db):
     docs = (
         db.collection("taskmasters").where("uid", "==", project.user).limit(1).stream()
     )
-    docId = ""
     for doc in docs:
         docId = doc.id
     db.collection("taskmasters").document(docId).update(
@@ -35,7 +35,8 @@ def joinExistingProject(project, projectId, db):
     """Joins an existing project with the given ID.
 
     Args:
-        project (class JoinProject): contains an id and user
+        project (class JoinProject): contains userId
+        projectId (str): id of project
         db (_type_): connection to firebase database
     """
     parentDocRef = db.collection("projects").document(projectId)
@@ -47,7 +48,6 @@ def joinExistingProject(project, projectId, db):
     docs = (
         db.collection("taskmasters").where("uid", "==", project.user).limit(1).stream()
     )
-    docId = ""
     for doc in docs:
         docId = doc.id
     db.collection("taskmasters").document(docId).update(
