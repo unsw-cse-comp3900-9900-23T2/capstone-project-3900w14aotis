@@ -66,9 +66,10 @@ function ConnectionsPage() {
               width: "93%",
               columnGap: "4vw",
               rowGap: "4vh",
+              textAlign: "center",
             }}
           >
-            {Array.isArray(connections) ? (
+            {Array.isArray(connections) && connections.length > 0 ? (
               connections.map((connection) => (
                 <ConnectionCard
                   key={connection.uid}
@@ -80,7 +81,18 @@ function ConnectionsPage() {
                 />
               ))
             ) : (
-              <h2>No current connections.</h2>
+              // Wrap the "No current connections" message inside a centered container
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <h2>No current connections.</h2>
+              </Box>
             )}
           </Box>
         )}
