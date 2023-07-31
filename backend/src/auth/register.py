@@ -3,6 +3,7 @@ from src.config.firestoreUtils import auth
 from src.auth.login import signInWithEmailAndPassword
 from src.serverHelper import convertImageToBase64
 
+INITIAL_WORKLOAD = float()
 
 # authRegister takes in 2 parameters, item (representing the taskMaster class) and db(the database). It
 # creates the user in the authentication section and also adds a new document representing the user in the
@@ -30,6 +31,7 @@ def authRegister(item, db):
             "pendingConnections": item.pendingConnections,
             "profileImage": item.profileImage,
             "coverProfileImage": item.coverProfileImage,
+            "workload": INITIAL_WORKLOAD,
             "achievementHidden": False,
             "Rating": {
                 "Very Happy": [],
