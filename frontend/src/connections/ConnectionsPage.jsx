@@ -80,7 +80,7 @@ function ConnectionsPage() {
                 />
               ))
             ) : (
-              <p>No current connections.</p>
+              <h2>No current connections.</h2>
             )}
           </Box>
         )}
