@@ -44,11 +44,28 @@ def updateTask(projectId, taskId, db, item):
 
     # Task Master Achievement
     taskMasterDoc = getAchievement(db, "Task Master", item.creatorId)
-    incrementAchievement(taskMasterDoc, taskDict, "Task Master")
+    for achievement in taskMasterDoc:
+        goal = achievement.get("target")
+        currValue = achievement.get("currentValue")
+        # If Achievement is alrdy done, skip
+        if currValue == goal:
+            taskDict["Task Master"] = "Done"
+            break
 
-    # Task Wizard Achievement
-    taskWizardDoc = getAchievement(db, "Task Wizard", item.creatorId)
-    incrementAchievement(taskWizardDoc, taskDict, "Task Wizard")
+        else:
+            currValue += 1
+            # If current Value meets the goal, update achievement status to done
+            if currValue == goal:
+                achievement.reference.update(
+                    {"currentValue": currValue, "status": "Done"}
+                )
+                taskDict["Task Master"] = "Done"
+            else:
+                achievement.reference.update(
+                    {
+                        "currentValue": currValue,
+                    }
+                )
 
     initialStatus = taskDoc["Status"]
     initialPriority = taskDoc["Priority"]
@@ -70,32 +87,5 @@ def updateTask(projectId, taskId, db, item):
         for assigneeEmail in assigneeList:
             assigneeId = getFromUser("email", assigneeEmail, "uid", db)
             updateWorkload(assigneeId, db)
-            
+
     return taskDict
-
-
-def incrementAchievement(achievementDoc, dict, achievementName):
-    for achievement in achievementDoc:
-        goal = achievement.get("target")
-        currValue = achievement.get("currentValue")
-        # If Achievement is alrdy done, skip
-        if currValue == goal:
-            dict[achievementName] = "Done"
-            break
-
-        else:
-            currValue += 1
-            # If current Value meets the goal, update achievement status to done
-            if currValue == goal:
-                achievement.reference.update(
-                    {"currentValue": currValue, "status": "Done"}
-                )
-                dict[achievementName] = "Done"
-            else:
-                achievement.reference.update(
-                    {
-                        "currentValue": currValue,
-                    }
-                )
-    return
-
