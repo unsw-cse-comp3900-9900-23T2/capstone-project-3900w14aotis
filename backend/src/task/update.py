@@ -21,6 +21,7 @@ def updateTask(projectId, taskId, db, item):
         "TaskID": taskId,
         "Task Fledgling": "In Progress",
         "Task Master": "In Progress",
+        "Task Wizard" : "In Progress",
     }
     # Check if user is part of the task's assignee list
     userRef = findUser("uid", item.creatorId, db)
@@ -44,12 +45,31 @@ def updateTask(projectId, taskId, db, item):
 
     # Task Master Achievement
     taskMasterDoc = getAchievement(db, "Task Master", item.creatorId)
-    for achievement in taskMasterDoc:
+    incrementAchievement(taskMasterDoc, taskDict, "Task Master")
+
+    # Task Wizard Achievement
+    taskWizardDoc = getAchievement(db, "Task Wizard", item.creatorId)
+    incrementAchievement(taskWizardDoc, taskDict, "Task Wizard")
+
+    taskDocRef.update(
+        {
+            "Title": item.title,
+            "Description": item.description,
+            "Deadline": item.deadline,
+            "Priority": item.priority,
+            "Status": item.status,
+        }
+    )
+    return taskDict
+
+
+def incrementAchievement(achievementDoc, dict, achievementName):
+    for achievement in achievementDoc:
         goal = achievement.get("target")
         currValue = achievement.get("currentValue")
         # If Achievement is alrdy done, skip
         if currValue == goal:
-            taskDict["Task Master"] = "Done"
+            dict[achievementName] = "Done"
             break
 
         else:
@@ -59,13 +79,16 @@ def updateTask(projectId, taskId, db, item):
                 achievement.reference.update(
                     {"currentValue": currValue, "status": "Done"}
                 )
-                taskDict["Task Master"] = "Done"
+                dict[achievementName] = "Done"
             else:
                 achievement.reference.update(
                     {
                         "currentValue": currValue,
                     }
                 )
+<<<<<<< HEAD
+    return
+=======
 
     initialStatus = taskDoc["Status"]
     initialPriority = taskDoc["Priority"]
@@ -89,3 +112,4 @@ def updateTask(projectId, taskId, db, item):
             updateWorkload(assigneeId, db)
 
     return taskDict
+>>>>>>> main
