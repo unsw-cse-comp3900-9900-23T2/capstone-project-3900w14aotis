@@ -5,4 +5,7 @@
   font-weight: 600;
   margin-left: 15px;
   margin-top: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

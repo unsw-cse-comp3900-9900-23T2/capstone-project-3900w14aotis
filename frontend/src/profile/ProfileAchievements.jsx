@@ -8,7 +8,6 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
 const ProfileAchievements = ({ achievements }) => {
-
   const [authUserId, setAuthUserId] = useState("");
   const { userId } = useParams();
   const [buttonText, setButtonText] = useState("Hide");
@@ -21,7 +20,7 @@ const ProfileAchievements = ({ achievements }) => {
       setButtonText("Hide");
     }
     setShowAchievements(!showAchievements);
-  }
+  };
 
   useEffect(() => {
     const auth = getAuth();
@@ -56,12 +55,16 @@ const ProfileAchievements = ({ achievements }) => {
         >
           <h3 className={styles.statusHeading}>Achievements</h3>
         </Box>
-        <Box sx={{
-          position: "absolute",
-          textAlign: "right",
-          width: "90%",
-        }}>
-          {authUserId === userId ? <Button onClick={hideAchievementsHandler}>{buttonText}</Button> : null}
+        <Box
+          sx={{
+            position: "absolute",
+            textAlign: "right",
+            width: "90%",
+          }}
+        >
+          {authUserId === userId ? (
+            <Button onClick={hideAchievementsHandler}>{buttonText}</Button>
+          ) : null}
         </Box>
         <PerfectScrollbar>
           <Box
@@ -73,16 +76,27 @@ const ProfileAchievements = ({ achievements }) => {
               padding: "2%",
             }}
           >
-            {achievements.map((achievement) => {
-              { return showAchievements ? <AchievementSmallCard achievementDetails={achievement} /> : null }
-            })}
-            {showAchievements ? null :
-              <Box sx={{
-                justifyContent: "center",
-              }}>
+            {showAchievements ? (
+              achievements.map((achievement) => {
+                return (
+                  <Box sx={{ width: "48%" }}>
+                    <AchievementSmallCard achievementDetails={achievement} />
+                  </Box>
+                );
+              })
+            ) : (
+              <></>
+            )}
+
+            {showAchievements ? null : (
+              <Box
+                sx={{
+                  justifyContent: "center",
+                }}
+              >
                 Achievements are hidden.
               </Box>
-            }
+            )}
           </Box>
         </PerfectScrollbar>
       </Box>

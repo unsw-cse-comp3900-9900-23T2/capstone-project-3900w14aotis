@@ -1,8 +1,11 @@
 import React from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/SummaryTaskCards.module.css";
+import AchievementSmallCard from "../profile/AchievementSmallCard";
+import Loading from "../components/Loading";
 
-const SummaryAchievements = () => {
+const SummaryAchievements = ({ achievements, isLoading }) => {
+  console.log(achievements);
   return (
     <Box
       sx={{
@@ -13,7 +16,32 @@ const SummaryAchievements = () => {
         boxShadow: "0px 0px 10px 3px rgba(0, 0, 0, 0.25)",
       }}
     >
-      <h3 className={styles.statusHeading}>Achievements</h3>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "5%",
+        }}
+      >
+        <h3 className={styles.statusHeading}>Achievements</h3>
+      </Box>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <Box
+          sx={{
+            // display: "flex",
+            // flexDirection: "column",
+            // justifyContent: "space-between",
+            // height: "100%",
+            width: "100%",
+          }}
+        >
+          {achievements.map((achievement) => {
+            return <AchievementSmallCard achievementDetails={achievement} />;
+          })}
+        </Box>
+      )}
     </Box>
   );
 };

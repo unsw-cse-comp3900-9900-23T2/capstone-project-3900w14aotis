@@ -115,6 +115,19 @@ export const emptyDeadlinesSort = (tasksList) => {
   return sortedTasks;
 };
 
+export const sortAchievementsByPercentage = (acheivementsList) => {
+  const sortedTasks = acheivementsList.sort((a, b) => {
+    if (a.currentValue === 0 || a.currentValue === a.target) {
+      return 1;
+    } else if (b.currentValue === 0 || b.currentValue === b.target) {
+      return -1;
+    } else {
+      return b.currentValue / b.target - a.currentValue / a.target;
+    }
+  });
+  return sortedTasks;
+};
+
 export const stringToColor = (string) => {
   let hash = 0;
   let i;

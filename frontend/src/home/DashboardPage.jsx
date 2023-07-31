@@ -5,14 +5,21 @@ import SummaryTaskCards from "./SummaryTaskCards";
 import { allTasksFetch } from "../api/task";
 import { allProjectsFetch } from "../api/project";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { sortTasksSoonest } from "../utils/helpers";
+import {
+  displayError,
+  emptyDeadlinesSort,
+  sortAchievementsByPercentage,
+} from "../utils/helpers";
 import SummaryAchievements from "./SummaryAchievements";
+import { profileAchievementsFetch } from "../api/profile";
 
 const DashboardPage = () => {
   const [todoTasks, setTodoTasks] = useState([]);
   const [doingTasks, setDoingTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [achievements, setAchievements] = useState([]);
+  const [achievementsLoading, setAchievementsLoading] = useState(true);
 
   const getAllTasks = async (projectId, uid) => {
     const allTasksResponse = await allTasksFetch(projectId);
@@ -23,7 +30,7 @@ const DashboardPage = () => {
           task.Status === "To Do" &&
           task.Assignees.some((assignee) => assignee.uid === uid)
       );
-      const filteredTodoTasks = sortTasksSoonest(todoTasks).slice(0, 3);
+      const filteredTodoTasks = emptyDeadlinesSort(todoTasks).slice(0, 3);
       setTodoTasks(filteredTodoTasks);
 
       const doingTasks = allTasks.filter(
@@ -32,7 +39,7 @@ const DashboardPage = () => {
           task.Assignees.some((assignee) => assignee.uid === uid)
       );
 
-      const filteredDoingTasks = sortTasksSoonest(doingTasks).slice(0, 3);
+      const filteredDoingTasks = emptyDeadlinesSort(doingTasks).slice(0, 3);
       setDoingTasks(filteredDoingTasks);
 
       setLoading(false);
@@ -49,12 +56,27 @@ const DashboardPage = () => {
     setLoading(false);
   };
 
+  const getAllAcheivements = async (uid) => {
+    const userAcheivementsPromise = await profileAchievementsFetch(uid);
+    console.log(userAcheivementsPromise);
+    if (userAcheivementsPromise.detail.code === 200) {
+      const sortedAchievements = sortAchievementsByPercentage(
+        userAcheivementsPromise.detail.message
+      ).slice(0, 5);
+      setAchievements(sortedAchievements);
+      setAchievementsLoading(false);
+    } else {
+      displayError("Error fetching Achievements!");
+    }
+  };
+
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
         getAllProjects(user.uid);
+        getAllAcheivements(user.uid);
       }
     });
   }, []);
@@ -106,7 +128,10 @@ const DashboardPage = () => {
             alignItems: "center",
           }}
         >
-          <SummaryAchievements />
+          <SummaryAchievements
+            achievements={achievements}
+            isLoading={achievementsLoading}
+          />
         </Box>
       </Box>
     </Box>
