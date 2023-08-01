@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import styles from "./styles/SummaryTaskCards.module.css";
 import AchievementSmallCard from "../profile/AchievementSmallCard";
 import Loading from "../components/Loading";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 const SummaryAchievements = ({ achievements, isLoading }) => {
   console.log(achievements);
@@ -35,11 +36,14 @@ const SummaryAchievements = ({ achievements, isLoading }) => {
             // justifyContent: "space-between",
             // height: "100%",
             width: "100%",
+            height: "80%",
           }}
         >
-          {achievements.map((achievement) => {
-            return <AchievementSmallCard achievementDetails={achievement} />;
-          })}
+          <PerfectScrollbar>
+            {achievements.map((achievement) => {
+              return <AchievementSmallCard achievementDetails={achievement} />;
+            })}
+          </PerfectScrollbar>
         </Box>
       )}
     </Box>

@@ -18,6 +18,7 @@ import { createTaskFetch } from "../api/task.js";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addTaskAction } from "../tasks/state/addTaskAction";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   const [title, setTitle] = useState("");
@@ -145,6 +146,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
     boxShadow: "0px 0px 10px 10px rgba(0, 0, 0, 0.25)",
     p: 4,
     borderRadius: "15px",
+    height: "clamp(400px, 70%, 700px)",
   };
 
   const inputBoxStyle = {
@@ -180,106 +182,119 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
       >
         <Fade in={isOpen}>
           <Box sx={modalStyle}>
-            <Box sx={titleStyle}>
-              <h2>Create Task</h2>
-              <Icon
-                icon="iconamoon:close-bold"
-                onClick={closeFunction}
-                style={{ fontSize: "36px" }}
-                className={styles.clickButton}
-              />
-            </Box>
-            <Box sx={inputBoxStyle}>
-              <Icon icon="bi:card-heading" style={{ fontSize: "50px" }} />
-              <TextInput
-                label="Title"
-                type="title"
-                placeholder="Enter Title Here"
-                onChangeFunction={onChangeTitle}
-              />
-            </Box>
-            <Box sx={inputBoxStyle}>
-              <Icon
-                icon="fluent:text-description-24-filled"
-                style={{ fontSize: "50px" }}
-              />
-              <TextBox
-                label="Description"
-                type="description"
-                placeholder="Enter Description Here"
-                onChangeFunction={onChangeDescription}
-                width="100%"
-                maxRows={1}
-              />
-            </Box>
-
-            <Box sx={inputBoxStyle}>
-              <Icon icon="octicon:people-16" style={{ fontSize: "50px" }} />
-              <Box sx={emailBoxStyle}>
-                <TextInput
-                  label="Assignees"
-                  type="assignees"
-                  defaultValue={email}
-                  placeholder='Type An Email And Press "Enter"'
-                  onChangeFunction={onChangeEmail}
-                  onKeyDownFunction={onEnter}
-                  emailInput={true}
-                />
-                {assignees.map((email) => (
-                  <Chip
-                    key={email}
-                    style={{ margin: "10px 10px 0 0" }}
-                    label={email}
-                    onDelete={() => handleDelete(email)}
+            <PerfectScrollbar>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                }}
+              >
+                <Box sx={titleStyle}>
+                  <h2>Create Task</h2>
+                  <Icon
+                    icon="iconamoon:close-bold"
+                    onClick={closeFunction}
+                    style={{ fontSize: "36px" }}
+                    className={styles.clickButton}
                   />
-                ))}
+                </Box>
+                <Box sx={inputBoxStyle}>
+                  <Icon icon="bi:card-heading" style={{ fontSize: "50px" }} />
+                  <TextInput
+                    label="Title"
+                    type="title"
+                    placeholder="Enter Title Here"
+                    onChangeFunction={onChangeTitle}
+                  />
+                </Box>
+                <Box sx={inputBoxStyle}>
+                  <Icon
+                    icon="fluent:text-description-24-filled"
+                    style={{ fontSize: "50px" }}
+                  />
+                  <TextBox
+                    label="Description"
+                    type="description"
+                    placeholder="Enter Description Here"
+                    onChangeFunction={onChangeDescription}
+                    width="100%"
+                    maxRows={1}
+                  />
+                </Box>
+
+                <Box sx={inputBoxStyle}>
+                  <Icon icon="octicon:people-16" style={{ fontSize: "50px" }} />
+                  <Box sx={emailBoxStyle}>
+                    <TextInput
+                      label="Assignees"
+                      type="assignees"
+                      defaultValue={email}
+                      placeholder='Type An Email And Press "Enter"'
+                      onChangeFunction={onChangeEmail}
+                      onKeyDownFunction={onEnter}
+                      emailInput={true}
+                    />
+                    {assignees.map((email) => (
+                      <Chip
+                        key={email}
+                        style={{ margin: "10px 10px 0 0" }}
+                        label={email}
+                        onDelete={() => handleDelete(email)}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+
+                <Box sx={inputBoxStyle}>
+                  <Icon
+                    icon="zondicons:exclamation-outline"
+                    style={{ fontSize: "50px" }}
+                  />
+                  <DropDown
+                    label="Priority"
+                    options={["Low", "Medium", "High", "Severe"]}
+                    onChangeFunction={onChangePriority}
+                  ></DropDown>
+                </Box>
+
+                <Box sx={inputBoxStyle}>
+                  <Icon icon="la:tasks" style={{ fontSize: "50px" }} />
+                  <DropDown
+                    label="Status"
+                    options={["To Do", "In Progress", "Done"]}
+                    onChangeFunction={onChangeStatus}
+                    defaultStatus={defaultStatus}
+                    isRequired={true}
+                  ></DropDown>
+                </Box>
+
+                <Box sx={inputBoxStyle}>
+                  <Icon
+                    icon="mdi:calendar-outline"
+                    style={{ fontSize: "50px" }}
+                  />
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label={"Deadline"}
+                      value={deadline}
+                      onChange={(deadline) => {
+                        setEmptyDeadline(false);
+                        setDeadline(deadline);
+                      }}
+                      format="DD-MM-YYYY"
+                    />
+                  </LocalizationProvider>
+                </Box>
+                <Box sx={createButtonBox}>
+                  <CustomButton
+                    text="Create"
+                    onClickFunction={createTaskButtonHandler}
+                  />
+                </Box>
               </Box>
-            </Box>
-
-            <Box sx={inputBoxStyle}>
-              <Icon
-                icon="zondicons:exclamation-outline"
-                style={{ fontSize: "50px" }}
-              />
-              <DropDown
-                label="Priority"
-                options={["Low", "Medium", "High", "Severe"]}
-                onChangeFunction={onChangePriority}
-              ></DropDown>
-            </Box>
-
-            <Box sx={inputBoxStyle}>
-              <Icon icon="la:tasks" style={{ fontSize: "50px" }} />
-              <DropDown
-                label="Status"
-                options={["To Do", "In Progress", "Done"]}
-                onChangeFunction={onChangeStatus}
-                defaultStatus={defaultStatus}
-                isRequired={true}
-              ></DropDown>
-            </Box>
-
-            <Box sx={inputBoxStyle}>
-              <Icon icon="mdi:calendar-outline" style={{ fontSize: "50px" }} />
-
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  label={"Deadline"}
-                  value={deadline}
-                  onChange={(deadline) => {
-                    setEmptyDeadline(false);
-                    setDeadline(deadline);
-                  }}
-                  format="DD-MM-YYYY"
-                />
-              </LocalizationProvider>
-            </Box>
-            <Box sx={createButtonBox}>
-              <CustomButton
-                text="Create"
-                onClickFunction={createTaskButtonHandler}
-              />
-            </Box>
+            </PerfectScrollbar>
           </Box>
         </Fade>
       </Modal>
