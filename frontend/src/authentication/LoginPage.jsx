@@ -8,12 +8,17 @@ import { loginFetch } from "../api/authentication.js";
 import { useNavigate } from "react-router-dom";
 import { displayError, displaySuccess } from "../utils/helpers";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { loginAction } from "./state/loginAction";
+import RecoverPasswordModal from "./RecoverPasswordModal";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onChangeEmail = (value) => setEmail(value);
   const onChangePassword = (value) => setPassword(value);
@@ -22,11 +27,20 @@ const LoginPage = () => {
     try {
       const auth = getAuth();
       const res = await signInWithEmailAndPassword(auth, email, password);
+      dispatch(loginAction());
       navigate("/otis/dashboard");
       displaySuccess("Welcome to Otis!");
     } catch (error) {
       displayError(`${error.message}`);
     }
+  };
+
+  const closeFunctionHandler = () => {
+    setModalOpen(false);
+  };
+
+  const recoverPasswordModal = () => {
+    setModalOpen(true);
   };
 
   const loginContainerSx = {
@@ -48,6 +62,10 @@ const LoginPage = () => {
 
   return (
     <>
+      <RecoverPasswordModal
+        isOpen={modalOpen}
+        handleCloseFunction={closeFunctionHandler}
+      />
       <Box
         sx={{
           display: "flex",
@@ -86,8 +104,8 @@ const LoginPage = () => {
                 justifyContent: "flex-end",
               }}
             >
-              <div className={styles.textLink}>
-                <TextLink linkTo="/register" text="Forgot your password?" />
+              <div className={styles.textLink} onClick={recoverPasswordModal}>
+                <TextLink text="Forgot your password?" />
               </div>
             </Box>
             <CustomButton text="Log In" onClickFunction={loginHandler} />

@@ -5,7 +5,13 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
-const DropDown = ({ label, options, onChangeFunction, defaultStatus }) => {
+const DropDown = ({
+  label,
+  options,
+  onChangeFunction,
+  defaultStatus,
+  isRequired,
+}) => {
   const [value, setValue] = useState(defaultStatus);
 
   const handleChange = (event) => {
@@ -42,7 +48,7 @@ const DropDown = ({ label, options, onChangeFunction, defaultStatus }) => {
 
   return (
     <Box sx={dropdownSx}>
-      <FormControl fullWidth>
+      <FormControl fullWidth required={isRequired}>
         <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           labelId="demo-simple-select-label"

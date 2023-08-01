@@ -26,6 +26,10 @@ const CreateProject = () => {
 
   const createProjectButtonHandler = async () => {
     try {
+      if (project.length === 0) {
+        displayError("Please enter a Project Name");
+        return;
+      }
       const user = getAuth();
       const createProjectFetchResponse = await createProjectFetch(
         project,

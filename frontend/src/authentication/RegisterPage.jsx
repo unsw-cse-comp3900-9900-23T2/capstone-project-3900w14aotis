@@ -8,6 +8,8 @@ import { registerFetch } from "../api/authentication.js";
 import { useNavigate } from "react-router-dom";
 import { displayError, displaySuccess } from "../utils/helpers";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { registerAction } from "./state/registerAction";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -18,6 +20,7 @@ const RegisterPage = () => {
   const [passwordColour, setPasswordColour] = useState("#B2B2B2");
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onChangeFirstName = (value) => setFirstName(value);
   const onChangeLastName = (value) => setLastName(value);
@@ -49,7 +52,7 @@ const RegisterPage = () => {
           password,
           email
         );
-        console.log(res);
+        dispatch(registerAction());
         navigate("/otis/dashboard");
         displaySuccess("Welcome to Otis!");
       } catch (error) {

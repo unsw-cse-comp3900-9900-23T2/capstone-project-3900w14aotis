@@ -22,12 +22,19 @@ import JoinProject from "./projects/JoinProjectPage";
 import BoardPage from "./board/BoardPage";
 import ProfilePage from "./profile/ProfilePage";
 import ConnectionsPage from "./connections/ConnectionsPage";
+import { stringToObject } from "../src/utils/helpers";
 
+const loggedIn = stringToObject(localStorage.getItem("loggedIn"));
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<RootLayout />}>
       <Route path="/" element={<AuthLayout />}>
-        <Route index element={<Navigate to="/login" />} />
+        <Route
+          index
+          element={
+            loggedIn ? <Navigate to="/otis" /> : <Navigate to="/login" />
+          }
+        />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
       </Route>

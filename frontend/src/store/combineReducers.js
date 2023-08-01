@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import authReducer from "../authentication/state/authReducer";
 import addTaskReducer from "../tasks/state/addTaskReducer";
 import deleteTaskReducer from "../tasks/state/deleteTaskReducer";
 import updateProfileReducer from "../profile/state/updateProfileReducer";
@@ -6,6 +7,7 @@ import removeConnectionReducer from "../connections/state/removeConnectionReduce
 import addConnectionReducer from "../connections/state/addConnectionReducer";
 
 const rootReducer = combineReducers({
+  authenticated: authReducer,
   taskAdded: addTaskReducer,
   taskDeleted: deleteTaskReducer,
   tasksUpdated: addTaskReducer,

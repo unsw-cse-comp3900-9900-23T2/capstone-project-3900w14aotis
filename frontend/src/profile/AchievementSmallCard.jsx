@@ -15,11 +15,10 @@ const AchievementSmallCard = ({
       sx={{
         display: "flex",
         flexDirection: "row",
-        width: "48%",
+        width: "100%",
         height: "7.1875rem",
         background: "#FFF",
         justifyContent: "space-between",
-        margin: "1%",
       }}
     >
       <Box
