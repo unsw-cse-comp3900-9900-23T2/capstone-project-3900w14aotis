@@ -10,7 +10,7 @@ import { displayError, displaySuccess } from "../utils/helpers";
 import { getAuth } from "firebase/auth";
 import { sendConnectionFetch } from "../api/connections";
 
-const SendRequestModal = () => {
+const SendConnectionModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -102,4 +102,4 @@ const SendRequestModal = () => {
   );
 };
 
-export default SendRequestModal;
+export default SendConnectionModal;
