@@ -118,7 +118,10 @@ const TasksPage = () => {
   }, [searchQuery, taskAdded]);
 
   const modalOpen = () => setOpen(true);
-  const modalClose = () => setOpen(false);
+  const modalClose = () => {
+    // clickedTaskId("");
+    setOpen(false);
+  };
 
   const updateSearchQuery = (value) => {
     setSearchQuery(value);

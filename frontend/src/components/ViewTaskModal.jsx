@@ -40,6 +40,7 @@ const ViewTaskModal = ({
   const [userId, setUserId] = useState("");
   const [ratingUpdated, setRatingUpdated] = useState(0);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [deadline, setDeadline] = useState(new Date(0));
 
   const dispatch = useDispatch();
 
@@ -136,8 +137,8 @@ const ViewTaskModal = ({
 
   return (
     <div>
-      {console.log("taskId: " + taskId)}
-      {console.log(details)}
+      {/* {console.log("taskId: " + taskId)}
+      {console.log(details)} */}
       {isOpen && (
         <Modal
           aria-labelledby="transition-modal-title"
@@ -269,6 +270,7 @@ const ViewTaskModal = ({
                     {details && (
                       <DeadlineBox
                         deadline={details.Deadline}
+                        // deadline={finalDeadline}
                         width={"7.4375rem"}
                         height={"2.49rem"}
                       />
