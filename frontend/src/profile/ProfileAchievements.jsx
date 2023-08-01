@@ -11,6 +11,7 @@ import {
   setHiddenAchievementsFetch,
 } from "../api/profile.js";
 
+
 const ProfileAchievements = ({ achievements }) => {
   const [authUserId, setAuthUserId] = useState("");
   const { userId } = useParams();
@@ -20,10 +21,8 @@ const ProfileAchievements = ({ achievements }) => {
   const hideAchievementsHandler = async () => {
     if (buttonText === "Hide") {
       setButtonText("Show");
-      console.log("24");
     } else {
       setButtonText("Hide");
-      console.log("line 27");
     }
     // Set both local variable and database variable
     const achievementState = await checkHiddenAchievementsAPI(userId);
