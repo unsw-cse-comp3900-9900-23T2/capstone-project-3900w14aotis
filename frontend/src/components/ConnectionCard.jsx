@@ -109,7 +109,7 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
         {loading ? (
           <Loading />
         ) : (
-          <Tooltip title={`${workload}%`}>
+          <Tooltip title={`${workload.toFixed(2)}%`}>
             <Box
               sx={{
                 alignItems: "center",
@@ -118,7 +118,7 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
               }}
             >
               <ProgressBar
-                completed={workload === -1 ? 100 : workload}
+                completed={workload === -1 ? 100 : `${workload.toFixed(2)}%`}
                 bgColor={getColor()}
                 width="100%"
                 height="100%"
