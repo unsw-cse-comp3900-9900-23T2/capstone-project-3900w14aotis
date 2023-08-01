@@ -41,10 +41,12 @@ const ProfilePage = () => {
   const { userId } = useParams();
 
   const profileUpdated = useSelector((state) => state.profileUpdated);
+  const profileAchievementLoad = useSelector((state) => state.profileAchievementLoad);
+  const profileTasksLoad = useSelector((state) => state.profileTasksLoad);
 
   const backButtonHandler = () => {
     try {
-      navigate(-1);
+      navigate("/otis/dashboard");
     } catch (error) {
       displayError(`${error.message}`);
     }
@@ -57,7 +59,6 @@ const ProfilePage = () => {
   // Get profile details
   const getProfileDetails = async () => {
     try {
-      // TODO: Figure out which user to retrieve details for
       const profileDetailsResponse = await profileDetailFetch(userId);
       console.log(profileDetailsResponse);
       const profile = profileDetailsResponse.detail.message;
@@ -85,14 +86,13 @@ const ProfilePage = () => {
 
   useEffect(() => {
     getAchievements();
-  }, []);
+  }, [profileAchievementLoad]);
 
   // Get user achievements
   const getAchievements = async () => {
     try {
       const achievementsResponse = await profileAchievementsFetch(userId);
       const userAchievements = achievementsResponse.detail.message;
-      console.log("achievements: ", userAchievements);
       setAchievements(userAchievements);
     } catch (error) {
       displayError(error);
@@ -127,7 +127,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     getAllProjects(userId);
-  }, []);
+  }, [profileTasksLoad]);
 
   return (
     <>
@@ -254,6 +254,7 @@ const ProfilePage = () => {
                   </>
                 )}
               </Box>
+              {/* <ProfileRatings ratingNames={ratingNames} ratingValues={ratingValues}/> */}
               <ProfileRatings />
               <ProfileAchievements achievements={achievements} />
               <ProfileAssignedTasks projectId={projects[0]} tasks={allTasks} />

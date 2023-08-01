@@ -14,7 +14,11 @@ import { stringAvatar } from "../utils/helpers";
 import { profileDetailFetch } from "../api/profile.js";
 import Loading from "../components/Loading";
 import { useSelector } from "react-redux";
-import { updateProfileAction } from "../profile/state/updateProfileAction";
+import { profileAchievementLoadAction } from "../profile/state/profileAchievementLoadAction";
+import { profileRatingsLoadAction } from "../profile/state/profileRatingsLoadAction";
+import { profileTasksLoadAction } from "../profile/state/profileTasksLoadAction";
+import { useDispatch } from "react-redux";
+
 
 const ProfilePictureDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -45,6 +49,7 @@ const ProfilePictureDropdown = () => {
   };
 
   const profileUpdated = useSelector((state) => state.profileUpdated);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getUserDetails();
@@ -62,6 +67,9 @@ const ProfilePictureDropdown = () => {
     const auth = getAuth();
     const uid = auth.currentUser.uid;
     console.log(auth.currentUser);
+    dispatch(profileAchievementLoadAction());
+    dispatch(profileRatingsLoadAction());
+    dispatch(profileTasksLoadAction());
     navigate(`/otis/profile/${uid}`);
   };
 
