@@ -32,7 +32,7 @@ const JoinProject = () => {
         user.currentUser.uid
       );
 
-      if (joinProjectFetchResponse.code === "200") {
+      if (joinProjectFetchResponse.detail.code === 200) {
         console.log(joinProjectFetchResponse);
         navigate(`/otis/${joinProjectFetchResponse.detail.message}/tasks`);
         displaySuccess(`Successfully joined project ${projectId}`);
