@@ -17,6 +17,8 @@ import { taskDetailFetch } from "../api/task";
 import Loading from "./Loading";
 import { useDispatch } from "react-redux";
 import { deleteTaskAction } from "../tasks/state/deleteTaskAction";
+import PerfectScrollbar from "react-perfect-scrollbar";
+import DeleteTaskConfirmation from "../tasks/DeleteTaskConfirmation";
 
 const ViewTaskModal = ({
   isOpen,
@@ -25,7 +27,6 @@ const ViewTaskModal = ({
   taskId,
   setRemovedTaskId,
 }) => {
-  // TODO: rating options are skewed (more negatives, add a neutral option)
   const ratingMapping = [
     { mood: "Very Sad", iconName: "fa-regular:sad-cry" },
     { mood: "Sad", iconName: "akar-icons:face-sad" },
@@ -38,6 +39,8 @@ const ViewTaskModal = ({
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState("");
   const [ratingUpdated, setRatingUpdated] = useState(0);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [deadline, setDeadline] = useState(new Date(0));
 
   const dispatch = useDispatch();
 
@@ -56,26 +59,14 @@ const ViewTaskModal = ({
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        localStorage.setItem("loggedIn", true);
         setUserId(user.uid);
         getTaskDetails();
-      } else {
-        // User is signed out
-        localStorage.removeItem("loggedIn");
       }
     });
   }, [isOpen, ratingUpdated]);
 
   const deleteTaskHandler = async () => {
-    const deleteTaskResponse = await deleteTaskFetch(projectId, taskId);
-    if (deleteTaskResponse.detail.code !== 200) {
-      displayError(deleteTaskResponse.detail.message);
-    } else {
-      setRemovedTaskId(taskId);
-      dispatch(deleteTaskAction());
-      displaySuccess(deleteTaskResponse.detail.message);
-    }
-    onClose();
+    setConfirmModalOpen(true);
   };
 
   const ratingFetch = async (uid, mood) => {
@@ -93,15 +84,15 @@ const ViewTaskModal = ({
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        localStorage.setItem("loggedIn", true);
         const userId = user.uid;
         ratingFetch(userId, mood);
         setRatingUpdated(ratingUpdated + 1);
-      } else {
-        // User is signed out
-        localStorage.removeItem("loggedIn");
       }
     });
+  };
+
+  const handleClose = () => {
+    setConfirmModalOpen(false);
   };
 
   const modalStyle = {
@@ -117,6 +108,7 @@ const ViewTaskModal = ({
     boxShadow: "0px 0px 10px 10px rgba(0, 0, 0, 0.25)",
     p: 4,
     borderRadius: "15px",
+    height: "clamp(400px, 70%, 550px)",
   };
 
   const titleStyle = {
@@ -145,6 +137,8 @@ const ViewTaskModal = ({
 
   return (
     <div>
+      {/* {console.log("taskId: " + taskId)}
+      {console.log(details)} */}
       {isOpen && (
         <Modal
           aria-labelledby="transition-modal-title"
@@ -155,136 +149,152 @@ const ViewTaskModal = ({
         >
           <Fade in={isOpen}>
             <Box sx={modalStyle}>
-              <Box sx={titleStyle}>
-                <Icon
-                  icon="iconamoon:close-bold"
-                  onClick={onClose}
-                  style={{ fontSize: "36px" }}
-                  className={styles.clickButton}
-                />
-              </Box>
-              {loading ? (
-                <Loading />
-              ) : (
-                <>
-                  <Box sx={displayBoxStyle}>
-                    <Icon icon="bi:card-heading" style={{ fontSize: "50px" }} />
-                    <Box>
-                      <h2>{details && details.Title}</h2>
-                      <p>ID: {taskId}</p>
+              <DeleteTaskConfirmation
+                isOpen={confirmModalOpen}
+                closeFunction={handleClose}
+                taskId={taskId}
+                onClose={onClose}
+                setRemovedTaskId={setRemovedTaskId}
+                projectId={projectId}
+              />
+              <PerfectScrollbar>
+                <Box sx={titleStyle}>
+                  <Icon
+                    icon="iconamoon:close-bold"
+                    onClick={onClose}
+                    style={{ fontSize: "36px" }}
+                    className={styles.clickButton}
+                  />
+                </Box>
+                {loading ? (
+                  <Loading />
+                ) : (
+                  <>
+                    <Box sx={displayBoxStyle}>
+                      <Icon
+                        icon="bi:card-heading"
+                        style={{ fontSize: "50px" }}
+                      />
+                      <Box>
+                        <h2>{details && details.Title}</h2>
+                        <p>ID: {taskId}</p>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderRadius: "20px",
+                          width: "120px",
+                          height: "50px",
+                          background: details
+                            ? details.Priority === "Low"
+                              ? "#3CE800"
+                              : details.Priority === "Medium"
+                              ? "#FDFF89"
+                              : details.Priority === "High"
+                              ? "#FF9534"
+                              : details.Priority === "Severe"
+                              ? "#FF2121"
+                              : "#FFFFFF"
+                            : "#FFFFF",
+                        }}
+                      >
+                        <h3>{details && details.Priority}</h3>
+                      </Box>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        borderRadius: "20px",
-                        width: "120px",
-                        height: "50px",
-                        background: details
-                          ? details.Priority === "Low"
-                            ? "#3CE800"
-                            : details.Priority === "Medium"
-                            ? "#FDFF89"
-                            : details.Priority === "High"
-                            ? "#FF9534"
-                            : details.Priority === "Severe"
-                            ? "#FF2121"
-                            : "#FFFFFF"
-                          : "#FFFFF",
-                      }}
-                    >
-                      <h3>{details && details.Priority}</h3>
+                    <Box sx={displayBoxStyle}>
+                      <Icon
+                        icon="fluent:text-description-24-filled"
+                        style={{ fontSize: "50px" }}
+                      />
+                      <Box>
+                        <h2>Description</h2>
+                        <p>{details && details.Description}</p>
+                      </Box>
                     </Box>
-                  </Box>
-                  <Box sx={displayBoxStyle}>
-                    <Icon
-                      icon="fluent:text-description-24-filled"
-                      style={{ fontSize: "50px" }}
-                    />
-                    <Box>
-                      <h2>Description</h2>
-                      <p>{details && details.Description}</p>
-                    </Box>
-                  </Box>
-                  <Box sx={displayBoxStyle}>
-                    <Icon icon="ph:star-bold" style={{ fontSize: "50px" }} />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "20px",
-                        width: "100%",
-                      }}
-                    >
-                      {ratingMapping.length > 0 &&
-                        ratingMapping.map((rating, idx) => {
-                          let rated = false;
-                          if (details) {
-                            const ratingList = details.Rating[rating.mood];
+                    <Box sx={displayBoxStyle}>
+                      <Icon icon="ph:star-bold" style={{ fontSize: "50px" }} />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: "20px",
+                          width: "100%",
+                        }}
+                      >
+                        {ratingMapping.length > 0 &&
+                          ratingMapping.map((rating, idx) => {
+                            let rated = false;
+                            if (details) {
+                              const ratingList = details.Rating[rating.mood];
 
-                            for (const userRating of ratingList) {
-                              if (userRating.uid === userId) {
-                                rated = true;
+                              for (const userRating of ratingList) {
+                                if (userRating.uid === userId) {
+                                  rated = true;
+                                }
                               }
+                              return (
+                                <TaskRatingIcon
+                                  key={idx}
+                                  rated={rated}
+                                  iconName={rating.iconName}
+                                  mood={rating.mood}
+                                  addRatingFunction={addRatingHandler}
+                                  userRatings={details.Rating[rating.mood]}
+                                />
+                              );
                             }
-                            return (
-                              <TaskRatingIcon
-                                key={idx}
-                                rated={rated}
-                                iconName={rating.iconName}
-                                mood={rating.mood}
-                                addRatingFunction={addRatingHandler}
-                                userRatings={details.Rating[rating.mood]}
-                              />
-                            );
-                          }
-                        })}
+                          })}
+                      </Box>
                     </Box>
-                  </Box>
-                  <Box sx={displayBoxStyle}>
-                    <Icon
-                      icon="octicon:people-16"
-                      style={{ fontSize: "50px" }}
-                    />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: "10px",
-                      }}
-                    >
-                      {details && details.Assignees && (
-                        <TaskUsers assignees={details.Assignees} />
-                      )}
+                    <Box sx={displayBoxStyle}>
+                      <Icon
+                        icon="octicon:people-16"
+                        style={{ fontSize: "50px" }}
+                      />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: "10px",
+                        }}
+                      >
+                        {details && details.Assignees && (
+                          <TaskUsers assignees={details.Assignees} />
+                        )}
+                      </Box>
                     </Box>
-                  </Box>
-                  <Box sx={displayBoxStyle}>
-                    <Icon icon="la:tasks" style={{ fontSize: "50px" }} />
-                    <h2>{details && details.Status}</h2>
-                  </Box>
-                  {details && (
-                    <DeadlineBox
-                      deadline={details && details.Deadline}
-                      width={"7.4375rem"}
-                      height={"2.49rem"}
-                    />
-                  )}
-                  <Box
-                    onClick={deleteTaskHandler}
-                    sx={{
-                      "&:hover": {
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    <Icon
-                      icon="mingcute:delete-line"
-                      style={{
-                        fontSize: "50px",
-                      }}
-                    />
-                  </Box>
-                </>
-              )}
+                    <Box sx={displayBoxStyle}>
+                      <Icon icon="la:tasks" style={{ fontSize: "50px" }} />
+                      <h2>{details && details.Status}</h2>
+                    </Box>
+                    {details && (
+                      <DeadlineBox
+                        deadline={details.Deadline}
+                        // deadline={finalDeadline}
+                        width={"7.4375rem"}
+                        height={"2.49rem"}
+                      />
+                    )}
+                    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                      <Box
+                        onClick={deleteTaskHandler}
+                        sx={{
+                          "&:hover": {
+                            cursor: "pointer",
+                          },
+                        }}
+                      >
+                        <Icon
+                          icon="mingcute:delete-line"
+                          style={{
+                            fontSize: "50px",
+                          }}
+                        />
+                      </Box>
+                    </Box>
+                  </>
+                )}
+              </PerfectScrollbar>
             </Box>
           </Fade>
         </Modal>

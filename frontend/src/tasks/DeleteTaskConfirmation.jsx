@@ -1,51 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box } from "@mui/material";
-import { Icon } from "@iconify/react";
-import { removeConnectionFetch } from "../api/connections";
-import { getAuth } from "firebase/auth";
-import { displaySuccess, displayError } from "../utils/helpers";
-import styles from "./styles/Modal.module.css";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import CustomButton from "./CustomButton";
+import CustomButton from "../components/CustomButton";
+import { deleteTaskFetch } from "../api/task";
+import { displayError, displaySuccess } from "../utils/helpers";
 import { useDispatch } from "react-redux";
-import { addConnectionAction } from "../connections/state/addConnectionAction";
+import { deleteTaskAction } from "../tasks/state/deleteTaskAction";
 
-const RemoveConnectionModal = ({
-  uId,
+const DeleteTaskConfirmation = ({
   isOpen,
-  closeModal,
-  onRemoveConnection,
+  closeFunction,
+  taskId,
+  onClose,
+  setRemovedTaskId,
+  projectId,
 }) => {
-  const [open, setOpen] = useState(false);
-
   const dispatch = useDispatch();
 
-  const handleOpen = (event) => {
-    setOpen(true);
-  };
-  const handleClose = (event) => {
-    closeModal();
+  const deleteTaskHandler = async () => {
+    const deleteTaskResponse = await deleteTaskFetch(projectId, taskId);
+    if (deleteTaskResponse.detail.code !== 200) {
+      displayError(deleteTaskResponse.detail.message);
+    } else {
+      if (setRemovedTaskId) {
+        setRemovedTaskId(taskId);
+      }
+      dispatch(deleteTaskAction());
+      displaySuccess(deleteTaskResponse.detail.message);
+    }
+    onClose();
   };
 
-  const removeConnectionHandler = async () => {
-    try {
-      const user = getAuth();
-      const res = await removeConnectionFetch(user.currentUser.uid, uId);
-      if (res.detail.code === 200) {
-        dispatch(addConnectionAction());
-        displaySuccess(`${res.detail.message}`);
-      } else {
-        displayError(`${res.detail.message}`);
-      }
-      handleClose();
-      // This is really shit lol
-      if (onRemoveConnection) {
-        onRemoveConnection();
-      }
-    } catch (error) {
-      displayError(`${error.message}`);
-    }
+  const handleClose = () => {
+    closeFunction();
   };
 
   const modalStyle = {
@@ -75,15 +63,15 @@ const RemoveConnectionModal = ({
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={isOpen}
-        onClose={handleClose}
+        onClose={closeFunction}
         closeAfterTransition
       >
         <Fade in={isOpen}>
           <Box sx={modalStyle}>
             <Box sx={titleStyle}>
-              <h2>Remove Connection</h2>
+              <h2>Delete Task</h2>
             </Box>
-            <p>Are you sure you want to remove this connection?</p>
+            <p>Are you sure you want to delete this task?</p>
             <Box
               sx={{
                 display: "flex",
@@ -93,7 +81,7 @@ const RemoveConnectionModal = ({
             >
               <CustomButton
                 text="Yes"
-                onClickFunction={removeConnectionHandler}
+                onClickFunction={deleteTaskHandler}
               ></CustomButton>
               <CustomButton
                 text="No"
@@ -106,5 +94,4 @@ const RemoveConnectionModal = ({
     </Box>
   );
 };
-
-export default RemoveConnectionModal;
+export default DeleteTaskConfirmation;
