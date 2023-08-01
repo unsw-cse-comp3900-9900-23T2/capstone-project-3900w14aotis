@@ -18,6 +18,7 @@ import { profileAchievementLoadAction } from "../profile/state/profileAchievemen
 import { profileRatingsLoadAction } from "../profile/state/profileRatingsLoadAction";
 import { profileTasksLoadAction } from "../profile/state/profileTasksLoadAction";
 import { useDispatch } from "react-redux";
+import { logoutAction } from "../authentication/state/logoutAction";
 
 
 const ProfilePictureDropdown = () => {
@@ -27,6 +28,7 @@ const ProfilePictureDropdown = () => {
 
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const fetchUserDetails = async (uid) => {
     const profileDetailsResponse = await profileDetailFetch(uid);
@@ -39,17 +41,12 @@ const ProfilePictureDropdown = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        localStorage.setItem("loggedIn", true);
         fetchUserDetails(user.uid);
-      } else {
-        // User is signed out
-        localStorage.removeItem("loggedIn");
       }
     });
   };
 
   const profileUpdated = useSelector((state) => state.profileUpdated);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     getUserDetails();
@@ -75,6 +72,7 @@ const ProfilePictureDropdown = () => {
 
   const logoutHandler = () => {
     const auth = getAuth();
+    dispatch(logoutAction());
     handleClose();
     signOut(auth);
     navigate("/login");

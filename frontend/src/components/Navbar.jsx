@@ -4,24 +4,12 @@ import styles from "./styles/Navbar.module.css";
 import ProfilePictureDropdown from "./ProfilePictureDropdown";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { stringToObject } from "../utils/helpers";
+import { useSelector } from "react-redux";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = useState(
-    stringToObject(localStorage.getItem("loggedIn"))
-  );
-
-  useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        setLoggedIn(true);
-      } else {
-        // User is signed out
-        setLoggedIn(false);
-      }
-    });
-  }, []);
+  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
 
   const navbarContainerSx = {
     position: "fixed",
@@ -49,7 +37,7 @@ const Navbar = () => {
           <img className={styles.logo} src="/Jira-Emblem.png" alt="Otis logo" />
           <h2>Otis</h2>
         </Box>
-        {loggedIn && <ProfilePictureDropdown />}
+        {loading ? <></> : user && <ProfilePictureDropdown />}
       </Box>
     </>
   );

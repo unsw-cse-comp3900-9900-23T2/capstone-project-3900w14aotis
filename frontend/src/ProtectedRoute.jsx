@@ -1,23 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useSelector } from "react-redux";
+import { useAuthState } from "react-firebase-hooks/auth";
+import Loading from "../src/components/Loading";
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
-
   const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in
-      localStorage.setItem("loggedIn", true);
-    } else {
-      // User is signed out
-      localStorage.removeItem("loggedIn");
-    }
-  });
+  const [user, loading, error] = useAuthState(auth);
 
-  const authorised = localStorage.getItem("loggedIn");
-  return authorised ? (
+  if (loading) {
+    return <Loading />;
+  }
+  return user ? (
     children
   ) : (
     <Navigate to="/login" replace state={{ path: location.pathname }} />

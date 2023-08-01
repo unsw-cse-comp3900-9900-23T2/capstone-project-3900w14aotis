@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import authReducer from "../authentication/state/authReducer";
 import addTaskReducer from "../tasks/state/addTaskReducer";
 import deleteTaskReducer from "../tasks/state/deleteTaskReducer";
 import updateProfileReducer from "../profile/state/updateProfileReducer";
@@ -9,6 +10,7 @@ import profileRatingsLoad from "../profile/state/profileRatingsLoadReducer";
 import profileTasksLoad from "../profile/state/profileTasksLoadReducer";
 
 const rootReducer = combineReducers({
+  authenticated: authReducer,
   taskAdded: addTaskReducer,
   taskDeleted: deleteTaskReducer,
   tasksUpdated: addTaskReducer,

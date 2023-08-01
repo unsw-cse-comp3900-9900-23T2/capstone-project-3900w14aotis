@@ -1,4 +1,4 @@
-// Reducer that changes the state of whether a task has been added
+// Reducer that changes the state of whether profile has been updated
 const updateProfileReducer = (state = 0, action) => {
   switch (action.type) {
     case "UPDATE-PROFILE":

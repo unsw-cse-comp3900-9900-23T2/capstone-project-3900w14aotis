@@ -25,12 +25,16 @@ const SmallTaskCard = ({ task, index, viewTaskFunction }) => {
               justifyContent: "space-between",
             }}
             onClick={() => {
-              //TODO: view task modal popup
-              console.log(`clicked task: ${task.taskID}`);
               viewTaskFunction(task.taskID);
             }}
           >
-            <h5 className={styles.taskCardTitle}>{task.Title}</h5>
+            <Box
+              sx={{
+                width: "100%",
+              }}
+            >
+              <h5 className={styles.taskCardTitle}>{task.Title}</h5>
+            </Box>
             <Box
               sx={{
                 display: "flex",
@@ -41,15 +45,19 @@ const SmallTaskCard = ({ task, index, viewTaskFunction }) => {
                 marginRight: "15px",
               }}
             >
-              <DeadlineBox
-                deadline={task.Deadline}
-                status={task.Status}
-                width={"8rem"}
-                height={"1.6rem"}
-              />
+              {Date.parse(task.Deadline) !== 0 && (
+                <DeadlineBox
+                  deadline={task.Deadline}
+                  status={task.Status}
+                  width={"8rem"}
+                  height={"1.6rem"}
+                />
+              )}
               <Box
                 sx={{
                   display: "flex",
+                  width: Date.parse(task.Deadline) === 0 ? "100%" : "50%",
+                  justifyContent: "flex-end",
                   gap: "10px",
                 }}
               >

@@ -61,7 +61,7 @@ def createNewTask(newTask, projectId, db):
         emailLower = email.lower()
         taskmasterRef = findUser("email", emailLower, db)
         taskmasterRef.update({"tasks": firestore.ArrayUnion([taskRef[1].id])})
-        
+
         # updates workload when new task is created and the person is assigned to it.
         userId = taskmasterRef.get().get("uid")
         updateWorkload(userId, db)
