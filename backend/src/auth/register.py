@@ -1,7 +1,9 @@
 from src.config.firestoreUtils import initialiseFirestore
 from src.config.firestoreUtils import auth
 from src.auth.login import signInWithEmailAndPassword
+from src.serverHelper import convertImageToBase64
 
+INITIAL_WORKLOAD = float()
 
 # authRegister takes in 2 parameters, item (representing the taskMaster class) and db(the database). It
 # creates the user in the authentication section and also adds a new document representing the user in the
@@ -29,12 +31,22 @@ def authRegister(item, db):
             "pendingConnections": item.pendingConnections,
             "profileImage": item.profileImage,
             "coverProfileImage": item.coverProfileImage,
+            "workload": INITIAL_WORKLOAD,
+            "achievementHidden": False,
+            "Rating": {
+                "Very Happy": [],
+                "Happy": [],
+                "Neutral": [],
+                "Sad": [],
+                "Very Sad": [],
+            },
         }
     )
 
     parentDocRef = db.collection("achievements").document(item.uid)
     achievementCollection = parentDocRef.collection("achievements")
     # Initialise innovator achievement
+    # Add extra field for image, set it to be link of the image 
     achievementCollection.add(
         {
             "achievement": "Innovator",
@@ -42,9 +54,9 @@ def authRegister(item, db):
             "target": 1,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/innovatorImage.png")
         }
     )
-
     # Initialise New Critic achievement
     achievementCollection.add(
         {
@@ -53,6 +65,7 @@ def authRegister(item, db):
             "target": 1,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/newCriticImage.png")
         }
     )
 
@@ -64,6 +77,7 @@ def authRegister(item, db):
             "target": 5,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/connoisseurImage.png")
         }
     )
 
@@ -75,6 +89,7 @@ def authRegister(item, db):
             "target": 1,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/taskFledglingImage.jpg")     
         }
     )
 
@@ -86,6 +101,43 @@ def authRegister(item, db):
             "target": 5,
             "currentValue": 0,
             "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/taskMasterImage.png") 
+        }
+    )
+
+    # Initialise Task Wizard achievement
+    achievementCollection.add(
+        {
+            "achievement": "Task Wizard",
+            "description": "Complete 100 tasks",
+            "target": 100,
+            "currentValue": 0,
+            "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/taskWizardImage.png") 
+        }
+    )
+
+    # Initialise Social Butterfly achievement
+    achievementCollection.add(
+        {
+            "achievement": "Social Butterfly",
+            "description": "Send your first connection",
+            "target": 1,
+            "currentValue": 0,
+            "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/socialButterflyImage.png") 
+        }
+    )
+
+    # Initialise BNOC achievement
+    achievementCollection.add(
+        {
+            "achievement": "BNOC",
+            "description": "Send 5 connections",
+            "target": 5,
+            "currentValue": 0,
+            "status": "In Progress",
+            "image": convertImageToBase64("./src/auth/images/bnocImage.png") 
         }
     )
 

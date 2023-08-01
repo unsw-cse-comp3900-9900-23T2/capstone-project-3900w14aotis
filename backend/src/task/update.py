@@ -1,4 +1,5 @@
-from src.serverHelper import getAchievement, findUser
+from src.serverHelper import getAchievement, findUser, getFromUser, getTaskDoc
+from src.workload.calculateWorkload import updateWorkload
 
 
 def updateTask(projectId, taskId, db, item):
@@ -15,16 +16,18 @@ def updateTask(projectId, taskId, db, item):
     """
     projectDocRef = db.collection("projects").document(projectId)
     taskDocRef = projectDocRef.collection("tasks").document(taskId)
+    taskDoc = getTaskDoc(projectId, taskId, db)
     taskDict = {
         "TaskID": taskId,
         "Task Fledgling": "In Progress",
         "Task Master": "In Progress",
+        "Task Wizard" : "In Progress",
     }
     # Check if user is part of the task's assignee list
     userRef = findUser("uid", item.creatorId, db)
     userEmail = userRef.get().get("email")
     # If user isnt part of task, return none
-    assigneeList = taskDocRef.get().get("Assignees")
+    assigneeList = taskDoc.get("Assignees")
     if userEmail not in assigneeList:
         return None
 
@@ -42,28 +45,15 @@ def updateTask(projectId, taskId, db, item):
 
     # Task Master Achievement
     taskMasterDoc = getAchievement(db, "Task Master", item.creatorId)
-    for achievement in taskMasterDoc:
-        goal = achievement.get("target")
-        currValue = achievement.get("currentValue")
-        # If Achievement is alrdy done, skip
-        if currValue == goal:
-            taskDict["Task Master"] = "Done"
-            break
+    incrementAchievement(taskMasterDoc, taskDict, "Task Master")
 
-        else:
-            currValue += 1
-            # If current Value meets the goal, update achievement status to done
-            if currValue == goal:
-                achievement.reference.update(
-                    {"currentValue": currValue, "status": "Done"}
-                )
-                taskDict["Task Master"] = "Done"
-            else:
-                achievement.reference.update(
-                    {
-                        "currentValue": currValue,
-                    }
-                )
+    # Task Wizard Achievement
+    taskWizardDoc = getAchievement(db, "Task Wizard", item.creatorId)
+    incrementAchievement(taskWizardDoc, taskDict, "Task Wizard")
+
+    initialStatus = taskDoc["Status"]
+    initialPriority = taskDoc["Priority"]
+    initialDeadline = taskDoc["Deadline"]
 
     taskDocRef.update(
         {
@@ -74,4 +64,38 @@ def updateTask(projectId, taskId, db, item):
             "Status": item.status,
         }
     )
+
+    # if status changed:
+    if (initialStatus != item.status or initialPriority != item.priority or initialDeadline != item.deadline):
+        # update workload value
+        for assigneeEmail in assigneeList:
+            assigneeId = getFromUser("email", assigneeEmail, "uid", db)
+            updateWorkload(assigneeId, db)
+
     return taskDict
+
+
+def incrementAchievement(achievementDoc, dict, achievementName):
+    for achievement in achievementDoc:
+        goal = achievement.get("target")
+        currValue = achievement.get("currentValue")
+        # If Achievement is alrdy done, skip
+        if currValue == goal:
+            dict[achievementName] = "Done"
+            break
+
+        else:
+            currValue += 1
+            # If current Value meets the goal, update achievement status to done
+            if currValue == goal:
+                achievement.reference.update(
+                    {"currentValue": currValue, "status": "Done"}
+                )
+                dict[achievementName] = "Done"
+            else:
+                achievement.reference.update(
+                    {
+                        "currentValue": currValue,
+                    }
+                )
+    return

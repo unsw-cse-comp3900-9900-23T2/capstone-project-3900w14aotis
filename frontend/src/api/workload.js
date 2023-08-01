@@ -8,7 +8,7 @@ export const workloadFetch = async (uId) => {
   };
 
   const workloadPromise = await fetch(
-    `${API_URL}/workload/calculate/${uId}`,
+    `${API_URL}/workload/get/${uId}`,
     requestOption
   );
   const workloadResponse = await workloadPromise.json();

@@ -1,12 +1,9 @@
 import { Modal, Fade, Box } from "@mui/material";
-// import EditIcon from "@mui/icons-material/Edit";
 import { Icon } from "@iconify/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/ProfileModal.module.css";
 import TextInput from "../components/TextInput";
-// import TextField from "@mui/material/TextField";
-import ImageInput from "../components/ImageInput";
 import {
   getAuth,
   onAuthStateChanged,
@@ -16,13 +13,19 @@ import {
 import { displayError, displaySuccess, fileToDataUrl } from "../utils/helpers";
 import { profileDetailFetch, profileUpdateFetch } from "../api/profile.js";
 import CustomButton from "../components/CustomButton";
-// import ProfilePicture from "../components/ProfilePicture";
 import { useDispatch } from "react-redux";
 import { updateProfileAction } from "../profile/state/updateProfileAction";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import UploadImageButton from "./UploadImageButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from '@mui/material/IconButton';
 
 const UpdateProfileModal = () => {
+
+  const profileInput = useRef(null);
+  const coverProfileInput = useRef(null);
+
   // Initialise profile details
   const [userDetails, setUserDetails] = useState({});
   const [firstName, setFirstName] = useState("");
@@ -173,27 +176,6 @@ const UpdateProfileModal = () => {
               displayError(error);
             });
         }
-        // Check image files
-        // If there is no image file, continue with empty string
-        // If there is an image file(object), convert to dataurl
-        // If there is a dataURL(string), continue with dataURL
-        // console.log("profile photo image: ", profileImage);
-        // const newProfileImage = ((profileImage === "" ) || (typeof(profileImage) !== "object")) ? (
-        //   profileImage
-        // ) : (
-        //   // console.log("should call file to data url")
-        //   await fileToDataUrl(profileImage)
-        // );
-        // console.log("new profile image: ", newProfileImage);
-        // console.log("cover photos image: ", coverProfileImage);
-        // const newCoverProfileImage = ((coverProfileImage === "") || typeof(coverProfileImage) !== "object") ? (
-        //   coverProfileImage
-        // ) : (
-        //   await fileToDataUrl(coverProfileImage)
-        // );
-        // API call to backend
-        // console.log("profile update body: ", auth.currentUser.uid, firstName, lastName, email, newProfileImage, newCoverProfileImage);
-        console.log(userId, firstName, lastName, email);
         const profileUpdateFetchResponse = await profileUpdateFetch(
           userId,
           firstName,
@@ -201,13 +183,11 @@ const UpdateProfileModal = () => {
           email,
           profileImage,
           coverProfileImage
-          // newProfileImage,
-          // newCoverProfileImage
         );
-        console.log(
-          "profile update fetch response: ",
-          profileUpdateFetchResponse
-        );
+        // console.log(
+        //   "profile update fetch response: ",
+        //   profileUpdateFetchResponse
+        // );
         dispatch(updateProfileAction());
         closeModalHandler();
         displaySuccess(`Profile Updated Successfully!`);
@@ -236,7 +216,6 @@ const UpdateProfileModal = () => {
   const modalTitleSx = {
     display: "flex",
     flexDirection: "row",
-    // gap: "78%",
     justifyContent: "space-between",
   };
 
@@ -248,9 +227,31 @@ const UpdateProfileModal = () => {
     margin: "5% 2% 5% 2%",
   };
 
+  const imageSectionContainerSx = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "2%",
+    margin: "5% 2% 5% 2%",
+  };
+
   const saveChangesButtonSx = {
     display: "flex",
     justifyContent: "center",
+  };
+
+  const imageContainerSx = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "60%",
+    width: "100%",
+  };
+
+  const editFileContainer = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    margin: "10px",
   };
 
   return (
@@ -258,7 +259,6 @@ const UpdateProfileModal = () => {
       <Icon
         icon="mdi-light:pencil"
         style={{
-          // color: "#454545",
           color: "#000",
           fontSize: "36px",
           marginTop: "8%",
@@ -279,7 +279,7 @@ const UpdateProfileModal = () => {
           <Box sx={modalContainerSx}>
             <PerfectScrollbar>
               <Box sx={modalTitleSx}>
-                <h2 className={styles.modalTitle}>Edit Profile</h2>
+                <h2>Edit Profile</h2>
                 <Icon
                   icon="iconamoon:close-bold"
                   onClick={closeModalHandler}
@@ -287,27 +287,67 @@ const UpdateProfileModal = () => {
                   className={styles.clickButton}
                 />
               </Box>
-              <Box sx={inputContainerSx}>
-                <h3>Profile Image:</h3>
-                <ImageInput
-                  type="PROFILE"
-                  userDetails={userDetails}
-                  width={"200px"}
-                  height={"200px"}
-                  onChangeFunction={onChangeProfileImage}
-                  onDeleteFunction={onDeleteProfileImage}
-                />
+              <Box sx={imageSectionContainerSx}>
+                <Box sx={modalTitleSx}>
+                  <h3 className={styles.imageText}>Profile Image:</h3>
+                  <Box
+                    sx={editFileContainer}
+                  >
+                    <input
+                      type='file'
+                      name='image'
+                      ref={profileInput}
+                      onChange={onChangeProfileImage}
+                      style={{ display: 'none' }}
+                    />
+                    <UploadImageButton
+                      fileInput={profileInput}
+                      onDeleteFunction={onDeleteProfileImage}
+                    />
+                  </Box>
+                </Box>
+                <Box
+                  sx={imageContainerSx}
+                >
+                  <input
+                    type="image"
+                    src={profileImage ? profileImage : "/Default-Avatar.png"}
+                    width={"200px"}
+                    height={"200px"}
+                    className={styles.profilePicture}
+                  />
+                </Box>
               </Box>
-              <Box sx={inputContainerSx}>
-                <h3>Cover Photo:</h3>
-                <ImageInput
-                  type="COVER"
-                  userDetails={userDetails}
-                  width={"400px"}
-                  height={"auto"}
-                  onChangeFunction={onChangeCoverProfileImage}
-                  onDeleteFunction={onDeleteCoverProfileImage}
-                />
+              <Box sx={imageSectionContainerSx}>
+                <Box sx={modalTitleSx}>
+                  <h3 className={styles.imageText}>Cover Photo:</h3>
+                  <Box
+                    sx={editFileContainer}
+                  >
+                    <input
+                      type='file'
+                      name='image'
+                      ref={coverProfileInput}
+                      onChange={onChangeCoverProfileImage}
+                      style={{ display: 'none' }}
+                    />
+                    <UploadImageButton
+                      fileInput={coverProfileInput}
+                      onDeleteFunction={onDeleteCoverProfileImage}
+                    />
+                  </Box>
+                </Box>
+                <Box
+                  sx={imageContainerSx}
+                >
+                  <input
+                      type="image"
+                      src={coverProfileImage ? coverProfileImage : "/Default-Cover.jpg"}
+                      width={"400px"}
+                      height={"auto"}
+                      className={styles.coverPicture}
+                    />
+                </Box>
               </Box>
               <Box sx={inputContainerSx}>
                 <h3>Name:</h3>
@@ -334,15 +374,6 @@ const UpdateProfileModal = () => {
                 />
               </Box>
               <h3 className={styles.passwordTitle}>Password Change</h3>
-              {/* <Box sx={inputContainerSx}>
-                <TextInput
-                  label="Old password"
-                  type="password"
-                  placeholder="myPassword!3900"
-                  onChangeFunction={onChangeOldPassword}
-                  boxColour={passwordColour}
-                />
-              </Box> */}
               <Box sx={inputContainerSx}>
                 <TextInput
                   label="New password"

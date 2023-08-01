@@ -21,6 +21,9 @@
   margin-bottom: 3%;
 }
 
-.modalTitle {
-  width: 50%;
+.profilePicture {
+  border-radius: 50%;
+}
+.coverPicture {
+  border-radius: 6%;
 }

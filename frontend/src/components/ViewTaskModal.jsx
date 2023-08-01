@@ -136,6 +136,8 @@ const ViewTaskModal = ({
 
   return (
     <div>
+      {console.log("taskId: " + taskId)}
+      {console.log(details)}
       {isOpen && (
         <Modal
           aria-labelledby="transition-modal-title"
@@ -266,7 +268,7 @@ const ViewTaskModal = ({
                     </Box>
                     {details && (
                       <DeadlineBox
-                        deadline={details && details.Deadline}
+                        deadline={details.Deadline}
                         width={"7.4375rem"}
                         height={"2.49rem"}
                       />

@@ -2,25 +2,30 @@ import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { displayError, displaySuccess, fileToDataUrl } from "../utils/helpers";
 import Box from "@mui/material/Box";
-import BackButton from "../components/BackButton";
-import { Button } from "@mui/material";
+// import BackButton from "../components/BackButton";
+// import { Button } from "@mui/material";
 import UpdateProfileModal from "./UpdateProfileModal";
-import ProfileCard from "./ProfileCard";
 import {
   profileAchievementsFetch,
   profileDetailFetch,
 } from "../api/profile.js";
+// import { allRatingsFetch } from "../api/rating.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";
 import { useSelector } from "react-redux";
 import { allTasksFetch } from "../api/task";
 import { allProjectsFetch } from "../api/project";
+import ProfileRatings from "./ProfileRatings";
 import ProfileAssignedTasks from "./ProfileAssignedTasks";
 import ProfileAchievements from "./ProfileAchievements";
 import styles from "./styles/ProfileCard.module.css";
 import CustomButton from "../components/CustomButton";
 import Loading from "../components/Loading";
+import CircleLoading from "../components/CircleLoading";
+import { sendConnectionFetch } from "../api/connections";
+import { checkPendingFetch, checkConnectionFetch } from "../api/connections";
+import RemoveConnectionModal from "../components/RemoveConnectionModal";
 
 const ProfilePage = () => {
   // Initialise profile details
@@ -31,15 +36,96 @@ const ProfilePage = () => {
   const [profileImage, setProfileImage] = useState("");
   const [coverProfileImage, setCoverProfileImage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [circleLoading, setCircleLoading] = useState(true);
   const [achievements, setAchievements] = useState([]);
   const [authUserId, setAuthUserId] = useState("");
   const [allTasks, setAllTasks] = useState([]);
   const [projects, setProjects] = useState([]);
+  const [pending, setPending] = useState(false);
+  const [connected, setConnected] = useState(false);
+  const [connectText, setConnectText] = useState("connect");
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
   const { userId } = useParams();
 
   const profileUpdated = useSelector((state) => state.profileUpdated);
+
+  const closeModalHandler = () => {
+    setIsOpen(false);
+  };
+
+  const removeConnectionModal = () => {
+    setIsOpen(true);
+  };
+
+  const handleRemoveConnection = () => {
+    setConnected(false);
+    setConnectText("connect");
+  };
+
+  const sendConnectionHandler = async () => {
+    try {
+      const user = getAuth();
+      const res = await sendConnectionFetch(email, user.currentUser.uid);
+      if (res.detail.code === 200) {
+        displaySuccess(`${res.detail.message}`);
+
+        setPending(true);
+      } else {
+        displayError(`${res.detail.message}`);
+      }
+    } catch (error) {
+      displayError(`${error.message}`);
+    }
+  };
+
+  const getConnectedStatus = async () => {
+    try {
+      const user = getAuth();
+
+      const checkConnectedResponse = await checkConnectionFetch(
+        user.currentUser.uid,
+        userId
+      );
+
+      const isConnected = !!checkConnectedResponse; // Check if response is truthy (connected) or falsy (not connected)
+
+      setConnected(isConnected);
+      if (isConnected) {
+        setConnectText("remove");
+      }
+      setCircleLoading(false);
+    } catch (error) {
+      displayError(error);
+    }
+  };
+
+  const getPendingStatus = async () => {
+    try {
+      const user = getAuth();
+
+      const checkPendingResponse = await checkPendingFetch(
+        user.currentUser.uid,
+        userId
+      );
+
+      const isPending = !!checkPendingResponse; // Check if response is truthy (pending) or falsy (not pending)
+
+      setPending(isPending);
+      if (isPending) {
+        setConnectText("pending");
+      }
+      setCircleLoading(false);
+    } catch (error) {
+      displayError(error);
+    }
+  };
+
+  useEffect(() => {
+    getConnectedStatus();
+    getPendingStatus();
+  }, [pending, connected]);
 
   const backButtonHandler = () => {
     try {
@@ -103,7 +189,6 @@ const ProfilePage = () => {
 
   // Get all projects
   const getAllProjects = async (uid) => {
-    // console.log("uid", uid);
     const userProjectsPromise = await allProjectsFetch(uid);
     const projects = userProjectsPromise.detail.message;
     setProjects(projects);
@@ -243,24 +328,45 @@ const ProfilePage = () => {
                   flexDirection: "column",
                   justifyContent: "center",
                   alignItems: "center",
+                  width: "14%",
                 }}
               >
                 {userId === authUserId ? (
                   <></>
                 ) : (
                   <>
-                    <h4 className={styles.email}>{`${email}`}</h4>
-                    <CustomButton text="Connect" />
+                    {circleLoading ? (
+                      <CircleLoading />
+                    ) : (
+                      <>
+                        <h4 className={styles.email}>{`${email}`}</h4>
+                        <CustomButton
+                          text={connectText}
+                          onClickFunction={
+                            connected
+                              ? removeConnectionModal
+                              : sendConnectionHandler
+                          }
+                          disabled={pending}
+                        />
+                      </>
+                    )}
                   </>
                 )}
               </Box>
-              <ProfileCard title={"Ratings"} />
+              <ProfileRatings />
               <ProfileAchievements achievements={achievements} />
-              <ProfileAssignedTasks tasks={allTasks} />
+              <ProfileAssignedTasks projectId={projects[0]} tasks={allTasks} />
             </Box>
           </Box>
         </>
       )}
+      <RemoveConnectionModal
+        uId={userId}
+        isOpen={isOpen}
+        closeModal={closeModalHandler}
+        onRemoveConnection={handleRemoveConnection}
+      />
     </>
   );
 };

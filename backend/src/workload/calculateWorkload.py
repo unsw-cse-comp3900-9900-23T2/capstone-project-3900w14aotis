@@ -1,6 +1,6 @@
-from src.serverHelper import getFromUser, getProjectID, getFromTask
+from src.serverHelper import getFromUser, getProjectID, findUser, getTaskDoc
 from src.workload.workloadHelper import usersTaskRating, checkDeadline
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone
 """
 This file contains helper functions to calculate workload for a user.
 """
@@ -10,7 +10,15 @@ MAX_WEIGHT = 100.0
 OVERLOADED = -1
 DONE_STATUS = "Done"
 
+# NO_DATE is Jan 1, 1970 (default datetime date)
+# or: "1970-01-01T00:00:00+00:00"
+NO_DATE = datetime.fromtimestamp(0, timezone.utc)
 
+def updateWorkload(userId, db):
+    workloadValue = calculate(userId, db)
+    userRef = findUser("uid", userId, db)
+    userRef.update({"workload": workloadValue})
+    return f"Workload updated with value {workloadValue}"
 
 def calculate(currUser, db):
     #1. basic weighted task out of total tasks
@@ -22,14 +30,15 @@ def calculate(currUser, db):
 
     for taskId in taskList:
         projectId = getProjectID(taskId, db)
+        taskDoc = getTaskDoc(projectId, taskId, db)
 
         #1. Num of tasks (not marked as "done")
-        taskStatus = getFromTask(projectId, taskId, "Status", db)
+        taskStatus = taskDoc["Status"]
         if taskStatus == DONE_STATUS:
             continue
 
         #2. rating system adjustments
-        moodRating = usersTaskRating(projectId, taskId, currUser, db)
+        moodRating = usersTaskRating(taskDoc.get("Rating"), currUser)
         moodWeight = 1.0
         match moodRating:
             case "Very Happy":
@@ -46,7 +55,7 @@ def calculate(currUser, db):
                 moodWeight = 1
         
         #3. priority system adjustments
-        taskPrio = getFromTask(projectId, taskId, "Priority", db)
+        taskPrio = taskDoc["Priority"]
         prioWeight = 1.0
         match taskPrio:
             case "High":
@@ -57,14 +66,15 @@ def calculate(currUser, db):
                 prioWeight = 1
   
         #4. time pressure adjustments
-        timeDiff = checkDeadline(projectId, taskId, db)
         deadlineWeight = 1.0
-        if timeDiff <= timedelta(days=3):
-            deadlineWeight = 1.25
-        elif timeDiff >= timedelta(days=7):
-            deadlineWeight = 0.75
-        else:
-            deadlineWeight = 1.0
+        timeDiff = checkDeadline(taskDoc["Deadline"])
+        if timeDiff != NO_DATE:
+            if timeDiff <= timedelta(days=3):
+                deadlineWeight = 1.25
+            elif timeDiff >= timedelta(days=7):
+                deadlineWeight = 0.75
+            else:
+                deadlineWeight = 1.0
 
         totalTaskWeight = DEFAULT_WEIGHT * moodWeight * prioWeight * deadlineWeight
         totalWorkload += totalTaskWeight
@@ -74,3 +84,7 @@ def calculate(currUser, db):
         return OVERLOADED
 
     return totalWorkload
+
+def getWorkloadValue(userId, db):
+    workloadStored = getFromUser("uid", userId, "workload", db)
+    return workloadStored

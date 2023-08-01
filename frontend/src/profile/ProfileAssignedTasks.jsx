@@ -7,10 +7,14 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import SearchBar from "../components/SearchBar";
 import moment from "moment";
 import { emptyDeadlinesSort } from "../utils/helpers";
+import ViewTaskModal from "../components/ViewTaskModal";
 
-const ProfileAssignedTasks = ({ tasks }) => {
+const ProfileAssignedTasks = ({ projectId, tasks }) => {
+  console.log(tasks);
   const [searchQuery, setSearchQuery] = useState("");
   const [tasksAfterSearch, setTasksAfterSearch] = useState([]);
+  const [viewTaskModalOpen, setViewTaskModalOpen] = useState(false);
+  const [taskId, setTaskId] = useState("");
 
   const updateSearchQuery = (value) => {
     setSearchQuery(value);
@@ -55,8 +59,29 @@ const ProfileAssignedTasks = ({ tasks }) => {
     queryTasks();
   }, [searchQuery]);
 
+  const closeModalHandler = () => {
+    // setIsOpen(false);
+    setViewTaskModalOpen(false);
+  };
+
+  const viewTaskHandler = (taskId) => {
+    setTaskId(taskId);
+    setViewTaskModalOpen(true);
+  };
+
   return (
     <>
+      <ViewTaskModal
+        isOpen={viewTaskModalOpen}
+        onClose={closeModalHandler}
+        projectId={projectId}
+        taskId={taskId}
+        setRemovedTaskId={() => {
+          console.log(
+            "Remove task bin clicked! Remove task from profile functionality not implemented."
+          );
+        }}
+      />
       <Box
         sx={{
           width: "90%",
@@ -113,17 +138,18 @@ const ProfileAssignedTasks = ({ tasks }) => {
                 width: "100%",
               }}
             >
-              {tasksAfterSearch.map((task) => {
-                return (
-                  <AssignedTaskCard
-                    key={task.taskID}
-                    task={task}
-                    viewTaskFunction={() => {
-                      console.log("VIEW TASK clicked");
-                    }}
-                  />
-                );
-              })}
+              {tasks.length == 0 ? (
+                <Box>No assigned tasks.</Box>
+              ) : (
+                tasksAfterSearch.map((task) => {
+                  return (
+                    <AssignedTaskCard
+                      task={task}
+                      viewTaskFunction={() => viewTaskHandler(task.taskID)}
+                    />
+                  );
+                })
+              )}
             </Box>
           </Box>
         </PerfectScrollbar>

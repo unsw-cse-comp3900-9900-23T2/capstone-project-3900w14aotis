@@ -1,5 +1,6 @@
-from src.serverHelper import getAchievement, findUser, getFromUser
+from src.serverHelper import getAchievement, findUser
 from google.cloud import firestore
+from src.workload.calculateWorkload import updateWorkload
 
 """
 This file contains helper functions to create a new task within a project.
@@ -60,5 +61,9 @@ def createNewTask(newTask, projectId, db):
         emailLower = email.lower()
         taskmasterRef = findUser("email", emailLower, db)
         taskmasterRef.update({"tasks": firestore.ArrayUnion([taskRef[1].id])})
+
+        # updates workload when new task is created and the person is assigned to it.
+        userId = taskmasterRef.get().get("uid")
+        updateWorkload(userId, db)
 
     return taskRef[1].id
