@@ -80,8 +80,8 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
     >
       <ProfilePicture
         userDetails={{ uid: uId, profileImage, firstName, lastName }}
-        imgWidth={100}
-        imgHeight={100}
+        imgWidth="100px"
+        imgHeight="100px"
       />
       <Box
         sx={{
@@ -92,7 +92,7 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
           justifyContent: "center",
         }}
       >
-        <h2>{`${firstName} ${lastName}`}</h2>
+        <h2 className="names">{`${firstName} ${lastName}`}</h2>
         <p>{email}</p>
       </Box>
       <Box

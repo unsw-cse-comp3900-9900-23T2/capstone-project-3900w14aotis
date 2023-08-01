@@ -69,7 +69,7 @@ const ProfilePage = () => {
       const user = getAuth();
       const res = await sendConnectionFetch(email, user.currentUser.uid);
       if (res.detail.code === 200) {
-        displaySuccess(`${res.detail.message}`);
+        displaySuccess("Connection request successfully sent!");
 
         setPending(true);
       } else {
