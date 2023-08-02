@@ -1,6 +1,6 @@
 from src.serverHelper import getUserDoc, getFromUser
 """
-This files contains helper functions to help send a connection to a taskmaster
+This file contains helper functions to help send a connection to a taskmaster
 """
 def isConnectedTo(currUser, queryField, queryValue, db):
     """

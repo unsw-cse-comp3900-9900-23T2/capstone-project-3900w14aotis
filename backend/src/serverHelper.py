@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 import base64
 """
-This files contains helper functions that will help modularise 
+This file contains helper functions that will help modularise 
 """
 
 

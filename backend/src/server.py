@@ -9,8 +9,6 @@ from src.task.createProject import createNewProject
 from src.task.getTasks import listTasks, listPaginatedTasks
 from src.task.createProject import joinExistingProject
 from fastapi.middleware.cors import CORSMiddleware
-from src.task.assignTask import addAssignee
-from src.task.assignTask import deleteAssignee
 from src.task.getTaskDetails import getDetails
 from src.task.deleteTask import taskRemove
 from src.task.update import updateTask
@@ -169,7 +167,9 @@ async def createTask(task: Task, projectId: str):
                 "message": f"Task {taskId} created successfully",
             }
         }
-    except:
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error creating a new task"},
@@ -313,69 +313,6 @@ async def joinProject(item: JoinProject, projectId: str):
             status_code=404,
             detail={"code": "404", "message": "Error joining project"},
         )
-
-
-@app.post("/task/addTaskAssignee", summary="Adds an assignee to a task")
-async def addTaskAssignee(assignee: Assignee):
-    """
-    This function adds an assignee to the given task.
-
-    Args:
-        assignee (Assignee): assignee body containing projectId, taskId, email
-        and currentUser
-
-    Returns:
-        assigned (str): string saying that the user is successfully added along with the
-        user's email
-    """
-    try:
-        assigned = addAssignee(
-            assignee.projectId, assignee.taskId, assignee.email, assignee.currUser, db
-        )
-        return {
-            "detail": {
-                "code": 200, 
-                "message": assigned
-            }
-        }
-    
-    except HTTPException as e:
-        if e.status_code == 400:
-            raise
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error assigning taskmaster"},
-        )
-
-
-@app.delete("/task/deleteTaskAssignee", summary="Removes an assignee from a task")
-async def deleteTaskAssignee(assignee: Assignee):
-    """
-    This function removes an assignee from a task.
-
-    Args:
-        assignee (Assignee): assignee body containing projectId, taskId, email, and 
-        currUser
-
-    Returns:
-        deleted (str): email of the deleted user
-    """
-    try:
-        deleted = deleteAssignee(
-            assignee.projectId, assignee.taskId, assignee.email, db
-        )
-        return {
-            "detail": {
-                "code": 200, 
-                "message": f"User: {deleted} successfully removed"
-            }
-        }
-    except:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error removing taskmaster"},
-        )
-
 
 @app.delete("/task/delete/{projectId}/{taskId}", summary="Removes a task")
 async def deleteTask(projectId: str, taskId: str):

@@ -1,7 +1,7 @@
 from google.cloud import firestore
 from src.serverHelper import findUser
 """
-This files contains helper functions to help send a connection to a taskmaster
+This file contains helper functions to help send a connection to a taskmaster
 """
 def acceptConnection(currUser, userId, db):
     """

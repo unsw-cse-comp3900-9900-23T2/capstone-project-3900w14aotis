@@ -1,6 +1,6 @@
 from src.serverHelper import getTaskDoc, getUserDoc
 """
-This files contains helper functions to help retrieve details of a task
+This file contains helper functions to help retrieve details of a task
 """
 
 

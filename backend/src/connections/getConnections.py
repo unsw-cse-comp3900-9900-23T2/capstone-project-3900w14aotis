@@ -4,7 +4,7 @@ EMPTY = 0
 PENDING_CONNECTION = "pendingConnections"
 
 """
-This files contains helper functions to help get a list of connections for a taskmaster
+This file contains helper functions to help get a list of connections for a taskmaster
 """
 def getConnections(userId, listType, db):
     """
