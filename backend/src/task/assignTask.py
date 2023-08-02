@@ -37,6 +37,12 @@ def addAssignee(projectId, taskId, email, currUser, db):
             status_code=400,
             detail={"code": "400", "message": "User is not a connection!"},
         )
+    
+    if not checkAssignee(userEmail, projectId, db):
+        raise HTTPException(
+            status_code=400,
+            detail={"code": "400", "message": "User is not in the project"},
+        )
 
     # adds task in taskmaster's task list
     taskmasterRef.update({"tasks": firestore.ArrayUnion([taskId])})
@@ -83,3 +89,9 @@ def deleteAssignee(projectId, taskId, email, db):
     updateWorkload(userId, db)
 
     return email
+
+def checkAssignee(email, projectId, db):
+    projects = getFromUser("email", email, "Projects", db)
+    if projectId in projects:
+        return True
+    return False
