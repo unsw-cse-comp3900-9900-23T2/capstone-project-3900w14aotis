@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@mui/material";
 
-const CustomButton = ({ text, onClickFunction }) => {
+const CustomButton = ({ text, onClickFunction, disabled }) => {
   const buttonSx = {
     width: "75%",
     height: "60px",
@@ -15,10 +15,20 @@ const CustomButton = ({ text, onClickFunction }) => {
     "&:hover": {
       background: "#2578e6",
     },
+    "&:disabled": {
+      background: "#7C9BC3",
+      cursor: "not-allowed",
+      color: "#FFFFFF",
+    },
   };
 
   return (
-    <Button onClick={onClickFunction} variant="contained" sx={buttonSx}>
+    <Button
+      onClick={onClickFunction}
+      variant="contained"
+      disabled={disabled}
+      sx={buttonSx}
+    >
       <h4>{text}</h4>
     </Button>
   );

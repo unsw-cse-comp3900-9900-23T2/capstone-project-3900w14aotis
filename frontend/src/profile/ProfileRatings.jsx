@@ -7,12 +7,15 @@ import Chart from "react-apexcharts";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import { allRatingsFetch } from "../api/rating.js";
 import { displayError } from "../utils/helpers";
+import { useSelector } from "react-redux";
 
 const ProfileRatings = () => {
 
   const { userId } = useParams();
   const [ratingNames, setRatingNames] = useState([]);
   const [ratingValues, setRatingValues] = useState([]);
+
+  const profileRatingsLoad = useSelector((state) => state.profileRatingsLoad);
 
   // Get all ratings of a user
   const allRatings = async () => {
@@ -29,7 +32,7 @@ const ProfileRatings = () => {
 
   useEffect(() => {
     allRatings();
-  }, []);
+  }, [profileRatingsLoad]);
 
   return (
     <>

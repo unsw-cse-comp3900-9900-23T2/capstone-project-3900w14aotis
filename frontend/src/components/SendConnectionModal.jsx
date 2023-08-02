@@ -10,7 +10,7 @@ import { displayError, displaySuccess } from "../utils/helpers";
 import { getAuth } from "firebase/auth";
 import { sendConnectionFetch } from "../api/connections";
 
-const SendRequestModal = () => {
+const SendConnectionModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -23,7 +23,8 @@ const SendRequestModal = () => {
       const res = await sendConnectionFetch(email, user.currentUser.uid);
       if (res.detail.code === 200) {
         handleClose();
-        displaySuccess(`${res.detail.message}`);
+        console.log(res.detail);
+        displaySuccess("Connection request successfully sent!");
       } else {
         displayError(`${res.detail.message}`);
       }
@@ -102,4 +103,4 @@ const SendRequestModal = () => {
   );
 };
 
-export default SendRequestModal;
+export default SendConnectionModal;

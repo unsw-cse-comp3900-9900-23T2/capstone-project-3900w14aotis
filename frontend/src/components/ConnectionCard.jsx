@@ -6,14 +6,19 @@ import { Icon } from "@iconify/react";
 import { removeConnectionFetch } from "../api/connections";
 import { getAuth } from "firebase/auth";
 import { displaySuccess, displayError } from "../utils/helpers";
-import styles from "./styles/Modal.module.css";
 import RemoveConnectionModal from "./RemoveConnectionModal";
 import { workloadFetch } from "../api/workload";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ProgressBar from "@ramonak/react-progress-bar";
+import styles from "./styles/Connections.module.css";
+import Loading from "../components/Loading";
+import Tooltip from "@mui/material/Tooltip";
 
 function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
   const [workload, setWorkload] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -26,6 +31,7 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
       const workload = workloadResponse.detail.message;
 
       setWorkload(workload);
+      setLoading(false);
     } catch (error) {
       displayError(error);
     }
@@ -35,25 +41,28 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
     getWorkload();
   }, []);
 
-  const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-    height: "40%",
-    width: "70%",
-    borderRadius: "10px",
-    [`&.${linearProgressClasses.colorPrimary}`]: {
-      backgroundColor: theme.palette.grey[200],
-    },
-    [`& .${linearProgressClasses.bar}`]: {
-      borderRadius: "10px",
-      backgroundColor: "#1a90ff",
-    },
-  }));
-
   const removeButtonStyles = {
     fontSize: "35px",
     position: "absolute",
     top: "5%",
     right: "5%",
     borderRadius: "50%",
+  };
+
+  const getColor = () => {
+    if (workload === -1) return "red";
+    if (workload >= 0 && workload <= 30) return "green";
+    if (workload > 30 && workload <= 70) return "blue";
+    if (workload > 70 && workload <= 100) return "orange";
+    return "#001AFF"; // Default color
+  };
+
+  const closeModalHandler = () => {
+    setIsOpen(false);
+  };
+
+  const openModalHandler = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -72,11 +81,19 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
     >
       <ProfilePicture
         userDetails={{ uid: uId, profileImage, firstName, lastName }}
-        imgWidth={100}
-        imgHeight={100}
+        imgWidth="100px"
+        imgHeight="100px"
       />
-      <Box>
-        <h2>{`${firstName} ${lastName}`}</h2>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <h2 className="names">{`${firstName} ${lastName}`}</h2>
         <p>{email}</p>
       </Box>
       <Box
@@ -89,9 +106,43 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
         }}
       >
         <p>Workload</p>
-        <BorderLinearProgress variant="determinate" value={workload} />
+        {loading ? (
+          <Loading />
+        ) : (
+          <Tooltip title={`${workload.toFixed(2)}%`}>
+            <Box
+              sx={{
+                alignItems: "center",
+                width: "70%",
+                height: "30%",
+              }}
+            >
+              <ProgressBar
+                completed={workload === -1 ? 100 : `${workload.toFixed(2)}%`}
+                bgColor={getColor()}
+                width="100%"
+                height="100%"
+                customLabel={workload === -1 ? "OVERLOADED" : undefined}
+                labelAlignment="outside "
+                baseBgColor="#B6B6B6"
+              />
+            </Box>
+          </Tooltip>
+        )}
       </Box>
-      <RemoveConnectionModal uId={uId} style={removeButtonStyles} />
+      <Box sx={removeButtonStyles}>
+        <Icon
+          icon="mdi:bin-outline"
+          style={{ fontSize: "35px" }}
+          className={styles.clickButton}
+          onClick={openModalHandler}
+        />
+      </Box>
+      <RemoveConnectionModal
+        uId={uId}
+        isOpen={isOpen}
+        closeModal={closeModalHandler}
+      />
     </Box>
   );
 }

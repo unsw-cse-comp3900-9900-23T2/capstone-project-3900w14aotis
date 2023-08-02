@@ -14,7 +14,12 @@ import { stringAvatar } from "../utils/helpers";
 import { profileDetailFetch } from "../api/profile.js";
 import Loading from "../components/Loading";
 import { useSelector } from "react-redux";
-import { updateProfileAction } from "../profile/state/updateProfileAction";
+import { profileAchievementLoadAction } from "../profile/state/profileAchievementLoadAction";
+import { profileRatingsLoadAction } from "../profile/state/profileRatingsLoadAction";
+import { profileTasksLoadAction } from "../profile/state/profileTasksLoadAction";
+import { useDispatch } from "react-redux";
+import { logoutAction } from "../authentication/state/logoutAction";
+
 
 const ProfilePictureDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -23,6 +28,7 @@ const ProfilePictureDropdown = () => {
 
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const fetchUserDetails = async (uid) => {
     const profileDetailsResponse = await profileDetailFetch(uid);
@@ -35,11 +41,7 @@ const ProfilePictureDropdown = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in
-        localStorage.setItem("loggedIn", true);
         fetchUserDetails(user.uid);
-      } else {
-        // User is signed out
-        localStorage.removeItem("loggedIn");
       }
     });
   };
@@ -62,11 +64,15 @@ const ProfilePictureDropdown = () => {
     const auth = getAuth();
     const uid = auth.currentUser.uid;
     console.log(auth.currentUser);
+    dispatch(profileAchievementLoadAction());
+    dispatch(profileRatingsLoadAction());
+    dispatch(profileTasksLoadAction());
     navigate(`/otis/profile/${uid}`);
   };
 
   const logoutHandler = () => {
     const auth = getAuth();
+    dispatch(logoutAction());
     handleClose();
     signOut(auth);
     navigate("/login");

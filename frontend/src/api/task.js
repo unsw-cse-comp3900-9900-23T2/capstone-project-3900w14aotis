@@ -55,7 +55,7 @@ export const createTaskFetch = async (
   const jsonData = JSON.stringify({
     title,
     description,
-    deadline,
+    deadline: deadline ? deadline : new Date(0),
     assignees,
     priority,
     status,
