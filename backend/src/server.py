@@ -842,7 +842,7 @@ async def getWorkload(userId: str):
                         of 100. A value of -1 means overloaded (>100%).
     """
     try: 
-        workloadValue = getWorkloadValue(userId, db)
+        workloadValue = round(getWorkloadValue(userId, db), 2)
         return {
             "detail": {
                 "code": 200,
