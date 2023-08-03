@@ -22,15 +22,13 @@ def updateTask(projectId, taskId, db, item):
         "TaskID": taskId,
         "Task Fledgling": "In Progress",
         "Task Master": "In Progress",
-        "Task Wizard" : "In Progress",
+        "Task Wizard": "In Progress",
     }
     # Check if user is part of the task's assignee list
     userRef = findUser("uid", item.creatorId, db)
     userEmail = userRef.get().get("email")
     # If user isnt part of task, return none
     assigneeList = taskDoc.get("Assignees")
-    if userEmail not in assigneeList:
-        return None
 
     # If Task Fledgling Achievement is in progress, mark as done
     achievementDoc = getAchievement(db, "Task Fledgling", item.creatorId)
@@ -67,7 +65,11 @@ def updateTask(projectId, taskId, db, item):
     )
 
     # if status changed:
-    if (initialStatus != item.status or initialPriority != item.priority or initialDeadline != item.deadline):
+    if (
+        initialStatus != item.status
+        or initialPriority != item.priority
+        or initialDeadline != item.deadline
+    ):
         # update workload value
         for assigneeEmail in assigneeList:
             assigneeId = getFromUser("email", assigneeEmail, "uid", db)
