@@ -41,19 +41,22 @@ def createNewTask(newTask, projectId, db):
 
     # check if assignee is in project
     projectMembers = parentDocRef.get().get("members")
+    creatorEmail = getFromUser("uid", newTask.creatorId, "email", db)
     for email in newTask.assignees:
-        assigneeID = getFromUser("email", email, "uid", db)
+        lowerEmail = email.lower()
+        assigneeID = getFromUser("email", lowerEmail, "uid", db)
         
         if assigneeID not in projectMembers:
             raise HTTPException(
                 status_code=400,
                 detail={"code": "400", "message": "User is not in project!"},
             )
-        if not isConnectedTo(newTask.creatorId, "email", email, db):
-            raise HTTPException(
-                status_code=400,
-                detail={"code": "400", "message": "Assignee is not connected to current user"},
-            )            
+        if lowerEmail != creatorEmail:
+            if not isConnectedTo(newTask.creatorId, "email", email, db):
+                raise HTTPException(
+                    status_code=400,
+                    detail={"code": "400", "message": "Assignee is not connected to current user"},
+                )
 
     taskRef = parentDocRef.collection(subCollection).add(
         {
