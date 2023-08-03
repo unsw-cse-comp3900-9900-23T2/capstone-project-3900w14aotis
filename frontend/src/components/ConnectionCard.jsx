@@ -109,7 +109,7 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
         {loading ? (
           <Loading />
         ) : (
-          <Tooltip title={workload}>
+          <Tooltip title={`${workload}%`}>
             <Box
               sx={{
                 alignItems: "center",
