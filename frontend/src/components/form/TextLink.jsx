@@ -2,6 +2,9 @@ import React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@mui/material";
 
+/**
+ * This is text that links to another screen.
+ */
 const TextLink = ({ linkTo, text }) => {
   const linkSx = {
     "&:hover": {

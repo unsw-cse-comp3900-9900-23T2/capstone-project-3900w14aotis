@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext } from "react-beautiful-dnd";
 import { allTasksFetch } from "../api/task";
 import { Box } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import { useSelector } from "react-redux";
 import ColumnStatus from "./ColumnStatus";
-import { columns } from "./ColumnData";
+import { columns } from "./data/ColumnData";
 import { updateTaskFetch } from "../api/task";
 
+/**
+ * This is the board that allows users to drag tasks from
+ * "To Do" to "In Progress" and to "Done".
+ */
 const KanbanBoard = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [todoTasks, setTodoTasks] = useState([]);

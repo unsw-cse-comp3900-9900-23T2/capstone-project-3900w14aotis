@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Box, Divider } from "@mui/material";
 import styles from "./styles/ProjectPage.module.css";
 import Headerbar from "../components/Headerbar";
-import CustomButton from "../components/CustomButton";
+import CustomButton from "../components/buttons/CustomButton";
 import { displayError } from "../utils/helpers";
 import { useLocation } from "react-router-dom";
 import { allProjectsFetch } from "../api/project";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import Loading from "../components/Loading";
+import Loading from "../components/loaders/Loading";
 
 const ProjectPage = () => {
   const [userProjects, setUserProjects] = useState([]);

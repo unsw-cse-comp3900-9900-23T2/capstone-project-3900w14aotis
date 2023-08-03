@@ -4,7 +4,11 @@ import DeadlineBox from "../components/DeadlineBox";
 import styles from "./styles/ProfileCard.module.css";
 import TaskUsers from "../components/TaskUsers";
 
-const AssignedTaskCard = ({ task, index, viewTaskFunction }) => {
+/**
+ * This is the task card that appears in the profile "assigned tasks" section.
+ * It contains detials of the card and when clicked, shows further details.
+ */
+const AssignedTaskCard = ({ task, viewTaskFunction }) => {
   return (
     <Box
       sx={{
@@ -17,10 +21,11 @@ const AssignedTaskCard = ({ task, index, viewTaskFunction }) => {
         boxShadow: "0px 0px 6px 0px rgba(0, 0, 0, 0.8)",
         justifyContent: "space-between",
         margin: "1%",
+        "&:hover": {
+          cursor: "pointer",
+        },
       }}
       onClick={() => {
-        //TODO: view task modal popup
-        console.log(`clicked task: ${task.taskID}`);
         viewTaskFunction(task.taskID);
       }}
     >

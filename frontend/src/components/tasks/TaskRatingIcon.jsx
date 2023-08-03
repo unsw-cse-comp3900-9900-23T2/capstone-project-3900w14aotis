@@ -2,6 +2,14 @@ import React from "react";
 import { Box, Tooltip } from "@mui/material";
 import { Icon } from "@iconify/react";
 
+/**
+ * This is the icon for a task rating. It include icons for:
+ * - Very Happy
+ * - Happy
+ * - Neutral
+ * - Sad
+ * - Very Sad
+ */
 const TaskRatingIcon = ({
   rated,
   iconName,

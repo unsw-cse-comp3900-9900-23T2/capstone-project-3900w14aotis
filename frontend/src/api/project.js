@@ -1,6 +1,7 @@
 const API_URL = `http://localhost:${8000}`;
 const API_MEDIA_TYPE = "application/json";
 
+// Sends an API call to get all projects in the system.
 export const allProjectsFetch = async (userId) => {
   const requestOption = {
     method: "GET",

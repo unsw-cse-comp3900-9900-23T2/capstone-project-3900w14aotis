@@ -1,9 +1,12 @@
 import React from "react";
 import { Box } from "@mui/material";
-import styles from "./styles/LongTaskCard.module.css";
-import DeadlineBox from "./DeadlineBox";
-import TaskUsers from "./TaskUsers";
+import styles from "../styles/LongTaskCard.module.css";
+import DeadlineBox from "../DeadlineBox";
+import TaskUsers from "../TaskUsers";
 
+/**
+ * This is a task card that is displayed on the all tasks screen.
+ */
 const LongTaskCard = ({
   id,
   title,

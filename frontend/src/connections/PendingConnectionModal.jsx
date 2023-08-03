@@ -3,13 +3,18 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import { Icon } from "@iconify/react";
-import styles from "./styles/Modal.module.css";
-import PendingConnectionCard from "./PendingConnectionCard";
+import styles from "../components/styles/Modal.module.css";
+import PendingConnectionCard from "../components/connections/PendingConnectionCard";
 import { pendingConnectionsFetch } from "../api/connections";
 import { getAuth } from "firebase/auth";
 import { displayError } from "../utils/helpers";
 import { useSelector } from "react-redux";
 
+/**
+ * This modal pops up when users click on the "pending connections icon".
+ * It shows all the user's pending connection requests.
+ * Users interact with this page by accepting or declining requests.
+ */
 const PendingConnectionModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -34,6 +39,7 @@ const PendingConnectionModal = () => {
     }
   };
 
+  // Update the pending connections every time a connection is accepted or declined
   useEffect(() => {
     getPendingConnections();
   }, [connectionUpdated]);

@@ -9,15 +9,22 @@ import { allRatingsFetch } from "../api/rating.js";
 import { displayError } from "../utils/helpers";
 import { useSelector } from "react-redux";
 
+/**
+ * This shows the user's ratings on tasks they have been assigned to.
+ * Possible ratings include:
+ * - Very Happy
+ * - Happy
+ * - Neutral
+ * - Sad
+ * - Very Sad
+ */
 const ProfileRatings = () => {
-
   const { userId } = useParams();
   const [ratingNames, setRatingNames] = useState([]);
   const [ratingValues, setRatingValues] = useState([]);
 
   const profileRatingsLoad = useSelector((state) => state.profileRatingsLoad);
 
-  // Get all ratings of a user
   const allRatings = async () => {
     try {
       const allRatingsResponse = await allRatingsFetch(userId);
@@ -78,18 +85,20 @@ const ProfileRatings = () => {
                 bar: {
                   borderRadius: 4,
                   horizontal: true,
-                }
+                },
               },
               dataLabels: {
-                enabled: false
+                enabled: false,
               },
               xaxis: {
                 categories: ratingNames,
-              }
+              },
             }}
-            series={[{
-              data: ratingValues
-            }]}
+            series={[
+              {
+                data: ratingValues,
+              },
+            ]}
             type="bar"
             width="100%"
             height="100%"

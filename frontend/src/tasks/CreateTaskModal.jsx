@@ -6,20 +6,30 @@ import { Icon } from "@iconify/react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import TextInput from "./TextInput";
-import TextBox from "./TextBox";
+import TextInput from "../components/form/TextInput";
+import TextBox from "../components/form/TextBox";
 import Chip from "@mui/material/Chip";
 import { displayError, displaySuccess } from "../utils/helpers";
-import DropDown from "./Dropdown";
-import styles from "./styles/Modal.module.css";
-import CustomButton from "./CustomButton";
+import DropDown from "../components/form/Dropdown";
+import styles from "../components/styles/Modal.module.css";
+import CustomButton from "../components/buttons/CustomButton";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { createTaskFetch } from "../api/task.js";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addTaskAction } from "../tasks/state/addTaskAction";
+import { addTaskAction } from "./state/addTaskAction";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import { useAuthState } from "react-firebase-hooks/auth";
 
+/**
+ * This modal allows users to create a task. Task details include:
+ * - Title
+ * - Description
+ * - Deadline
+ * - Assignees of the task
+ * - Priority of the task
+ * - Status of the task (including Todo, In progress and Done)
+ */
 const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -38,6 +48,9 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
 
   const { projectId } = useParams();
   const dispatch = useDispatch();
+
+  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
 
   const onEnter = (key) => {
     if (key === "Enter") {
@@ -78,6 +91,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   };
 
   const createTask = async (creatorId, convertedDeadline, finalAssignees) => {
+    console.log(creatorId);
     if (!status) {
       displayError("Please select a status");
       setAssignees([]);
@@ -93,6 +107,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
       status,
       creatorId
     );
+    console.log(createTaskFetchResponse);
     dispatch(addTaskAction());
     closeFunction();
     setAssignees([]);
@@ -113,8 +128,15 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
     }
     try {
       const finalAssignees = [...assignees];
+      // if (finalAssignees.length === 0) {
+      //   finalAssignees.push(user.email);
+      //   setAssignees(finalAssignees);
+      // }
+      // createTask(user.uid, convertedDeadline, finalAssignees);
       const auth = getAuth();
       onAuthStateChanged(auth, (user) => {
+        // console.log("FOUND IT");
+        // console.log(user);
         if (user) {
           // User is signed in
           localStorage.setItem("loggedIn", true);

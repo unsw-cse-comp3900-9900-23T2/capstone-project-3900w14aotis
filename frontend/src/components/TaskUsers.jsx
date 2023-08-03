@@ -1,8 +1,11 @@
 import React from "react";
 import ProfilePicture from "./ProfilePicture";
 import AvatarGroup from "@mui/material/AvatarGroup";
-import Avatar from "@mui/material/Avatar";
 
+/**
+ * This displays the assignees of a task as profile icons. These icons
+ * are clickable and will navigate to the clicked user's profile.
+ */
 const TaskUsers = ({ assignees, group }) => {
   return (
     <>

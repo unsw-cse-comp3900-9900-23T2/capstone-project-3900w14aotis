@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
-import Loading from "./Loading";
+import Loading from "./loaders/Loading";
 
+/**
+ * This shows the deadline of a task. It is colour coded:
+ * - Done: green
+ * - Due within 7 days: yellow
+ * - Due after 7 days: grey
+ * - Due today or deadline passed: pink
+ */
 const DeadlineBox = ({ deadline, status, width, height }) => {
   const [color, setColor] = useState("#E5E5E5");
   const [deadlineString, setDeadlineString] = useState("");
@@ -10,7 +17,6 @@ const DeadlineBox = ({ deadline, status, width, height }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log(deadline);
     setFinalDeadline(deadline);
   }, [deadline]);
 

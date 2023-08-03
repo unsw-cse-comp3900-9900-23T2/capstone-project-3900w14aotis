@@ -3,11 +3,18 @@ import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import SortTasksDropdown from "./SortTasksDropdown";
 import { Icon } from "@iconify/react";
-import PendingConnectionModal from "./PendingConnectionModal";
-import SendConnectionModal from "./SendConnectionModal";
+import PendingConnectionModal from "../connections/PendingConnectionModal";
+import SendConnectionModal from "../connections/SendConnectionModal";
 import SearchBar from "./SearchBar";
 import styles from "./styles/Modal.module.css";
 
+/**
+ * This is the headerbar of the application. It includes a title showing the
+ * current page the user is on and on certain pages will show additional features such as:
+ * - Search bar
+ * - Pending connections
+ * - Add connections icon
+ */
 const Headerbar = ({
   text,
   updateQueryFunction,

@@ -2,9 +2,17 @@ import React from "react";
 import { Box, List } from "@mui/material";
 import SidebarLink from "./SidebarLink";
 import { Icon } from "@iconify/react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
+/**
+ * The sidebar includes the four navigation links that users can click on
+ * These tabs include:
+ * - Dashboard
+ * - Tasks
+ * - Board
+ * - Connections
+ */
 const Sidebar = () => {
   const location = useLocation();
 

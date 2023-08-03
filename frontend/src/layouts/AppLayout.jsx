@@ -1,8 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/navigation/Sidebar";
 import { Box } from "@mui/material";
 
+/**
+ * This defines the layout of the sidebar and the main interface.
+ */
 const AppLayout = () => {
   const boxSx = {
     display: "flex",

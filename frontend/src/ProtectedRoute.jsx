@@ -3,7 +3,7 @@ import { useLocation, Navigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useSelector } from "react-redux";
 import { useAuthState } from "react-firebase-hooks/auth";
-import Loading from "../src/components/Loading";
+import Loading from "./components/loaders/Loading";
 
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();

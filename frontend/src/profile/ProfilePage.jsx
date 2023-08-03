@@ -1,15 +1,12 @@
 import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { displayError, displaySuccess, fileToDataUrl } from "../utils/helpers";
+import { displayError, displaySuccess } from "../utils/helpers";
 import Box from "@mui/material/Box";
-// import BackButton from "../components/BackButton";
-// import { Button } from "@mui/material";
 import UpdateProfileModal from "./UpdateProfileModal";
 import {
   profileAchievementsFetch,
   profileDetailFetch,
 } from "../api/profile.js";
-// import { allRatingsFetch } from "../api/rating.js";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import ProfilePicture from "../components/ProfilePicture";
@@ -20,13 +17,25 @@ import ProfileRatings from "./ProfileRatings";
 import ProfileAssignedTasks from "./ProfileAssignedTasks";
 import ProfileAchievements from "./ProfileAchievements";
 import styles from "./styles/ProfileCard.module.css";
-import CustomButton from "../components/CustomButton";
-import Loading from "../components/Loading";
-import CircleLoading from "../components/CircleLoading";
+import CustomButton from "../components/buttons/CustomButton";
+import Loading from "../components/loaders/Loading";
+import CircleLoading from "../components/loaders/CircleLoading";
 import { sendConnectionFetch } from "../api/connections";
 import { checkPendingFetch, checkConnectionFetch } from "../api/connections";
-import RemoveConnectionModal from "../components/RemoveConnectionModal";
+import RemoveConnectionModal from "../components/connections/RemoveConnectionModal";
 
+/**
+ * This is the user's profile page and contains everything within the profile
+ * including:
+ * - User's cover photo
+ * - User's profile photo
+ * - User's name (with an option to update the profile if viewing your own page)
+ * - Connection status (if viewing another user's profile)
+ * - User's ratings
+ * - User's achievements
+ * ' User's assigned tasks
+ * From here we can go back to the dashboard.
+ */
 const ProfilePage = () => {
   // Initialise profile details
   const [userDetails, setUserDetails] = useState({});
@@ -50,7 +59,9 @@ const ProfilePage = () => {
   const { userId } = useParams();
 
   const profileUpdated = useSelector((state) => state.profileUpdated);
-  const profileAchievementLoad = useSelector((state) => state.profileAchievementLoad);
+  const profileAchievementLoad = useSelector(
+    (state) => state.profileAchievementLoad
+  );
   const profileTasksLoad = useSelector((state) => state.profileTasksLoad);
 
   const closeModalHandler = () => {
@@ -91,7 +102,8 @@ const ProfilePage = () => {
         userId
       );
 
-      const isConnected = !!checkConnectedResponse; // Check if response is truthy (connected) or falsy (not connected)
+      // Check if response is truthy (connected) or falsy (not connected)
+      const isConnected = !!checkConnectedResponse;
 
       setConnected(isConnected);
       if (isConnected) {
@@ -184,9 +196,6 @@ const ProfilePage = () => {
     }
   };
 
-  // TODO: try to remove projects and tasks fetch and instead retreive user tasks from userDetails
-  // backend will need to action this.
-
   // Get all projects
   const getAllProjects = async (uid) => {
     const userProjectsPromise = await allProjectsFetch(uid);
@@ -198,7 +207,6 @@ const ProfilePage = () => {
     }
   };
 
-  // Get all tasks
   const getAllTasks = async (projectId, uid) => {
     const allTasksResponse = await allTasksFetch(projectId);
     if (allTasksResponse.detail.code === 200) {
@@ -280,7 +288,6 @@ const ProfilePage = () => {
                   style={{ width: "100%", height: "auto", objectFit: "fill" }}
                 />
               ) : (
-                // TODO: FEEL FREE TO CHANGE DEFAULT COVER PIC
                 <img
                   src="/Default-Cover.jpg"
                   alt={`${firstName} ${lastName} CP`}
@@ -354,7 +361,6 @@ const ProfilePage = () => {
                   </>
                 )}
               </Box>
-              {/* <ProfileRatings ratingNames={ratingNames} ratingValues={ratingValues}/> */}
               <ProfileRatings />
               <ProfileAchievements achievements={achievements} />
               <ProfileAssignedTasks projectId={projects[0]} tasks={allTasks} />

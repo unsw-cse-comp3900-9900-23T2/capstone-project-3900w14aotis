@@ -5,6 +5,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
+/**
+ * This is the dropdown component used when choosing a task
+ * priority when creating a task.
+ */
 const DropDown = ({
   label,
   options,

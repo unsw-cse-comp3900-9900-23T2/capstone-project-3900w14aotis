@@ -2,6 +2,10 @@ import React from "react";
 import { TextField, InputAdornment } from "@mui/material";
 import { Icon } from "@iconify/react";
 
+/**
+ * This is a search bar and allows users to type in to search for matching tasks.
+ * It is used in the all tasks page and the profile assigned tasks section.
+ */
 const SearchBar = ({ type, placeholder, defaultValue, onChangeFunction }) => {
   const textFieldSx = {
     width: "100%",

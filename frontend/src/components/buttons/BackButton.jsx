@@ -1,11 +1,15 @@
 import React from "react";
 import { Button } from "@mui/material";
 
-const CustomButton = ({ text, onClickFunction, disabled }) => {
+/**
+ * The back button exists in the profile page and navigates to the dashboard
+ * when clicked.
+ */
+const BackButton = ({ text, onClickFunction }) => {
   const buttonSx = {
-    width: "75%",
+    width: "30%",
     height: "60px",
-    background: "rgba(38, 132, 255, 0.90)",
+    background: "rgba(119, 119, 119, 0.90)",
     borderRadius: "10px",
     fontFamily: "Capriola",
     textTransform: "none",
@@ -15,23 +19,13 @@ const CustomButton = ({ text, onClickFunction, disabled }) => {
     "&:hover": {
       background: "#2578e6",
     },
-    "&:disabled": {
-      background: "#7C9BC3",
-      cursor: "not-allowed",
-      color: "#FFFFFF",
-    },
   };
 
   return (
-    <Button
-      onClick={onClickFunction}
-      variant="contained"
-      disabled={disabled}
-      sx={buttonSx}
-    >
+    <Button onClick={onClickFunction} variant="contained" sx={buttonSx}>
       <h4>{text}</h4>
     </Button>
   );
 };
 
-export default CustomButton;
+export default BackButton;

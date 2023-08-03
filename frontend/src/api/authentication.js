@@ -1,6 +1,8 @@
 const API_URL = `http://localhost:${8000}`;
 const API_MEDIA_TYPE = "application/json";
 
+// Sends an API call to register an account for a user, given an id, first name,
+// last name, password and email.
 export const registerFetch = async (
   uid,
   firstName,
@@ -43,6 +45,7 @@ export const registerFetch = async (
   return registerResponse;
 };
 
+// Sends an API call to login to an account given email and password.
 export const loginFetch = async (email, password) => {
   const jsonData = JSON.stringify({
     email,

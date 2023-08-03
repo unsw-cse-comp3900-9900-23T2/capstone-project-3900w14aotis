@@ -759,7 +759,11 @@ async def removeConnection(currUser: str, userId: str):
             detail={"code": "404", "message": "Error removing connection"},
         )
 
-@app.get("/connections/checkPending/{userId}/{sendingUserId}", summary="Checks if a connection request has been sent")
+
+@app.get(
+    "/connections/checkPending/{userId}/{sendingUserId}",
+    summary="Checks if a connection request has been sent",
+)
 async def checkPending(userId: str, sendingUserId: str):
     """
     Checks if the first user has already sent a connection request to the second user.
@@ -781,7 +785,11 @@ async def checkPending(userId: str, sendingUserId: str):
             detail={"code": "404", "message": "Error checking pending connections"},
         )
 
-@app.get("/connections/checkConnected/{currUser}/{otherUserId}", summary="Checks if the users are connected")
+
+@app.get(
+    "/connections/checkConnected/{currUser}/{otherUserId}",
+    summary="Checks if the users are connected",
+)
 async def checkConnected(currUser: str, otherUserId: str):
     """
     Returns true if the current user and user given are connected
@@ -794,13 +802,14 @@ async def checkConnected(currUser: str, otherUserId: str):
     Returns:
         bool: returns true or false depending on if the patron is connected
     """
-    try: 
+    try:
         return isConnectedTo(currUser, "uid", otherUserId, db)
     except:
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error checking connection"},
-        )        
+        )
+
 
 @app.post("/task/rate/{userId}", summary="Rate a task")
 async def addTaskRating(rating: TaskRatingBody, userId: str):
@@ -829,6 +838,7 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
             detail={"code": "404", "message": "Error rating task"},
         )
 
+
 @app.get("/workload/get/{userId}", summary="Gets the workload of a user")
 async def getWorkload(userId: str):
     """
@@ -836,12 +846,12 @@ async def getWorkload(userId: str):
 
     Args:
         userId (str): user Id for the user you want to get the workload % of
-    
+
     Returns:
         workloadValue (float): number that is a percentage of their workload out
                         of 100. A value of -1 means overloaded (>100%).
     """
-    try: 
+    try:
         workloadValue = getWorkloadValue(userId, db)
         return {
             "detail": {
@@ -855,12 +865,16 @@ async def getWorkload(userId: str):
             detail={"code": "404", "message": "Error retrieving workload value"},
         )
 
-@app.get("/profile/achievement/check/{userId}", summary="checks if achievement for given user is hidden or not")
+
+@app.get(
+    "/profile/achievement/check/{userId}",
+    summary="checks if achievement for given user is hidden or not",
+)
 async def checkHiddenAchievement(userId: str):
     """
     Checks a users achievement hidden status
     Args:
-        userId (str): user Id 
+        userId (str): user Id
 
     Returns:
         achievementCheck (bool): boolean showing if the achievement is hidden or not, true meaning it is hidden
@@ -880,12 +894,16 @@ async def checkHiddenAchievement(userId: str):
             detail={"code": "404", "message": "Error checking achievement"},
         )
 
-@app.post("/profile/achievement/set/{userId}", summary="sets the hidden status of a user's achievements")
+
+@app.post(
+    "/profile/achievement/set/{userId}",
+    summary="sets the hidden status of a user's achievements",
+)
 async def setHiddenAchievement(userId: str, hidden: bool):
     """
     Sets a users achievement hidden status
     Args:
-        userId (str): user Id 
+        userId (str): user Id
 
     Returns:
         userId (str): user Id

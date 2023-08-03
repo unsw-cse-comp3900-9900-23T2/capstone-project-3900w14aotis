@@ -3,6 +3,10 @@ import Headerbar from "../components/Headerbar";
 import { Box } from "@mui/material";
 import KanbanBoard from "./KanbanBoard";
 
+/**
+ * The board page contains the kanban board which users interact with to manage
+ * the status of tasks.
+ */
 const BoardPage = () => {
   return (
     <Box

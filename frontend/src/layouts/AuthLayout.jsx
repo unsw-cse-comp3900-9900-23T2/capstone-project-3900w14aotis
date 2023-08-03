@@ -3,6 +3,9 @@ import { Outlet } from "react-router-dom";
 import styles from "./styles/AuthLayout.module.css";
 import { Box } from "@mui/material";
 
+/**
+ * This defines the layout of our application when a user is not logged in.
+ */
 const AuthLayout = () => {
   const containerSx = {
     display: "flex",

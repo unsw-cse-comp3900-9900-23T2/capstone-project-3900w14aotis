@@ -1,11 +1,14 @@
 import { Box } from "@mui/material";
 import React from "react";
-import styles from "./styles/ProfileCard.module.css";
+import styles from "../styles/Achievement.module.css";
 import ProgressBar from "@ramonak/react-progress-bar";
 
-const AchievementSmallCard = ({
-  achievementDetails,
-}) => {
+/**
+ * This component shows the details of an achievement.
+ * These details include: the achievement display picture, the name of the
+ * achievement, the description and the status bar.
+ */
+const AchievementSmallCard = ({ achievementDetails }) => {
   const { achievement, currentValue, description, image, target } =
     achievementDetails;
 
@@ -30,6 +33,7 @@ const AchievementSmallCard = ({
       >
         <img
           src={`data:image/jpeg;base64,${image}`}
+          alt="Achievement"
           className={styles.achievementImage}
         />
         <Box

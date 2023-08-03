@@ -2,12 +2,16 @@ import React from "react";
 import { Box } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import CustomButton from "../components/CustomButton";
+import CustomButton from "../components/buttons/CustomButton";
 import { deleteTaskFetch } from "../api/task";
 import { displayError, displaySuccess } from "../utils/helpers";
 import { useDispatch } from "react-redux";
 import { deleteTaskAction } from "../tasks/state/deleteTaskAction";
 
+/**
+ * This modal appears when users attempt to delete a task to ask for a
+ * second confirmation. It prevents accidental deletion of tasks.
+ */
 const DeleteTaskConfirmation = ({
   isOpen,
   closeFunction,
@@ -30,6 +34,7 @@ const DeleteTaskConfirmation = ({
       displaySuccess(deleteTaskResponse.detail.message);
     }
     onClose();
+    closeFunction();
   };
 
   const handleClose = () => {

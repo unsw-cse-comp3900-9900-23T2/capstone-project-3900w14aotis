@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
-import TextInput from "../components/TextInput";
-import TextLink from "../components/TextLink";
-import CustomButton from "../components/CustomButton";
+import TextInput from "../components/form/TextInput";
+import TextLink from "../components/form/TextLink";
+import CustomButton from "../components/buttons/CustomButton";
 import styles from "./styles/LoginPage.module.css";
 import { registerFetch } from "../api/authentication.js";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,16 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useDispatch } from "react-redux";
 import { registerAction } from "./state/registerAction";
 
+/**
+ * This page is used to register for an account on Otis using specified details
+ * These details include:
+ * - First name
+ * - Last name
+ * - Email
+ * - Password
+ * - Confirm password
+ * The password and confirm password need to match to proceed.
+ */
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");

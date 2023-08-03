@@ -1,31 +1,33 @@
 import React from "react";
-import ProfilePicture from "./ProfilePicture";
-import { styled } from "@mui/material/styles";
-import { Box, LinearProgress, linearProgressClasses } from "@mui/material";
+import ProfilePicture from "../ProfilePicture";
+import { Box } from "@mui/material";
 import { Icon } from "@iconify/react";
-import { removeConnectionFetch } from "../api/connections";
-import { getAuth } from "firebase/auth";
-import { displaySuccess, displayError } from "../utils/helpers";
+import { displayError } from "../../utils/helpers";
 import RemoveConnectionModal from "./RemoveConnectionModal";
-import { workloadFetch } from "../api/workload";
+import { workloadFetch } from "../../api/workload";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import ProgressBar from "@ramonak/react-progress-bar";
-import styles from "./styles/Connections.module.css";
-import Loading from "../components/Loading";
+import styles from "../styles/Connections.module.css";
+import Loading from "../loaders/Loading";
 import Tooltip from "@mui/material/Tooltip";
 
-function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
+/**
+ * This component exists on a user's connections page and each card shows the
+ * details of the connection.
+ * These details include:
+ * - Profile picture
+ * - Full name
+ * - Email
+ * - Workload bar
+ */
+
+const ConnectionCard = ({ uId, firstName, lastName, email, profileImage }) => {
   const [workload, setWorkload] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
 
-  const navigate = useNavigate();
-
   const getWorkload = async () => {
     try {
-      const user = getAuth();
-
       const workloadResponse = await workloadFetch(uId);
 
       const workload = workloadResponse.detail.message;
@@ -49,12 +51,13 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
     borderRadius: "50%",
   };
 
+  // Changes the colour of the workload progress bar depending on its percentage
   const getColor = () => {
     if (workload === -1) return "red";
     if (workload >= 0 && workload <= 30) return "green";
     if (workload > 30 && workload <= 70) return "blue";
     if (workload > 70 && workload <= 100) return "orange";
-    return "#001AFF"; // Default color
+    return "#001AFF";
   };
 
   const closeModalHandler = () => {
@@ -145,6 +148,6 @@ function ConnectionCard({ uId, firstName, lastName, email, profileImage }) {
       />
     </Box>
   );
-}
+};
 
 export default ConnectionCard;

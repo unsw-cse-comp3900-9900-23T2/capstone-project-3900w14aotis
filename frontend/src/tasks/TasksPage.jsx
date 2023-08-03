@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Headerbar from "../components/Headerbar";
-import LongTaskCard from "../components/LongTaskCard";
+import LongTaskCard from "../components/tasks/LongTaskCard";
 import { useParams } from "react-router-dom";
 import { allTasksFetch } from "../api/task";
-import ViewTaskModal from "../components/ViewTaskModal";
+import ViewTaskModal from "./ViewTaskModal";
 import {
   sortTasksAscending,
   sortTasksDescending,
@@ -17,8 +17,8 @@ import {
 } from "../utils/helpers";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import CreateTaskModal from "../components/CreateTaskModal";
-import Loading from "../components/Loading";
+import CreateTaskModal from "./CreateTaskModal";
+import Loading from "../components/loaders/Loading";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 

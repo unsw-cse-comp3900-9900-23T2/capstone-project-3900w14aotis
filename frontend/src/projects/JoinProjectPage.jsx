@@ -3,12 +3,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { displayError, displaySuccess } from "../utils/helpers";
 import { joinProjectFetch } from "../api/task.js";
-import CustomButton from "../components/CustomButton";
+import CustomButton from "../components/buttons/CustomButton";
 import Headerbar from "../components/Headerbar";
-import TextInput from "../components/TextInput";
-import BackButton from "../components/BackButton";
+import TextInput from "../components/form/TextInput";
+import BackButton from "../components/buttons/BackButton";
 import { getAuth } from "firebase/auth";
 
+/**
+ * This page allows users to join a project.
+ */
 const JoinProject = () => {
   const navigate = useNavigate();
 

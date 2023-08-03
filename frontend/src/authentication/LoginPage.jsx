@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/LoginPage.module.css";
-import TextInput from "../components/TextInput";
-import TextLink from "../components/TextLink";
-import CustomButton from "../components/CustomButton";
-import { loginFetch } from "../api/authentication.js";
+import TextInput from "../components/form/TextInput";
+import TextLink from "../components/form/TextLink";
+import CustomButton from "../components/buttons/CustomButton";
 import { useNavigate } from "react-router-dom";
 import { displayError, displaySuccess } from "../utils/helpers";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -12,6 +11,14 @@ import { useDispatch } from "react-redux";
 import { loginAction } from "./state/loginAction";
 import RecoverPasswordModal from "./RecoverPasswordModal";
 
+/**
+ * This is the landing page for users when they first open the app.
+ * Users can log in using their authenticated details before being taken into
+ * the app.
+ * These details include:
+ * - Email
+ * - Password
+ */
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

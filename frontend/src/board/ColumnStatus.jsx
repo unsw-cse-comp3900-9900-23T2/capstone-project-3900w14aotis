@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { Box } from "@mui/material";
-import SmallTaskCard from "./SmallTaskCard";
+import DraggableTaskCard from "./DraggableTaskCard";
 import { Icon } from "@iconify/react";
 import styles from "./styles/ColumnStatus.module.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import CreateTaskModal from "../components/CreateTaskModal";
-import Loading from "../components/Loading";
+import CreateTaskModal from "../tasks/CreateTaskModal";
+import Loading from "../components/loaders/Loading";
 import { useParams } from "react-router-dom";
-import ViewTaskModal from "../components/ViewTaskModal";
+import ViewTaskModal from "../tasks/ViewTaskModal";
 
 const ColumnStatus = ({ columnId, title, tasks, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -93,7 +93,7 @@ const ColumnStatus = ({ columnId, title, tasks, isLoading }) => {
                     >
                       {tasks.map((task, idx) => {
                         return (
-                          <SmallTaskCard
+                          <DraggableTaskCard
                             key={task.taskID}
                             task={task}
                             index={idx}

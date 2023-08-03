@@ -1,6 +1,8 @@
 const API_URL = `http://localhost:${8000}`;
 const API_MEDIA_TYPE = "application/json";
 
+// Sends an API call to create a project, given a project title and the id of
+// the user creating the project.
 export const createProjectFetch = async (title, user) => {
   const jsonData = JSON.stringify({
     title,
@@ -22,6 +24,8 @@ export const createProjectFetch = async (title, user) => {
   return createProjectResponse;
 };
 
+// Sends an API call to join a project. Takes in the id of the user joining, and
+// the project id.
 export const joinProjectFetch = async (id, user) => {
   const jsonData = JSON.stringify({
     user,
@@ -42,6 +46,8 @@ export const joinProjectFetch = async (id, user) => {
   return joinProjectResponse;
 };
 
+// Sends an API call to create a project task. Tasks will include details such
+// as a title, description, deadline, assignee, prioriy and status.
 export const createTaskFetch = async (
   projectId,
   title,
@@ -78,6 +84,7 @@ export const createTaskFetch = async (
   return createTaskResponse;
 };
 
+// Sends an API call to get all tasks within a project given a project ID.
 export const allTasksFetch = async (projectId) => {
   const requestOption = {
     method: "GET",
@@ -93,21 +100,7 @@ export const allTasksFetch = async (projectId) => {
   return allTasksResponse;
 };
 
-export const paginateTasksFetch = async (projectId, latestTaskId) => {
-  const requestOption = {
-    method: "GET",
-    headers: { "Content-Type": API_MEDIA_TYPE },
-  };
-
-  const allTasksPromise = await fetch(
-    `${API_URL}/tasks/${projectId}/${latestTaskId}`,
-    requestOption
-  );
-
-  const allTasksResponse = await allTasksPromise.json();
-  return allTasksResponse;
-};
-
+// Sends an API call to get details of a task.
 export const taskDetailFetch = async (projectId, taskId) => {
   const requestOption = {
     method: "GET",
@@ -123,6 +116,7 @@ export const taskDetailFetch = async (projectId, taskId) => {
   return allTasksResponse;
 };
 
+// Sends an API call to update the details of a task.
 export const updateTaskFetch = async (
   projectId,
   taskId,
@@ -157,6 +151,8 @@ export const updateTaskFetch = async (
   return updateTaskResponse;
 };
 
+// Sends an API call to delete a task, given the id of the task being deleted
+// and the id of the project that the task is in.
 export const deleteTaskFetch = async (projectId, taskId) => {
   const requestOption = {
     method: "DELETE",

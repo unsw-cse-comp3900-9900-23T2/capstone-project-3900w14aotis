@@ -1,7 +1,7 @@
 import React from "react";
 import { TextField } from "@mui/material";
 
-const TextBox = ({
+const TextInput = ({
   label,
   type,
   placeholder,
@@ -9,13 +9,11 @@ const TextBox = ({
   readOnly,
   onChangeFunction,
   boxColour,
-  width,
-  height,
-  maxRows,
+  onKeyDownFunction,
+  emailInput,
 }) => {
   const textFieldSx = {
-    width: { width },
-    height: { height },
+    width: "100%",
     "& .MuiOutlinedInput-root": {
       background: "#rgba(255, 255, 255, 0.90)",
       border: "none",
@@ -24,6 +22,7 @@ const TextBox = ({
       "& fieldset": {
         border: "none",
       },
+      height: "60px",
     },
     "& .MuiInputBase-input": {
       fontSize: 20,
@@ -46,6 +45,12 @@ const TextBox = ({
 
   return (
     <TextField
+      onKeyDown={(event) => {
+        if (event.key === "Enter" && emailInput) {
+          onKeyDownFunction(event.key);
+          event.target.value = "";
+        }
+      }}
       onChange={(event) => {
         onChangeFunction(event.target.value);
       }}
@@ -53,8 +58,6 @@ const TextBox = ({
       variant="outlined"
       label={label}
       type={type}
-      multiline
-      maxRows={maxRows}
       placeholder={placeholder}
       defaultValue={defaultValue}
       InputProps={{
@@ -65,4 +68,4 @@ const TextBox = ({
   );
 };
 
-export default TextBox;
+export default TextInput;

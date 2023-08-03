@@ -1,25 +1,23 @@
 import React, { useState, useEffect } from "react";
-import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import { Icon } from "@iconify/react";
-import styles from "./styles/Modal.module.css";
-import ProfilePicture from "./ProfilePicture";
-import DeadlineBox from "./DeadlineBox";
+import styles from "../components/styles/Modal.module.css";
+import DeadlineBox from "../components/DeadlineBox";
 import TaskUsers from "../components/TaskUsers";
-import { deleteTaskFetch } from "../api/task";
-import { displayError, displaySuccess } from "../utils/helpers";
 import { addRatingFetch } from "../api/rating";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import TaskRatingIcon from "../components/TaskRatingIcon";
+import TaskRatingIcon from "../components/tasks/TaskRatingIcon";
 import { taskDetailFetch } from "../api/task";
-import Loading from "./Loading";
-import { useDispatch } from "react-redux";
-import { deleteTaskAction } from "../tasks/state/deleteTaskAction";
+import Loading from "../components/loaders/Loading";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import DeleteTaskConfirmation from "../tasks/DeleteTaskConfirmation";
+import DeleteTaskConfirmation from "./DeleteTaskConfirmation";
 
+/**
+ * This modal allows users to view a task. If viewing a task assigned to
+ * yourself, users are able to add or remove a rating.
+ */
 const ViewTaskModal = ({
   isOpen,
   onClose,
@@ -41,8 +39,6 @@ const ViewTaskModal = ({
   const [ratingUpdated, setRatingUpdated] = useState(0);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [deadline, setDeadline] = useState(new Date(0));
-
-  const dispatch = useDispatch();
 
   const getTaskDetails = async () => {
     if (isOpen && taskId) {
@@ -123,16 +119,6 @@ const ViewTaskModal = ({
     flexDirection: "row",
     alignItems: "center",
     gap: "30px",
-  };
-
-  const faceStyle = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    "&:hover": {
-      color: "#2578e6",
-      cursor: "pointer",
-    },
   };
 
   return (
@@ -270,7 +256,6 @@ const ViewTaskModal = ({
                     {details && (
                       <DeadlineBox
                         deadline={details.Deadline}
-                        // deadline={finalDeadline}
                         width={"7.4375rem"}
                         height={"2.49rem"}
                       />

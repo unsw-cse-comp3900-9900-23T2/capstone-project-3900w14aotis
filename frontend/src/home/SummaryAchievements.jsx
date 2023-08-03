@@ -1,8 +1,8 @@
 import React from "react";
 import { Box } from "@mui/material";
 import styles from "./styles/SummaryTaskCards.module.css";
-import AchievementSmallCard from "../profile/AchievementSmallCard";
-import Loading from "../components/Loading";
+import AchievementSmallCard from "../components/achievement/AchievementSmallCard";
+import Loading from "../components/loaders/Loading";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
 const SummaryAchievements = ({ achievements, isLoading }) => {
@@ -31,10 +31,6 @@ const SummaryAchievements = ({ achievements, isLoading }) => {
       ) : (
         <Box
           sx={{
-            // display: "flex",
-            // flexDirection: "column",
-            // justifyContent: "space-between",
-            // height: "100%",
             width: "100%",
             height: "80%",
           }}

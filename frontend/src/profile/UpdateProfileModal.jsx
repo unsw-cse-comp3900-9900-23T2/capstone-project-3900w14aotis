@@ -3,29 +3,36 @@ import { Icon } from "@iconify/react";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles/ProfileModal.module.css";
-import TextInput from "../components/TextInput";
+import TextInput from "../components/form/TextInput";
 import {
   getAuth,
   onAuthStateChanged,
   updateEmail,
   updatePassword,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  signOut,
 } from "firebase/auth";
 import { displayError, displaySuccess, fileToDataUrl } from "../utils/helpers";
 import { profileDetailFetch, profileUpdateFetch } from "../api/profile.js";
-import CustomButton from "../components/CustomButton";
+import CustomButton from "../components/buttons/CustomButton";
 import { useDispatch } from "react-redux";
 import { updateProfileAction } from "../profile/state/updateProfileAction";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import UploadImageButton from "./UploadImageButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import IconButton from '@mui/material/IconButton';
 
+/**
+ * This is a modal that handles updating the user's profile.
+ * Details to be updated include:
+ * - Cover Photo
+ * - Profile Photo
+ * - First Name
+ * - Last Name
+ * - Email
+ * - Password (in which you will be logged out if successful)
+ */
 const UpdateProfileModal = () => {
-
-  const profileInput = useRef(null);
-  const coverProfileInput = useRef(null);
-
   // Initialise profile details
   const [userDetails, setUserDetails] = useState({});
   const [firstName, setFirstName] = useState("");
@@ -35,13 +42,15 @@ const UpdateProfileModal = () => {
   const [coverProfileImage, setCoverProfileImage] = useState("");
   const [userId, setUserId] = useState("");
 
+  const profileInput = useRef(null);
+  const coverProfileInput = useRef(null);
+
   useEffect(() => {
     getProfileDetails();
   }, []);
 
   const profileDetails = async (userId) => {
     const profileDetailsResponse = await profileDetailFetch(userId);
-    // TODO: try catch?
     const profile = profileDetailsResponse.detail.message;
     setUserDetails(profile);
     setFirstName(profile.firstName);
@@ -66,11 +75,10 @@ const UpdateProfileModal = () => {
     }
   };
 
-  // TODO: pasword change -> old password needs to match
-  // const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordColour, setPasswordColour] = useState("#B2B2B2");
+  const [currPassword, setCurrPassword] = useState("");
 
   const [open, setOpen] = useState(false);
   const openModalHandler = () => {
@@ -87,7 +95,6 @@ const UpdateProfileModal = () => {
   const onChangeProfileImage = async (event) => {
     // Convert file input to string to store in database
     let newImage = event.target.files[0];
-    // console.log("newImage: ", newImage);
     if (newImage === undefined) {
       newImage = "";
     } else {
@@ -135,23 +142,14 @@ const UpdateProfileModal = () => {
     setCoverProfileImage("");
   };
 
-  // const onChangeOldPassword = (value) => setOldPassword(value);
   const onChangePassword = (value) => setPassword(value);
   const onChangeConfirmPassword = (value) => setConfirmPassword(value);
+  const onChangeCurrPassword = (value) => setCurrPassword(value);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Checking for dataURL
-  // const isDataURL = (s) => {
-  //   return !!s.match(regex);
-  // }
-  // const regex = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i;
-
   const profileUpdateButtonHandler = async () => {
-    // if (oldPassword === password) {
-    //   displayError("Please choose a new password!");
-    // }
     if (password !== confirmPassword) {
       displayError("Passwords do not match!");
     } else {
@@ -164,12 +162,20 @@ const UpdateProfileModal = () => {
             displayError(error);
           });
         // Update password in Firebase Auth
-        // For the time being, the app will not require the old password to change password.
         if (password !== "") {
+          const auth = getAuth();
+          const credential = EmailAuthProvider.credential(
+            auth.currentUser.email,
+            currPassword
+          );
+          const result = await reauthenticateWithCredential(
+            auth.currentUser,
+            credential
+          );
           updatePassword(auth.currentUser, password)
             .then(() => {
-              console.log("password change success!");
-              // TODO: sign user back in
+              // Logs the user out of Otis.
+              signOut(auth);
               navigate("/login");
             })
             .catch((error) => {
@@ -184,10 +190,6 @@ const UpdateProfileModal = () => {
           profileImage,
           coverProfileImage
         );
-        // console.log(
-        //   "profile update fetch response: ",
-        //   profileUpdateFetchResponse
-        // );
         dispatch(updateProfileAction());
         closeModalHandler();
         displaySuccess(`Profile Updated Successfully!`);
@@ -243,7 +245,7 @@ const UpdateProfileModal = () => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    width: "60%",
+    // width: "60%",
     width: "100%",
   };
 
@@ -290,15 +292,13 @@ const UpdateProfileModal = () => {
               <Box sx={imageSectionContainerSx}>
                 <Box sx={modalTitleSx}>
                   <h3 className={styles.imageText}>Profile Image:</h3>
-                  <Box
-                    sx={editFileContainer}
-                  >
+                  <Box sx={editFileContainer}>
                     <input
-                      type='file'
-                      name='image'
+                      type="file"
+                      name="image"
                       ref={profileInput}
                       onChange={onChangeProfileImage}
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                     />
                     <UploadImageButton
                       fileInput={profileInput}
@@ -306,30 +306,27 @@ const UpdateProfileModal = () => {
                     />
                   </Box>
                 </Box>
-                <Box
-                  sx={imageContainerSx}
-                >
+                <Box sx={imageContainerSx}>
                   <input
                     type="image"
                     src={profileImage ? profileImage : "/Default-Avatar.png"}
                     width={"200px"}
                     height={"200px"}
                     className={styles.profilePicture}
+                    alt="Profile Picture"
                   />
                 </Box>
               </Box>
               <Box sx={imageSectionContainerSx}>
                 <Box sx={modalTitleSx}>
                   <h3 className={styles.imageText}>Cover Photo:</h3>
-                  <Box
-                    sx={editFileContainer}
-                  >
+                  <Box sx={editFileContainer}>
                     <input
-                      type='file'
-                      name='image'
+                      type="file"
+                      name="image"
                       ref={coverProfileInput}
                       onChange={onChangeCoverProfileImage}
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                     />
                     <UploadImageButton
                       fileInput={coverProfileInput}
@@ -337,16 +334,19 @@ const UpdateProfileModal = () => {
                     />
                   </Box>
                 </Box>
-                <Box
-                  sx={imageContainerSx}
-                >
+                <Box sx={imageContainerSx}>
                   <input
-                      type="image"
-                      src={coverProfileImage ? coverProfileImage : "/Default-Cover.jpg"}
-                      width={"400px"}
-                      height={"auto"}
-                      className={styles.coverPicture}
-                    />
+                    type="image"
+                    src={
+                      coverProfileImage
+                        ? coverProfileImage
+                        : "/Default-Cover.jpg"
+                    }
+                    width={"400px"}
+                    height={"auto"}
+                    className={styles.coverPicture}
+                    alt="Cover Photo"
+                  />
                 </Box>
               </Box>
               <Box sx={inputContainerSx}>
@@ -374,6 +374,15 @@ const UpdateProfileModal = () => {
                 />
               </Box>
               <h3 className={styles.passwordTitle}>Password Change</h3>
+              <Box sx={inputContainerSx}>
+                <TextInput
+                  label="Current Password"
+                  type="password"
+                  placeholder="myPassword!3900"
+                  onChangeFunction={onChangeCurrPassword}
+                  boxColour={passwordColour}
+                />
+              </Box>
               <Box sx={inputContainerSx}>
                 <TextInput
                   label="New password"
