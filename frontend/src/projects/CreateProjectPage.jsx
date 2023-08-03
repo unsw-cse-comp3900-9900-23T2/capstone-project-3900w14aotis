@@ -9,6 +9,9 @@ import Headerbar from "../components/Headerbar";
 import TextInput from "../components/form/TextInput";
 import BackButton from "../components/buttons/BackButton";
 
+/**
+ * This page allows the user to create a project.
+ */
 const CreateProject = () => {
   const navigate = useNavigate();
 

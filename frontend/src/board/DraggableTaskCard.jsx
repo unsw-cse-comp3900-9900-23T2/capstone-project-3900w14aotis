@@ -5,6 +5,10 @@ import DeadlineBox from "../components/DeadlineBox";
 import styles from "./styles/DraggableTaskCard.module.css";
 import TaskUsers from "../components/TaskUsers";
 
+/**
+ * This is task card that has a draggable feature. This means that users are
+ * able to drag the task from one area to another.
+ */
 const DraggableTaskCard = ({ task, index, viewTaskFunction }) => {
   return (
     <Draggable draggableId={task.taskID} index={index}>

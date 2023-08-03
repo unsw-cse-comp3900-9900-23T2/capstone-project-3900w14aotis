@@ -11,6 +11,13 @@ import Loading from "../components/loaders/Loading";
 import { useParams } from "react-router-dom";
 import ViewTaskModal from "../tasks/ViewTaskModal";
 
+/**
+ * This is the individual column within the Kanban board. The application currently has 3 columns:
+ * - To Do
+ * - In Progress
+ * - Done
+ * Each column also includes a section at the bottom that allows users to create a task.
+ */
 const ColumnStatus = ({ columnId, title, tasks, isLoading }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [viewTaskModalOpen, setViewTaskModalOpen] = useState(false);

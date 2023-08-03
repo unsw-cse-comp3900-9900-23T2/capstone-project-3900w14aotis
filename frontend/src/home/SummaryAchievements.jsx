@@ -5,6 +5,9 @@ import AchievementSmallCard from "../components/achievement/AchievementSmallCard
 import Loading from "../components/loaders/Loading";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
+/**
+ * This summary of user achievements shows the 5 most completed tasks.
+ */
 const SummaryAchievements = ({ achievements, isLoading }) => {
   console.log(achievements);
   return (

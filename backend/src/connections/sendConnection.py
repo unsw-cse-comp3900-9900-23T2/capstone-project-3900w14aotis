@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from src.serverHelper import findUser, isValidUser, getFromUser,getAchievement
 from src.connections.connectionHelper import isConnectedTo, isRequestPending
 """
-This files contains helper functions to help send a connection to a taskmaster
+This file contains helper functions to help send a connection to a taskmaster
 """
 
 EMAIL_FIELD = "email"
@@ -92,13 +92,9 @@ def sendConnection(userEmail, userId, db):
                     }
                 )
 
-
-
     taskmasterRef = findUser(EMAIL_FIELD, lowerEmail, db)
     taskmasterRef.update(
         {"pendingConnections": firestore.ArrayUnion([userId])}
     )
-
-    
 
     return connectionDict
