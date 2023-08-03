@@ -50,7 +50,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   const dispatch = useDispatch();
 
   const auth = getAuth();
-  const [user, loading, error] = useAuthState(auth);
+  // const [user, loading, error] = useAuthState(auth);
 
   const onEnter = (key) => {
     if (key === "Enter") {
@@ -107,6 +107,13 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
       status,
       creatorId
     );
+    if (createTaskFetchResponse.detail.code === "400") {
+      displayError(
+        `Error creating task: ${createTaskFetchResponse.detail.message}`
+      );
+    } else {
+      displaySuccess("Successfully created task!");
+    }
     console.log(createTaskFetchResponse);
     dispatch(addTaskAction());
     closeFunction();
@@ -117,7 +124,6 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
     setTitle("");
     setDescription("");
     setEmail("");
-    displaySuccess("Successfully created task!");
   };
 
   const createTaskButtonHandler = async () => {
