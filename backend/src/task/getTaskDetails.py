@@ -1,6 +1,6 @@
-from fastapi import HTTPException
+from src.serverHelper import getTaskDoc, getUserDoc
 """
-This files contains helper functions to help retrieve details of a task
+This file contains helper functions to help retrieve details of a task
 """
 
 
@@ -16,51 +16,26 @@ def getDetails(projectId, taskId, db):
     Returns:
         doc (dict): dictionary containing the details of the doc
     """
-    projectDocRef = db.collection("projects").document(projectId)
-    taskDocRef = projectDocRef.collection("tasks").document(taskId)
-    taskDict = {}
-    doc = taskDocRef.get()
-
-    if doc.exists:
-        taskDict = doc.to_dict()
-    else:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Document doesn't exist"},
-        )
-
+    taskDict = getTaskDoc(projectId, taskId, db)
     assigneeList = taskDict.pop("Assignees")
     assigneeDictList = makeAssigneeList(db, assigneeList)
     taskDict["Assignees"] = assigneeDictList
     return taskDict
 
 
-def makeAssigneeList(db, list):
-    assigneeDictList = []
-    for assignee in list:
-        assigneeDetail = getProfDetails(assignee, db)
-        assigneeDictList.append(assigneeDetail)
-    return assigneeDictList
-
-
-def getProfDetails(email, db):
-    """gets user details given a email (email, firstname, lastname,uid, tasks, projects)
+def makeAssigneeList(db, assigneeList):
+    """
+    Creates an assignee list with all the details of those assignees
 
     Args:
-        email (str): _description_
-        db (_type_): database
+        db: database connection
+        list (List): list of assignee emails
 
     Returns:
-        profDetails(dict): dictionary of the profiles details
+        assigneeDictList (List): list of dictionaries containing assignee details
     """
-    profDetails = {}
-    docs = (
-        db.collection("taskmasters")
-        .where("email", "==", email.lower())
-        .limit(1)
-        .stream()
-    )
-    for doc in docs:
-        profDetails = doc.to_dict()
-
-    return profDetails
+    assigneeDictList = []
+    for email in assigneeList:
+        assigneeDetail = getUserDoc("email", email, db)
+        assigneeDictList.append(assigneeDetail)
+    return assigneeDictList

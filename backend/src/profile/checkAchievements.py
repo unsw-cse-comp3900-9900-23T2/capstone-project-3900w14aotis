@@ -1,18 +1,17 @@
+from src.serverHelper import getFromUser
+
 def checkAchievement(uid, db):
     """
-    returns the user's hidden achievement status 
+    Returns the user's hidden achievement status 
 
     Args:
-        uid (str): user id
+        uid (str): user id of the user
         db (_type_): database
 
     Returns:
         achievementHidden (bool): boolean of the achievementHidden status
     """
-    achievementHidden = bool
-    docs = db.collection("taskmasters").where("uid", "==", uid).limit(1).stream()  
-    for doc in docs:
-        achievementHidden = doc.get("achievementHidden")
+    achievementHidden = getFromUser("uid", uid, "achievementHidden", db)
     
     return achievementHidden
         
