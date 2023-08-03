@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box } from "@mui/material";
-import styles from "./styles/Navbar.module.css";
+import styles from "../styles/Navbar.module.css";
 import ProfilePictureDropdown from "./ProfilePictureDropdown";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { stringToObject } from "../utils/helpers";
-import { useSelector } from "react-redux";
+import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const Navbar = () => {

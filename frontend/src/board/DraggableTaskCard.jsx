@@ -2,10 +2,14 @@ import { Box } from "@mui/material";
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import DeadlineBox from "../components/DeadlineBox";
-import styles from "./styles/SmallTaskCard.module.css";
+import styles from "./styles/DraggableTaskCard.module.css";
 import TaskUsers from "../components/TaskUsers";
 
-const SmallTaskCard = ({ task, index, viewTaskFunction }) => {
+/**
+ * This is task card that has a draggable feature. This means that users are
+ * able to drag the task from one area to another.
+ */
+const DraggableTaskCard = ({ task, index, viewTaskFunction }) => {
   return (
     <Draggable draggableId={task.taskID} index={index}>
       {(provided) => {
@@ -70,4 +74,4 @@ const SmallTaskCard = ({ task, index, viewTaskFunction }) => {
     </Draggable>
   );
 };
-export default SmallTaskCard;
+export default DraggableTaskCard;

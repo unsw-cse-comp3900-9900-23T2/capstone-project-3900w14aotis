@@ -1,6 +1,7 @@
 const API_URL = `http://localhost:${8000}`;
 const API_MEDIA_TYPE = "application/json";
 
+// Sends an API call to get details of a profile given a user id.
 export const profileDetailFetch = async (uId) => {
   const requestOption = {
     method: "GET",
@@ -16,6 +17,8 @@ export const profileDetailFetch = async (uId) => {
   return profileDetailResponse;
 };
 
+// Sends an API call to update details of a profile. These details include a
+// user's first name, last name, email, profile image and cover image.
 export const profileUpdateFetch = async (
   uid,
   firstName,
@@ -45,6 +48,7 @@ export const profileUpdateFetch = async (
   return profileUpdateResponse;
 };
 
+// Sends an API call to get the user's achievements.
 export const profileAchievementsFetch = async (uId) => {
   const requestOption = {
     method: "GET",
@@ -60,6 +64,8 @@ export const profileAchievementsFetch = async (uId) => {
   return profileAchievementsResponse;
 };
 
+// Sends an API call to check if profile achievements should be hidden or
+// displayed on a profile.
 export const checkHiddenAchievementsFetch = async (uid) => {
   const requestOption = {
     method: "GET",
@@ -71,10 +77,12 @@ export const checkHiddenAchievementsFetch = async (uid) => {
     requestOption
   );
 
-  const checkHiddenAchievementsResponse = await checkHiddenAchievementsPromise.json();
+  const checkHiddenAchievementsResponse =
+    await checkHiddenAchievementsPromise.json();
   return checkHiddenAchievementsResponse;
-}
+};
 
+// Sends an API call to set the visiblity of profile achievements on a profile.
 export const setHiddenAchievementsFetch = async (uid, hidden) => {
   const requestOption = {
     method: "POST",
@@ -86,6 +94,7 @@ export const setHiddenAchievementsFetch = async (uid, hidden) => {
     requestOption
   );
 
-  const setHiddenAchievementsResponse = await setHiddenAchievementsPromise.json();
+  const setHiddenAchievementsResponse =
+    await setHiddenAchievementsPromise.json();
   return setHiddenAchievementsResponse;
-}
+};

@@ -2,6 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ListItem, ListItemButton, ListItemText } from "@mui/material";
 
+/**
+ * This component contains the sidebar navigation link that users can click on
+ * to swap to that tab.
+ */
 const SidebarLink = ({
   text,
   icon,

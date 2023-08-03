@@ -15,12 +15,36 @@ DONE_STATUS = "Done"
 NO_DATE = datetime.fromtimestamp(0, timezone.utc)
 
 def updateWorkload(userId, db):
+    """
+    Updates workload field in the taskmaster
+
+    Args:
+        userId (str): user id of the user
+        db: database
+
+    Returns:
+        workloadValue (float): the new value of the workload
+    """
     workloadValue = calculate(userId, db)
     userRef = findUser("uid", userId, db)
     userRef.update({"workload": workloadValue})
     return f"Workload updated with value {workloadValue}"
 
 def calculate(currUser, db):
+    """
+    Calculates the workload of a user based on four factors:
+    1. number of tasks
+    2. their mood rating of the task
+    3. priority status of the task
+    4. how close the user is to the task deadline
+
+    Args:
+        currUser (str): user id of the user
+        db: database
+
+    Returns:
+        totalWorkload (float): the new calculated value of the workload
+    """
     #1. basic weighted task out of total tasks
     taskList = getFromUser("uid", currUser, "tasks", db)
 
@@ -86,5 +110,15 @@ def calculate(currUser, db):
     return totalWorkload
 
 def getWorkloadValue(userId, db):
+    """
+    Gets the workload value of a user
+
+    Args:
+        userId (str): user id of the user
+        db: database
+
+    Returns:
+        workloadStored (float): the stored value of workload
+    """
     workloadStored = getFromUser("uid", userId, "workload", db)
     return workloadStored

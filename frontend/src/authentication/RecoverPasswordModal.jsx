@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box } from "@mui/material";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { displaySuccess, displayError } from "../utils/helpers";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import CustomButton from "../components/CustomButton";
-import TextInput from "../components/TextInput";
+import CustomButton from "../components/buttons/CustomButton";
+import TextInput from "../components/form/TextInput";
 
+/**
+ * This modal pops up when users click on "forgot your password?" in the login
+ * page. Users can enter their email and click send to receive an email with
+ * further instructions.
+ */
 const RecoverPasswordModal = ({ isOpen, handleCloseFunction }) => {
   const [email, setEmail] = useState("");
 

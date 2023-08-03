@@ -4,6 +4,17 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Box } from "@mui/material";
 
+/**
+ * This dropdown menu allows users to choose the method in which tasks are sorted.
+ * This includes:
+ * - Ascending
+ * - Descending
+ * - Soonest
+ * - Latest
+ * - Important
+ * - Least Important
+ * - Default
+ */
 const SortTasksDropdown = ({ sortTasksFunction }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortedBy, setSortedBy] = useState("");

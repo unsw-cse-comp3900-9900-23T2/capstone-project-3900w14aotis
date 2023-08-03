@@ -1,6 +1,8 @@
 const API_URL = `http://localhost:${8000}`;
 const API_MEDIA_TYPE = "application/json";
 
+// Sends an API call to update the rating of a task, given a projectId, taskId,
+// userId, and mood.
 export const addRatingFetch = async (projectId, taskId, userId, mood) => {
   const jsonData = JSON.stringify({
     projectId,
@@ -23,6 +25,7 @@ export const addRatingFetch = async (projectId, taskId, userId, mood) => {
   return addRatingResponse;
 };
 
+// Sends an API call to get all the ratings of a user, given the user's id.
 export const allRatingsFetch = async (userId) => {
   const requestOption = {
     method: "GET",
@@ -36,4 +39,4 @@ export const allRatingsFetch = async (userId) => {
 
   const allRatingsResponse = await allRatingsPromise.json();
   return allRatingsResponse;
-} 
+};

@@ -3,13 +3,17 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
 import { Icon } from "@iconify/react";
-import TextInput from "./TextInput";
-import styles from "./styles/Modal.module.css";
-import CustomButton from "./CustomButton";
+import TextInput from "../components/form/TextInput";
+import styles from "../components/styles/Modal.module.css";
+import CustomButton from "../components/buttons/CustomButton";
 import { displayError, displaySuccess } from "../utils/helpers";
 import { getAuth } from "firebase/auth";
 import { sendConnectionFetch } from "../api/connections";
 
+/**
+ * This modal pops up when users click on the "add connection" icon
+ * Users can enter an email and click the button to send a connection request.
+ */
 const SendConnectionModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);

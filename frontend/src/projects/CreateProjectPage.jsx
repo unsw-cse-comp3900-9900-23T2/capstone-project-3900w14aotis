@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { displayError, displaySuccess } from "../utils/helpers";
 import { createProjectFetch } from "../api/task.js";
 import { getAuth } from "firebase/auth";
-import CustomButton from "../components/CustomButton";
+import CustomButton from "../components/buttons/CustomButton";
 import Headerbar from "../components/Headerbar";
-import TextInput from "../components/TextInput";
-import BackButton from "../components/BackButton";
+import TextInput from "../components/form/TextInput";
+import BackButton from "../components/buttons/BackButton";
 
+/**
+ * This page allows the user to create a project.
+ */
 const CreateProject = () => {
   const navigate = useNavigate();
 

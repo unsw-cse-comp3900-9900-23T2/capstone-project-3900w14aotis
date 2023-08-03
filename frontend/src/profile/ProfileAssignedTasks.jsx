@@ -7,14 +7,19 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import SearchBar from "../components/SearchBar";
 import moment from "moment";
 import { emptyDeadlinesSort } from "../utils/helpers";
-import ViewTaskModal from "../components/ViewTaskModal";
+import ViewTaskModal from "../tasks/ViewTaskModal";
 
+/**
+ * This is the assigned tasks section of a user's profile.
+ * A search bar exists for users to search for desired tasks based off
+ * title, description, deadline and task id.
+ */
 const ProfileAssignedTasks = ({ projectId, tasks }) => {
-  console.log(tasks);
   const [searchQuery, setSearchQuery] = useState("");
   const [tasksAfterSearch, setTasksAfterSearch] = useState([]);
   const [viewTaskModalOpen, setViewTaskModalOpen] = useState(false);
   const [taskId, setTaskId] = useState("");
+  const [removedTaskId, setRemovedTaskId] = useState("");
 
   const updateSearchQuery = (value) => {
     setSearchQuery(value);
@@ -59,8 +64,16 @@ const ProfileAssignedTasks = ({ projectId, tasks }) => {
     queryTasks();
   }, [searchQuery]);
 
+  useEffect(() => {
+    const tasksCopy = [...tasksAfterSearch];
+    const removedTaskList = tasksCopy.filter((task) => {
+      return task.taskID !== removedTaskId;
+    });
+
+    setTasksAfterSearch(removedTaskList);
+  }, [removedTaskId]);
+
   const closeModalHandler = () => {
-    // setIsOpen(false);
     setViewTaskModalOpen(false);
   };
 
@@ -77,9 +90,7 @@ const ProfileAssignedTasks = ({ projectId, tasks }) => {
         projectId={projectId}
         taskId={taskId}
         setRemovedTaskId={() => {
-          console.log(
-            "Remove task bin clicked! Remove task from profile functionality not implemented."
-          );
+          setRemovedTaskId(taskId);
         }}
       />
       <Box
@@ -138,7 +149,7 @@ const ProfileAssignedTasks = ({ projectId, tasks }) => {
                 width: "100%",
               }}
             >
-              {tasks.length == 0 ? (
+              {tasks.length === 0 ? (
                 <Box>No assigned tasks.</Box>
               ) : (
                 tasksAfterSearch.map((task) => {

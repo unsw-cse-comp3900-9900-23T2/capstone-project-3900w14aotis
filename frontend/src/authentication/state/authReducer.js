@@ -1,3 +1,4 @@
+// Reducer for auth actions
 const authReducer = (state = null, action) => {
   switch (action.type) {
     case "LOGIN":

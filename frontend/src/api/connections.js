@@ -1,6 +1,7 @@
 const API_URL = `http://localhost:${8000}`;
 const API_MEDIA_TYPE = "application/json";
 
+// Sends an API to get all connections of a user, given that user's id.
 export const allConnectionsFetch = async (uId) => {
   const requestOption = {
     method: "GET",
@@ -15,6 +16,7 @@ export const allConnectionsFetch = async (uId) => {
   return allConnectionsResponse;
 };
 
+// Sends an API to get all pending connections of a user, given that user's id.
 export const pendingConnectionsFetch = async (uId) => {
   const requestOption = {
     method: "GET",
@@ -29,6 +31,8 @@ export const pendingConnectionsFetch = async (uId) => {
   return pendingConnectionsResponse;
 };
 
+// Sends an API to send a connection to another user. Takes in the current user's
+// id and the email of the user being sent a connection request.
 export const sendConnectionFetch = async (email, uId) => {
   const jsonData = JSON.stringify({
     email,
@@ -49,6 +53,8 @@ export const sendConnectionFetch = async (email, uId) => {
   return sendConnectionResponse;
 };
 
+// Sends an API to accept a pending connection request. Takes in the id of the
+// user accepting the connection request and the id of the user sending the request.
 export const acceptConnectionFetch = async (currUser, uId) => {
   const jsonData = JSON.stringify({
     currUser,
@@ -69,6 +75,8 @@ export const acceptConnectionFetch = async (currUser, uId) => {
   return acceptConnectionResponse;
 };
 
+// Sends an API to accept a pending connection request. Takes in the id of the
+// user declining the connection request and the id of the user sending the request.
 export const declineConnectionFetch = async (currUser, uId) => {
   const jsonData = JSON.stringify({
     currUser,
@@ -89,6 +97,9 @@ export const declineConnectionFetch = async (currUser, uId) => {
   return declineConnectionResponse;
 };
 
+// Sends an API to remove a connection from a user's connections list.
+// Takes in the id of the user removing the connection, and the id of the
+// user being removed.
 export const removeConnectionFetch = async (currUser, uId) => {
   const jsonData = JSON.stringify({
     currUser,
@@ -109,6 +120,8 @@ export const removeConnectionFetch = async (currUser, uId) => {
   return removeConnectionResponse;
 };
 
+// Sends an API to check whether two users are connected, given the ids
+// of the two users being checked.
 export const checkConnectionFetch = async (currUser, otherUser) => {
   const requestOption = {
     method: "GET",
@@ -123,6 +136,9 @@ export const checkConnectionFetch = async (currUser, otherUser) => {
   return checkConnectionResponse;
 };
 
+// Sends an API to check whether a user has sent another user a connection
+// request which hasn't been accepted or declined. Takes in the id of the user
+// sending the request and the id of the user with the pending request.
 export const checkPendingFetch = async (uId, sendingUser) => {
   const requestOption = {
     method: "GET",

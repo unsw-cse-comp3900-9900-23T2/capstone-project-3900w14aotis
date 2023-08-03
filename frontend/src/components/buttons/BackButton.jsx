@@ -1,6 +1,10 @@
 import React from "react";
 import { Button } from "@mui/material";
 
+/**
+ * The back button exists in the profile page and navigates to the dashboard
+ * when clicked.
+ */
 const BackButton = ({ text, onClickFunction }) => {
   const buttonSx = {
     width: "30%",

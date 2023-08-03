@@ -13,6 +13,12 @@ import {
 import SummaryAchievements from "./SummaryAchievements";
 import { profileAchievementsFetch } from "../api/profile";
 
+/**
+ * The dashboard the landing screen of the application. This include displaying the users:
+ * - To Do Tasks (3 most upcoming tasks)
+ * - In Progress Tasks (3 most upcoming tasks)
+ * - Achievements (5 of the most completed achievements)
+ */
 const DashboardPage = () => {
   const [todoTasks, setTodoTasks] = useState([]);
   const [doingTasks, setDoingTasks] = useState([]);

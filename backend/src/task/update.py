@@ -3,11 +3,12 @@ from src.workload.calculateWorkload import updateWorkload
 
 
 def updateTask(projectId, taskId, db, item):
-    """Update task details given project and task Id
+    """
+    Update task details given project and task Id
 
     Args:
-        projectId (str): project Id
-        taskId (str): task Id
+        projectId (str): project Id of the project
+        taskId (str): task Id of the task in the project
         db (_type_): database
         item (body): update body
 

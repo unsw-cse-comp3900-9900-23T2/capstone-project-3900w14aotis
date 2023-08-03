@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import Headerbar from "../components/Headerbar";
 import { getAuth } from "firebase/auth";
-import ConnectionCard from "../components/ConnectionCard";
+import ConnectionCard from "../components/connections/ConnectionCard";
 import { allConnectionsFetch } from "../api/connections";
 import { displayError } from "../utils/helpers";
-import Loading from "../components/Loading";
+import Loading from "../components/loaders/Loading";
 import { useSelector } from "react-redux";
 
-function ConnectionsPage() {
+/**
+ * This page shows all the user's connected taskmasters.
+ * It is the main page for a user trying to add or manage connections.
+ */
+const ConnectionsPage = () => {
   const [connections, setConnections] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -30,6 +34,7 @@ function ConnectionsPage() {
     }
   };
 
+  // Update the page every time a connection is added
   useEffect(() => {
     getConnections();
   }, [connectionAdded]);
@@ -99,6 +104,6 @@ function ConnectionsPage() {
       </Box>
     </Box>
   );
-}
+};
 
 export default ConnectionsPage;

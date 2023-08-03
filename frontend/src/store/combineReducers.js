@@ -9,6 +9,9 @@ import profileAchievementLoad from "../profile/state/profileAchievementLoadReduc
 import profileRatingsLoad from "../profile/state/profileRatingsLoadReducer";
 import profileTasksLoad from "../profile/state/profileTasksLoadReducer";
 
+/**
+ * This combines all the reduces.
+ */
 const rootReducer = combineReducers({
   authenticated: authReducer,
   taskAdded: addTaskReducer,

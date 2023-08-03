@@ -2,15 +2,17 @@ import React from "react";
 import { Box } from "@mui/material";
 import DeadlineBox from "../components/DeadlineBox";
 import styles from "./styles/SummaryTaskCards.module.css";
-import Loading from "../components/Loading";
+import Loading from "../components/loaders/Loading";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
+/**
+ * This shows a summary of tasks and inclues task details and deadline.
+ */
 const SummaryTaskCards = ({ status, tasks, isLoading }) => {
   return (
     <Box
       sx={{
         width: "80%",
-        // height: "20.75rem",
         height: "40%",
         borderRadius: "1.25rem",
         background: "#FFF",
@@ -38,7 +40,6 @@ const SummaryTaskCards = ({ status, tasks, isLoading }) => {
             ) : (
               <Box
                 sx={{
-                  // alignItems: "center",
                   width: "100%",
                 }}
               >

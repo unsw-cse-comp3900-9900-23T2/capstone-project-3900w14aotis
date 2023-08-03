@@ -1,10 +1,11 @@
 from src.serverHelper import findUser
 
 def userRatings(uid, db):
-    """_summary_
+    """
+    Gets the all ratings of a user
 
     Args:
-        uid (str): user id
+        uid (str): user id of the user
         db (_type_): database
 
     Returns:

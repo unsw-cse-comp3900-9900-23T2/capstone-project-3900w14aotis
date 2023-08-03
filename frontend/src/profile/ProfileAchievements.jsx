@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import { Box, Button } from "@mui/material";
 import styles from "./styles/ProfileCard.module.css";
-import AchievementSmallCard from "./AchievementSmallCard";
+import AchievementSmallCard from "../components/achievement/AchievementSmallCard";
 import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import {
@@ -11,7 +11,10 @@ import {
   setHiddenAchievementsFetch,
 } from "../api/profile.js";
 
-
+/**
+ * This is the achievements section within a user's profile. It handles the
+ * visibility of achievements to other users.
+ */
 const ProfileAchievements = ({ achievements }) => {
   const [authUserId, setAuthUserId] = useState("");
   const { userId } = useParams();

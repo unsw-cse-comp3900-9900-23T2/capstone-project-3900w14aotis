@@ -1,6 +1,10 @@
 import React from "react";
 import { Button } from "@mui/material";
 
+/**
+ * This component is a custom button created to generalise the styling of buttons
+ * throughout the app.
+ */
 const CustomButton = ({ text, onClickFunction, disabled }) => {
   const buttonSx = {
     width: "75%",

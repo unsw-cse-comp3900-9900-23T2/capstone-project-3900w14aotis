@@ -23,27 +23,6 @@
   margin-top: 10px;
 }
 
-.achievementImage {
-  width: 80px;
-  height: 60%;
-  margin: 3%;
-  margin-right: 5%;
-}
-
-.achievementTitle {
-  font-family: Cairo;
-  font-size: clamp(1em, 1.5em, 2em);
-  font-style: normal;
-  font-weight: 600;
-  /* margin-left: 15px; */
-  margin-top: 1%;
-}
-
-.achievementDescription {
-  margin-top: 0;
-  margin-bottom: 5%;
-}
-
 .ratingsChart {
   height: 100%;
   width: 100%;

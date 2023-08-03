@@ -1,18 +1,27 @@
 import React from "react";
 import Box from "@mui/material/Box";
-import ProfilePicture from "./ProfilePicture";
+import ProfilePicture from "../ProfilePicture";
 import { Icon } from "@iconify/react";
-import styles from "./styles/Modal.module.css";
+import styles from "../styles/Modal.module.css";
 import { getAuth } from "firebase/auth";
 import {
   acceptConnectionFetch,
   declineConnectionFetch,
-} from "../api/connections";
-import { displayError } from "../utils/helpers";
+} from "../../api/connections";
+import { displayError } from "../../utils/helpers";
 import { useDispatch } from "react-redux";
-import { addConnectionAction } from "../connections/state/addConnectionAction";
-import { removeConnectionAction } from "../connections/state/removeConnectionAction";
+import { addConnectionAction } from "../../connections/state/addConnectionAction";
+import { removeConnectionAction } from "../../connections/state/removeConnectionAction";
 
+/**
+ * This component exists on the modal showing a user's pending connections and each
+ * card shows the details of pending connections.
+ * These details include:
+ * - Profile picture
+ * - Full name
+ * - Email
+ * It also includes two buttons to accept or decline the connection request.
+ */
 const PendingConnectionCard = ({
   uId,
   firstName,

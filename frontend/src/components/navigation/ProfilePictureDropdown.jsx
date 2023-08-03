@@ -10,17 +10,21 @@ import { useNavigate } from "react-router-dom";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
-import { stringAvatar } from "../utils/helpers";
-import { profileDetailFetch } from "../api/profile.js";
-import Loading from "../components/Loading";
+import { stringAvatar } from "../../utils/helpers";
+import { profileDetailFetch } from "../../api/profile.js";
+import Loading from "../loaders/Loading";
 import { useSelector } from "react-redux";
-import { profileAchievementLoadAction } from "../profile/state/profileAchievementLoadAction";
-import { profileRatingsLoadAction } from "../profile/state/profileRatingsLoadAction";
-import { profileTasksLoadAction } from "../profile/state/profileTasksLoadAction";
+import { profileAchievementLoadAction } from "../../profile/state/profileAchievementLoadAction";
+import { profileRatingsLoadAction } from "../../profile/state/profileRatingsLoadAction";
+import { profileTasksLoadAction } from "../../profile/state/profileTasksLoadAction";
 import { useDispatch } from "react-redux";
-import { logoutAction } from "../authentication/state/logoutAction";
+import { logoutAction } from "../../authentication/state/logoutAction";
 
-
+/**
+ * This component is a dropdown that appears when users click their profile picture
+ * on the top right of most screens. It includes a button to view user's own profiles
+ * and a button to log out.
+ */
 const ProfilePictureDropdown = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [userDetails, setUserDetails] = useState({});

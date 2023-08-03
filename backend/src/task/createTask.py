@@ -1,6 +1,8 @@
-from src.serverHelper import getAchievement, findUser
+from src.serverHelper import getAchievement, findUser, getFromUser
 from google.cloud import firestore
+from fastapi import HTTPException
 from src.workload.calculateWorkload import updateWorkload
+from src.connections.connectionHelper import isConnectedTo
 
 """
 This file contains helper functions to create a new task within a project.
@@ -37,6 +39,25 @@ def createNewTask(newTask, projectId, db):
     subCollection = "tasks"
     parentDocRef = db.collection("projects").document(parentDocId)
 
+    # check if assignee is in project
+    projectMembers = parentDocRef.get().get("members")
+    creatorEmail = getFromUser("uid", newTask.creatorId, "email", db)
+    for email in newTask.assignees:
+        lowerEmail = email.lower()
+        assigneeID = getFromUser("email", lowerEmail, "uid", db)
+        
+        if assigneeID not in projectMembers:
+            raise HTTPException(
+                status_code=400,
+                detail={"code": "400", "message": "User is not in project!"},
+            )
+        if lowerEmail != creatorEmail:
+            if not isConnectedTo(newTask.creatorId, "email", email, db):
+                raise HTTPException(
+                    status_code=400,
+                    detail={"code": "400", "message": "Assignee is not connected to current user"},
+                )
+
     taskRef = parentDocRef.collection(subCollection).add(
         {
             "Title": newTask.title,
@@ -64,6 +85,7 @@ def createNewTask(newTask, projectId, db):
 
         # updates workload when new task is created and the person is assigned to it.
         userId = taskmasterRef.get().get("uid")
+
         updateWorkload(userId, db)
 
     return taskRef[1].id

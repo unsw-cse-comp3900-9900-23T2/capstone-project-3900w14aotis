@@ -1,5 +1,5 @@
 from src.config.firestoreUtils import initialiseFirestore
-from fastapi import FastAPI, HTTPException, Depends, Header
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from src.auth.register import authRegister
 from src.auth.login import authLogin
@@ -9,8 +9,6 @@ from src.task.createProject import createNewProject
 from src.task.getTasks import listTasks, listPaginatedTasks
 from src.task.createProject import joinExistingProject
 from fastapi.middleware.cors import CORSMiddleware
-from src.task.assignTask import addAssignee
-from src.task.assignTask import deleteAssignee
 from src.task.getTaskDetails import getDetails
 from src.task.deleteTask import taskRemove
 from src.task.update import updateTask
@@ -28,7 +26,7 @@ from src.connections.getConnections import getConnections
 from src.connections.connectionHelper import isRequestPending, isConnectedTo
 from src.rating.addRating import addRating
 from src.connections.connectionRemove import unfriend
-from src.workload.calculateWorkload import updateWorkload, getWorkloadValue
+from src.workload.calculateWorkload import getWorkloadValue
 
 db = initialiseFirestore()
 app = FastAPI()
@@ -113,21 +111,19 @@ class TaskRatingBody(BaseModel):
     mood: str
 
 
-# Given a taskMaster class (including firstName, lastName, password, and email), create a new document representing
-# the user whilst also adding a slot in the authentication section of firebase. Returns the
-# uid of the authentication
 @app.post("/auth/register", summary="Registers a user in the application")
 async def register(item: TaskMaster):
-    """_summary_
+    """
+    Given a taskMaster class, create a new document representing
+    the user whilst also adding a slot in the authentication section of firebase. Returns the
+    json payload with token
 
     Args:
-        item (taskMaster): _description_
-
-    Raises:
-        HTTPException: _description_
+        item (taskMaster): body containing uid,firstName,lastName,password,email,tasks,projects,connectedTo
+        pendingConnections,profileImage,coverProfileImage
 
     Returns:
-        _type_: _description_
+        token: json payload with token (essentially the auth token)
     """
     try:
         token = authRegister(item, db)
@@ -166,11 +162,11 @@ async def createTask(task: Task, projectId: str):
     given project.
 
     Args:
-        task (Task): details of the task including a title, description,
-        deadline and assignees
+        task (Task): task body containing title,description,deadline,assignees,priority,status,creationTime
+        and creatorId
 
     Returns:
-        (obj) : result object returned by firebase auth
+        taskId (str): Id of the created task
     """
     try:
         taskId = createNewTask(task, projectId, db)
@@ -180,7 +176,9 @@ async def createTask(task: Task, projectId: str):
                 "message": f"Task {taskId} created successfully",
             }
         }
-    except:
+    except HTTPException as e:
+        if e.status_code == 400:
+            raise
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error creating a new task"},
@@ -193,10 +191,10 @@ async def createProject(item: NewProject):
     This function creates a new project so that taskmasters have a collaborative space
     to add tasks to.
     Args:
-        project (str): title of the project
+        newProject (NewProject): project body containing title and user
 
     Returns:
-        (obj) : result object returned by firebase auth
+        projectId (str): Id of the created project
     """
     try:
         projectId = createNewProject(item, db)
@@ -215,14 +213,12 @@ async def createProject(item: NewProject):
 
 @app.get("/task/{projectId}/{taskId}/get", summary="Get details of a task")
 async def getTaskDetails(projectId: str, taskId: str):
-    """gets the details of a task
+    """
+    gets the details of a task
 
     Args:
         projectId (str): project id
         taskId (str): task id
-
-    Raises:
-        HTTPException: _description_
 
     Returns:
         taskDetails(dict): dictionary of task details
@@ -248,13 +244,11 @@ async def getTaskDetails(projectId: str, taskId: str):
 
 @app.get("/tasks/{projectId}", summary="Lists all tasks of given project")
 async def getTasks(projectId: str):
-    """get tasks of a project
+    """
+    get tasks of a project
 
     Args:
         projectId (str): project Id
-
-    Raises:
-        HTTPException: _description_
 
     Returns:
         taskList: list of tasks including assignee details
@@ -278,13 +272,12 @@ async def getTasks(projectId: str):
     "/tasks/{projectId}/{latestTaskId}", summary="Paginates the tasks of given project"
 )
 async def getPaginatedTasks(projectId: str, latestTaskId: str):
-    """get tasks of a project
+    """
+    Get paginated tasks of a given project
 
     Args:
         projectId (str): project Id
-
-    Raises:
-        HTTPException: _description_
+        latestTaskId (str): latest task Id
 
     Returns:
         taskList: list of tasks including assignee details
@@ -306,10 +299,15 @@ async def getPaginatedTasks(projectId: str, latestTaskId: str):
 
 @app.post("/project/join/{projectId}", summary="Join a project")
 async def joinProject(item: JoinProject, projectId: str):
-    """_summary_
+    """
+    Join a given project
 
     Args:
-        item (JoinProject): _description_
+        item (JoinProject): joinProject body containing user id
+        projectId (str): project Id
+
+    Returns:
+        projectId (str): Id of a project
     """
     try:
         response = joinExistingProject(item, projectId, db)
@@ -323,60 +321,6 @@ async def joinProject(item: JoinProject, projectId: str):
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error joining project"},
-        )
-
-
-@app.post("/task/addTaskAssignee", summary="Adds an assignee to a task")
-async def addTaskAssignee(assignee: Assignee):
-    """
-    This function adds an assignee to the given task.
-
-    Args:
-        projectId (str): ID for the project that the task is in
-        taskId (str): ID for the task that you want to assign someone to
-        userId (str): uID of the person you want to assign
-
-    Returns:
-        userId (str): uID if the user is successfully added
-    """
-    try:
-        assigned = addAssignee(
-            assignee.projectId, assignee.taskId, assignee.email, assignee.currUser, db
-        )
-        return {"detail": {"code": 200, "message": assigned}}
-    except HTTPException as e:
-        if e.status_code == 400:
-            raise
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error assigning taskmaster"},
-        )
-
-
-@app.delete("/task/deleteTaskAssignee", summary="Removes an assignee from a task")
-async def deleteTaskAssignee(assignee: Assignee):
-    """
-    This function removes an assignee from a task.
-
-    Args:
-        projectId (str): ID for the project that the task is in
-        taskId (str): ID for the task that you want to remove someone from
-        userId (str): uID of the person you want to remove
-
-    Returns:
-        userId (str): uID if the user is successfully added
-    """
-    try:
-        deleted = deleteAssignee(
-            assignee.projectId, assignee.taskId, assignee.email, db
-        )
-        return {
-            "detail": {"code": 200, "message": f"User: {deleted} successfully removed"}
-        }
-    except:
-        raise HTTPException(
-            status_code=404,
-            detail={"code": "404", "message": "Error removing taskmaster"},
         )
 
 
@@ -406,18 +350,15 @@ async def deleteTask(projectId: str, taskId: str):
 
 @app.post("/task/update/{projectId}/{taskId}", summary="Updates a tasks details")
 async def updateTaskDetails(item: UpdateTask, projectId: str, taskId: str):
-    """Update task details given project and task Id
+    """
+    Update task details given project and task Id
 
     Args:
-        item (UpdateTask): update body
-        projectId (str): project ID
-        taskId (str): task ID
-
-    Raises:
-        HTTPException: _description_
+        item (UpdateTask): update body containing title, description, deadline, priority,status
+        and creatorId
 
     Returns:
-        taskId (str): taskId if the task id successfully updated
+        taskDict (dict): dictionary containing the status of task related achievements
     """
 
     try:
@@ -432,17 +373,12 @@ async def updateTaskDetails(item: UpdateTask, projectId: str, taskId: str):
 
 @app.post("/profile/update/{uid}", summary="Updates a user's profile details")
 async def updateProfileDetails(item: UpdateBody, uid: str):
-    """_summary_
+    """
+    Update profile details given updatebody and user id
 
     Args:
-        firstName(str)
-        lastName(str)
-        email(str)
-        profileImage(str): str for profile picture
-        coverProfileImage(str): str for cover photo
-
-    Raises:
-        HTTPException: _description_
+        item (UpdateBody): update body containing firstName, lastName, email, profileImage
+        and coverProfileImage
 
     Returns:
         userId (str): uID if the profile is successfully added
@@ -461,13 +397,11 @@ async def updateProfileDetails(item: UpdateBody, uid: str):
 
 @app.get("/profile/achievements/{userId}", summary="gets all achievements of a user")
 async def getAchievements(userId: str):
-    """Gets all achievements of a user given a user id
+    """
+    Gets all achievements of a user given a user id
 
     Args:
         userId (str): user's id
-
-    Raises:
-        HTTPException: _description_
 
     Returns:
         achievementList: dictionary containing all achievements
@@ -489,16 +423,14 @@ async def getAchievements(userId: str):
 
 @app.get("/profile/tasks/{userId}", summary="gets all tasks assigned to the user")
 async def getUserTasks(userId: str):
-    """Gets all task details of a user given user id
+    """
+    Gets all task details of a user given user id
 
     Args:
         userId (str): user's id
 
-    Raises:
-        HTTPException: _description_
-
     Returns:
-        taskList: all details of tasks assigned to the user
+        taskListDoc: all details of tasks assigned to the user
     """
     try:
         taskListDoc = userTasks(userId, db)
@@ -517,13 +449,11 @@ async def getUserTasks(userId: str):
 
 @app.get("/profile/projects/{userId}", summary="gets all projects assigned to the user")
 async def getUserProjects(userId: str):
-    """Gets all project ids of a user given user id
+    """
+    Gets all project ids of a user given user id
 
     Args:
         userId (str): user's id
-
-    Raises:
-        HTTPException: _description_
 
     Returns:
         projectList: list of project Ids
@@ -545,13 +475,11 @@ async def getUserProjects(userId: str):
 
 @app.get("/profile/ratings/{userId}", summary="gets all ratings of a user")
 async def getUserRating(userId: str):
-    """Gets a users ratings given user Id
+    """
+    Gets a users ratings given user Id
 
     Args:
         userId (str): user id
-
-    Raises:
-        HTTPException: _description_
 
     Returns:
         ratingsList(dict): dictionary containing users ratings
@@ -574,13 +502,11 @@ async def getUserRating(userId: str):
 
 @app.get("/profile/{userId}/get", summary="Get details of a user")
 async def getProfileDetails(userId: str):
-    """get user details given a user Id
+    """
+    get user details given a user Id
 
     Args:
         userId (str): user id
-
-    Raises:
-        HTTPException: _description_
 
     Returns:
         profDetails(dict): dictionary containing user details
@@ -611,6 +537,7 @@ async def sendConnectionRequest(userEmail: str, currUser: str):
     try:
         messageStatus = sendConnection(userEmail, currUser, db)
         return {"detail": {"code": 200, "message": messageStatus}}
+
     except HTTPException as e:
         if e.status_code == 400:
             raise
@@ -715,7 +642,7 @@ async def getPendingConnections(userId: str):
         userId (str): userId of the person you want connections of.
 
     Returns:
-        connections (list): list of all pending connections of the given uId.
+        pendingConnections (list): list of all pending connections of the given uId.
     """
     try:
         pendingConnections = getConnections(userId, "pendingConnections", db)
@@ -742,6 +669,9 @@ async def removeConnection(currUser: str, userId: str):
     Args:
         currUser (str): Current user's uID
         userId (str): User uID of the person you want to remove.
+
+    Returns:
+        status (str): str containing userFirstName, userLastName,currUserFirst and currUserLast
     """
     try:
         status = unfriend(currUser, userId, db)
@@ -759,16 +689,19 @@ async def removeConnection(currUser: str, userId: str):
             detail={"code": "404", "message": "Error removing connection"},
         )
 
-@app.get("/connections/checkPending/{userId}/{sendingUserId}", summary="Checks if a connection request has been sent")
+
+@app.get(
+    "/connections/checkPending/{userId}/{sendingUserId}",
+    summary="Checks if a connection request has been sent",
+)
 async def checkPending(userId: str, sendingUserId: str):
     """
     Checks if the first user has already sent a connection request to the second user.
     Checks both user's pending connections
 
     Args:
-        firstUser (str): the user you want to check pending connections for
-        secondUser (str): the user you want to check if they've sent the connection
-        db: database
+        userId (str): the user you want to check pending connections for
+        sendingUserId (str): the user you want to check if they've sent the connection
 
     Returns:
         bool: true if request is already pending, false otherwise
@@ -781,7 +714,11 @@ async def checkPending(userId: str, sendingUserId: str):
             detail={"code": "404", "message": "Error checking pending connections"},
         )
 
-@app.get("/connections/checkConnected/{currUser}/{otherUserId}", summary="Checks if the users are connected")
+
+@app.get(
+    "/connections/checkConnected/{currUser}/{otherUserId}",
+    summary="Checks if the users are connected",
+)
 async def checkConnected(currUser: str, otherUserId: str):
     """
     Returns true if the current user and user given are connected
@@ -789,31 +726,31 @@ async def checkConnected(currUser: str, otherUserId: str):
     Args:
         currUser (str): current user's ID
         otherUserId (str): second user's ID
-        db: database
 
     Returns:
-        bool: returns true or false depending on if the patron is connected
+        bool: returns true or false depending on if the users are connected
     """
-    try: 
+    try:
         return isConnectedTo(currUser, "uid", otherUserId, db)
     except:
         raise HTTPException(
             status_code=404,
             detail={"code": "404", "message": "Error checking connection"},
-        )        
+        )
+
 
 @app.post("/task/rate/{userId}", summary="Rate a task")
 async def addTaskRating(rating: TaskRatingBody, userId: str):
     """
-    This function adds an assignee to the given task.
+    Adds a rating to the task (replaces old rating if old rating exists)
 
     Args:
-        projectId (str): ID for the project that the task is in
-        taskId (str): ID for the task that you want to assign someone to
-        userId (str): uID of the person you want to assign
+        rating (TaskRatingBody): body containing projectId, taskId, and mood
+        userId (str): uID of the person who is rating the task
 
     Returns:
-        userId (str): uID if the user is successfully added
+        task (dict): dictionary of the task containing task id and
+                    progress of the achievements
     """
     try:
         task = addRating(rating.projectId, rating.taskId, userId, rating.mood, db)
@@ -829,6 +766,7 @@ async def addTaskRating(rating: TaskRatingBody, userId: str):
             detail={"code": "404", "message": "Error rating task"},
         )
 
+
 @app.get("/workload/get/{userId}", summary="Gets the workload of a user")
 async def getWorkload(userId: str):
     """
@@ -836,12 +774,13 @@ async def getWorkload(userId: str):
 
     Args:
         userId (str): user Id for the user you want to get the workload % of
-    
+
     Returns:
         workloadValue (float): number that is a percentage of their workload out
-                        of 100. A value of -1 means overloaded (>100%).
+                        of 100. A value of -1 means overloaded (>100%). This value
+                        is rounded to 2 dp
     """
-    try: 
+    try:
         workloadValue = round(getWorkloadValue(userId, db), 2)
         return {
             "detail": {
@@ -855,12 +794,16 @@ async def getWorkload(userId: str):
             detail={"code": "404", "message": "Error retrieving workload value"},
         )
 
-@app.get("/profile/achievement/check/{userId}", summary="checks if achievement for given user is hidden or not")
+
+@app.get(
+    "/profile/achievement/check/{userId}",
+    summary="checks if achievement for given user is hidden or not",
+)
 async def checkHiddenAchievement(userId: str):
     """
     Checks a users achievement hidden status
     Args:
-        userId (str): user Id 
+        userId (str): user Id
 
     Returns:
         achievementCheck (bool): boolean showing if the achievement is hidden or not, true meaning it is hidden
@@ -880,12 +823,17 @@ async def checkHiddenAchievement(userId: str):
             detail={"code": "404", "message": "Error checking achievement"},
         )
 
-@app.post("/profile/achievement/set/{userId}", summary="sets the hidden status of a user's achievements")
+
+@app.post(
+    "/profile/achievement/set/{userId}",
+    summary="sets the hidden status of a user's achievements",
+)
 async def setHiddenAchievement(userId: str, hidden: bool):
     """
     Sets a users achievement hidden status
     Args:
-        userId (str): user Id 
+        userId (str): user Id
+        hidden (bool): true if the achievements should be hidden, false otherwises
 
     Returns:
         userId (str): user Id

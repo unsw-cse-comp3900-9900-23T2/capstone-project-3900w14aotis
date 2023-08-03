@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box } from "@mui/material";
-import { Icon } from "@iconify/react";
-import { removeConnectionFetch } from "../api/connections";
+import { removeConnectionFetch } from "../../api/connections";
 import { getAuth } from "firebase/auth";
-import { displaySuccess, displayError } from "../utils/helpers";
-import styles from "./styles/Modal.module.css";
+import { displaySuccess, displayError } from "../../utils/helpers";
 import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import CustomButton from "./CustomButton";
+import CustomButton from "../buttons/CustomButton";
 import { useDispatch } from "react-redux";
-import { addConnectionAction } from "../connections/state/addConnectionAction";
+import { addConnectionAction } from "../../connections/state/addConnectionAction";
 
+/**
+ * This modal contains pops up when users are trying to remove a connection and
+ * exists as a confirmation to verify whether users actually want to remove that
+ * connection.
+ * It includes a message asking to confirm and yes or no buttons.
+ */
 const RemoveConnectionModal = ({
   uId,
   isOpen,
@@ -39,7 +43,7 @@ const RemoveConnectionModal = ({
         displayError(`${res.detail.message}`);
       }
       handleClose();
-      // This is really shit lol
+      // TODO This is really shit lol
       if (onRemoveConnection) {
         onRemoveConnection();
       }

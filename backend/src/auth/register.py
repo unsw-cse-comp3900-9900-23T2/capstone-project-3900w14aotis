@@ -1,5 +1,3 @@
-from src.config.firestoreUtils import initialiseFirestore
-from src.config.firestoreUtils import auth
 from src.auth.login import signInWithEmailAndPassword
 from src.serverHelper import convertImageToBase64
 
@@ -9,14 +7,15 @@ INITIAL_WORKLOAD = float()
 # creates the user in the authentication section and also adds a new document representing the user in the
 # firebase data (includes authentication uid)
 def authRegister(item, db):
-    """_summary_
+    """
+    Registers a person given information from the user.
 
     Args:
-        item (_type_): _description_
-        db (_type_): _description_
+        item (TaskMaster): contains information for a taskmaster
+        db: database
 
     Returns:
-        _type_: _description_
+        token: login token as registering logs the person in too
     """
 
     db.collection("taskmasters").add(
@@ -46,101 +45,50 @@ def authRegister(item, db):
     parentDocRef = db.collection("achievements").document(item.uid)
     achievementCollection = parentDocRef.collection("achievements")
     # Initialise innovator achievement
-    # Add extra field for image, set it to be link of the image 
-    achievementCollection.add(
-        {
-            "achievement": "Innovator",
-            "description": "Create your first task",
-            "target": 1,
-            "currentValue": 0,
-            "status": "In Progress",
-            "image": convertImageToBase64("./src/auth/images/innovatorImage.png")
-        }
-    )
+    addAchievement("Innovator","Create your first task",1,0,"In Progress","./src/auth/images/innovatorImage.png",achievementCollection)
     # Initialise New Critic achievement
-    achievementCollection.add(
-        {
-            "achievement": "New Critic",
-            "description": "Rate your first task",
-            "target": 1,
-            "currentValue": 0,
-            "status": "In Progress",
-            "image": convertImageToBase64("./src/auth/images/newCriticImage.png")
-        }
-    )
-
+    addAchievement("New Critic","Rate your first task",1,0,"In Progress","./src/auth/images/newCriticImage.png",achievementCollection)
     # Initialise Connoisseur achievement
-    achievementCollection.add(
-        {
-            "achievement": "Connoisseur",
-            "description": "Rate 5 tasks",
-            "target": 5,
-            "currentValue": 0,
-            "status": "In Progress",
-            "image": convertImageToBase64("./src/auth/images/connoisseurImage.png")
-        }
-    )
-
+    addAchievement("Connoisseur","Rate 5 tasks",5,0,"In Progress","./src/auth/images/connoisseurImage.png",achievementCollection)
     # Initialise Task Fledgling achievement
-    achievementCollection.add(
-        {
-            "achievement": "Task Fledgling",
-            "description": "Complete First Task",
-            "target": 1,
-            "currentValue": 0,
-            "status": "In Progress",
-            "image": convertImageToBase64("./src/auth/images/taskFledglingImage.jpg")     
-        }
-    )
-
+    addAchievement("Task Fledgling","Complete First Task",1,0,"In Progress","./src/auth/images/taskFledglingImage.jpg",achievementCollection)
     # Initialise Task Master achievement
-    achievementCollection.add(
-        {
-            "achievement": "Task Master",
-            "description": "Complete 5 tasks",
-            "target": 5,
-            "currentValue": 0,
-            "status": "In Progress",
-            "image": convertImageToBase64("./src/auth/images/taskMasterImage.png") 
-        }
-    )
-
+    addAchievement("Task Master","Complete 5 tasks",5,0,"In Progress","./src/auth/images/taskMasterImage.png",achievementCollection)
     # Initialise Task Wizard achievement
-    achievementCollection.add(
-        {
-            "achievement": "Task Wizard",
-            "description": "Complete 100 tasks",
-            "target": 100,
-            "currentValue": 0,
-            "status": "In Progress",
-            "image": convertImageToBase64("./src/auth/images/taskWizardImage.png") 
-        }
-    )
-
+    addAchievement("Task Wizard","Complete 100 tasks",100,0,"In Progress","./src/auth/images/taskWizardImage.png",achievementCollection)
     # Initialise Social Butterfly achievement
-    achievementCollection.add(
-        {
-            "achievement": "Social Butterfly",
-            "description": "Send your first connection",
-            "target": 1,
-            "currentValue": 0,
-            "status": "In Progress",
-            "image": convertImageToBase64("./src/auth/images/socialButterflyImage.png") 
-        }
-    )
-
+    addAchievement("Social Butterfly","Send your first connection",1,0,"In Progress","./src/auth/images/socialButterflyImage.png",achievementCollection)
     # Initialise BNOC achievement
-    achievementCollection.add(
-        {
-            "achievement": "BNOC",
-            "description": "Send 5 connections",
-            "target": 5,
-            "currentValue": 0,
-            "status": "In Progress",
-            "image": convertImageToBase64("./src/auth/images/bnocImage.png") 
-        }
-    )
+    addAchievement("BNOC","Send 5 connections",5,0,"In Progress","./src/auth/images/bnocImage.png",achievementCollection)
 
     token = signInWithEmailAndPassword(email=item.email, password=item.password)
 
     return token
+
+def addAchievement(achievement, description, target, currentValue, status, image, achievementCollection):  
+    """
+    Adds an achievement into the database given details of the achievement
+
+    Args:
+        achievement (str): title of the achievement you are creating
+        description (str): description of achievement
+        target (int): completion target for achievement
+        currentValue (int), current value of the achievement towards target
+        status (str): status of the progression for the achievement, in progress and done
+        image (str): path of image 
+        achievementCollection(): collection of achievement to write into
+
+    """
+
+
+    achievementCollection.add(
+        {
+            "achievement": achievement,
+            "description": description,
+            "target": target,
+            "currentValue": currentValue,
+            "status": status,
+            "image": convertImageToBase64(image) 
+        }
+    )
+    return

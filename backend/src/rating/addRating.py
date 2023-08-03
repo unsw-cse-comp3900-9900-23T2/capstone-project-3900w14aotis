@@ -1,7 +1,7 @@
 from src.serverHelper import getUserDoc, getAchievement, findUser
 from src.workload.calculateWorkload import updateWorkload
 """
-This files contains helper functions to help remove a rating from a task
+This file contains helper functions to help remove a rating from a task
 """
 
 

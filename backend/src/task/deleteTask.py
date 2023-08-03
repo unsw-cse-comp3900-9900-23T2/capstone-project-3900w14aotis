@@ -1,4 +1,4 @@
-from src.serverHelper import findUser
+from src.serverHelper import findUser, getTaskDoc
 from google.cloud import firestore
 from src.workload.calculateWorkload import updateWorkload
 
@@ -14,8 +14,7 @@ def taskRemove(projectId,taskId,db):
         taskId(str): task id  
     """
     projectRef = db.collection("projects").document(projectId)
-    taskRef = projectRef.collection("tasks").document(taskId)
-    doc = taskRef.get()
+    doc = getTaskDoc(projectId, taskId, db)
     assigneeList = doc.get("Assignees")
     #for each assignee in the task, remove the task id from their corresponding user docs
     for assignee in assigneeList:
@@ -27,9 +26,6 @@ def taskRemove(projectId,taskId,db):
         userId = user.get().get("uid")
         updateWorkload(userId, db)
         
-
-
-
     # remove task from projects collection
     projectRef.collection("tasks").document(taskId).delete()
     return taskId
