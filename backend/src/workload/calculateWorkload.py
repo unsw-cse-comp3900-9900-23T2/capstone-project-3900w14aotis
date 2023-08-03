@@ -1,6 +1,7 @@
 from src.serverHelper import getFromUser, getProjectID, findUser, getTaskDoc
 from src.workload.workloadHelper import usersTaskRating, checkDeadline
 from datetime import timedelta, datetime, timezone
+
 """
 This file contains helper functions to calculate workload for a user.
 """
@@ -13,6 +14,7 @@ DONE_STATUS = "Done"
 # NO_DATE is Jan 1, 1970 (default datetime date)
 # or: "1970-01-01T00:00:00+00:00"
 NO_DATE = datetime.fromtimestamp(0, timezone.utc)
+
 
 def updateWorkload(userId, db):
     """
@@ -30,6 +32,7 @@ def updateWorkload(userId, db):
     userRef.update({"workload": workloadValue})
     return f"Workload updated with value {workloadValue}"
 
+
 def calculate(currUser, db):
     """
     Calculates the workload of a user based on four factors:
@@ -45,7 +48,7 @@ def calculate(currUser, db):
     Returns:
         totalWorkload (float): the new calculated value of the workload
     """
-    #1. basic weighted task out of total tasks
+    # 1. basic weighted task out of total tasks
     taskList = getFromUser("uid", currUser, "tasks", db)
 
     # Initialise number of tasks and total workload to 0
@@ -56,40 +59,60 @@ def calculate(currUser, db):
         projectId = getProjectID(taskId, db)
         taskDoc = getTaskDoc(projectId, taskId, db)
 
-        #1. Num of tasks (not marked as "done")
+        # 1. Num of tasks (not marked as "done")
         taskStatus = taskDoc["Status"]
         if taskStatus == DONE_STATUS:
             continue
 
-        #2. rating system adjustments
+        # 2. rating system adjustments
         moodRating = usersTaskRating(taskDoc.get("Rating"), currUser)
         moodWeight = 1.0
-        match moodRating:
-            case "Very Happy":
-                moodWeight = 0.5
-            case "Happy":
-                moodWeight = 0.75
-            case "Neutral":
-                moodWeight = 1
-            case "Sad":
-                moodWeight = 1.25
-            case "Very Sad":
-                moodWeight = 1.5
-            case _:
-                moodWeight = 1
-        
-        #3. priority system adjustments
+        if moodRating == "Very Happy":
+            moodWeight = 0.5
+        elif moodRating == "Happy":
+            moodWeight = 0.75
+        elif moodRating == "Neutral":
+            moodWeight = 1
+        elif moodRating == "Sad":
+            moodWeight = 1.25
+        elif moodRating == "Very Sad":
+            moodWeight = 1.5
+        else:
+            moodWeight = 1
+
+        # match moodRating:
+        #     case "Very Happy":
+        #         moodWeight = 0.5
+        #     case "Happy":
+        #         moodWeight = 0.75
+        #     case "Neutral":
+        #         moodWeight = 1
+        #     case "Sad":
+        #         moodWeight = 1.25
+        #     case "Very Sad":
+        #         moodWeight = 1.5
+        #     case _:
+        #         moodWeight = 1
+
+        # 3. priority system adjustments
         taskPrio = taskDoc["Priority"]
         prioWeight = 1.0
-        match taskPrio:
-            case "High":
-                prioWeight = 1.25
-            case "Low":
-                prioWeight = 0.75
-            case _:
-                prioWeight = 1
-  
-        #4. time pressure adjustments
+        if taskPrio == "High":
+            prioWeight = 1.25
+        elif taskPrio == "Low":
+            prioWeight = 0.75
+        else:
+            prioWeight = 1
+
+        # match taskPrio:
+        #     case "High":
+        #         prioWeight = 1.25
+        #     case "Low":
+        #         prioWeight = 0.75
+        #     case _:
+        #         prioWeight = 1
+
+        # 4. time pressure adjustments
         deadlineWeight = 1.0
         timeDiff = checkDeadline(taskDoc["Deadline"])
         if timeDiff != NO_DATE:
@@ -108,6 +131,7 @@ def calculate(currUser, db):
         return OVERLOADED
 
     return totalWorkload
+
 
 def getWorkloadValue(userId, db):
     """
