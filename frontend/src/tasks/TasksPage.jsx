@@ -22,6 +22,17 @@ import Loading from "../components/loaders/Loading";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
+/**
+ * This pages shows all tasks of a project. Users are able to traverse
+ * through the pages of tasks. It contains a filter of tasks:
+ * - Ascending
+ * - Descending
+ * - Soonest
+ * - Latest
+ * - Important
+ * - Least Important
+ * - Default
+ */
 const TasksPage = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [tasksAfterFilter, setTasksAfterFilter] = useState([]);

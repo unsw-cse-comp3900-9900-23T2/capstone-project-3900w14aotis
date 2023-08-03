@@ -5,6 +5,9 @@ import ProfilePictureDropdown from "./ProfilePictureDropdown";
 import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 
+/**
+ * This is the navigation bar for the entire application.
+ */
 const Navbar = () => {
   const auth = getAuth();
   const [user, loading, error] = useAuthState(auth);
