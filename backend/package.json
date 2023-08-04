@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "firebase": "^9.22.2",
-    "firebase-admin": "^11.9.0"
-  },
-  "scripts": {
-    "start": "python3 -m uvicorn src.server:app --reload"
-  }
-}
