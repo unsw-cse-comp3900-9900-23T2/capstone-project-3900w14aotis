@@ -1,6 +1,10 @@
 import React from "react";
 import { TextField } from "@mui/material";
 
+/**
+ * This is a regular size text field that allows users to input text.
+ * It is used in the create task modal.
+ */
 const TextInput = ({
   label,
   type,

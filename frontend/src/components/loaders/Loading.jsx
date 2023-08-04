@@ -2,6 +2,10 @@ import React from "react";
 import PulseLoader from "react-spinners/PulseLoader";
 import { Box } from "@mui/material";
 
+/**
+ * This is the loading component that is used when content is still
+ * being fetched.
+ */
 const Loading = () => {
   const boxSx = {
     width: "100%",
