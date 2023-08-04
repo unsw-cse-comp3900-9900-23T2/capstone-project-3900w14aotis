@@ -8,6 +8,10 @@ import UploadIcon from "@mui/icons-material/Upload";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import styles from "./styles/ProfileModal.module.css";
 
+/**
+ * This dropdown button allows users to upload or delete an image
+ * in their profile. It is used to update the profile and cover image.
+ */
 const UploadImageButton = ({ fileInput, onDeleteFunction }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);

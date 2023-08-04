@@ -10,6 +10,9 @@ import { allProjectsFetch } from "../api/project";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Loading from "../components/loaders/Loading";
 
+/**
+ * This page handles being able to join or create a project.
+ */
 const ProjectPage = () => {
   const [userProjects, setUserProjects] = useState([]);
   const [loading, setLoading] = useState(true);
