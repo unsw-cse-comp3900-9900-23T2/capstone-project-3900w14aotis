@@ -69,7 +69,6 @@ const KanbanBoard = () => {
       status,
       auth.currentUser.uid
     );
-    console.log(updateTaskPromise);
   };
 
   const onDragEndHandler = (result) => {

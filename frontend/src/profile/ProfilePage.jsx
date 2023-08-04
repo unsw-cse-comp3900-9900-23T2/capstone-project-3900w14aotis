@@ -124,7 +124,8 @@ const ProfilePage = () => {
         userId
       );
 
-      const isPending = !!checkPendingResponse; // Check if response is truthy (pending) or falsy (not pending)
+      // Check if response is truthy (pending) or falsy (not pending)
+      const isPending = !!checkPendingResponse;
 
       setPending(isPending);
       if (isPending) {
@@ -157,7 +158,6 @@ const ProfilePage = () => {
   const getProfileDetails = async () => {
     try {
       const profileDetailsResponse = await profileDetailFetch(userId);
-      console.log(profileDetailsResponse);
       const profile = profileDetailsResponse.detail.message;
       setUserDetails(profile);
       setFirstName(profile.firstName);

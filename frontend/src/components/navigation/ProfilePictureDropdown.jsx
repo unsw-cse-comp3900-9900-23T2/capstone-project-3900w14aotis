@@ -67,7 +67,6 @@ const ProfilePictureDropdown = () => {
   const onClickProfile = () => {
     const auth = getAuth();
     const uid = auth.currentUser.uid;
-    console.log(auth.currentUser);
     dispatch(profileAchievementLoadAction());
     dispatch(profileRatingsLoadAction());
     dispatch(profileTasksLoadAction());

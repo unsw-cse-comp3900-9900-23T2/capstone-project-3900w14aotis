@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLocation, Navigate } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useSelector } from "react-redux";
+import { getAuth } from "firebase/auth";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Loading from "./components/loaders/Loading";
 

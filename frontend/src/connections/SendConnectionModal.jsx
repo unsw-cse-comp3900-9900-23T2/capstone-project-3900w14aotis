@@ -27,7 +27,6 @@ const SendConnectionModal = () => {
       const res = await sendConnectionFetch(email, user.currentUser.uid);
       if (res.detail.code === 200) {
         handleClose();
-        console.log(res.detail);
         displaySuccess("Connection request successfully sent!");
       } else {
         displayError(`${res.detail.message}`);

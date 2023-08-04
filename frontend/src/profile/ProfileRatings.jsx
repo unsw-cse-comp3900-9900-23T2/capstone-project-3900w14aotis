@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import { Box } from "@mui/material";
 import styles from "./styles/ProfileCard.module.css";
@@ -31,7 +30,6 @@ const ProfileRatings = () => {
       const ratings = allRatingsResponse.detail.message;
       setRatingNames(Object.keys(ratings));
       setRatingValues(Object.values(ratings));
-      console.log("ratings: ", ratings);
     } catch (error) {
       displayError(error);
     }

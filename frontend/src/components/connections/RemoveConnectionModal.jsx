@@ -43,7 +43,6 @@ const RemoveConnectionModal = ({
         displayError(`${res.detail.message}`);
       }
       handleClose();
-      // TODO This is really shit lol
       if (onRemoveConnection) {
         onRemoveConnection();
       }

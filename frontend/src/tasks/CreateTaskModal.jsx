@@ -13,7 +13,7 @@ import { displayError, displaySuccess } from "../utils/helpers";
 import DropDown from "../components/form/Dropdown";
 import styles from "../components/styles/Modal.module.css";
 import CustomButton from "../components/buttons/CustomButton";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { createTaskFetch } from "../api/task.js";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -50,7 +50,7 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   const dispatch = useDispatch();
 
   const auth = getAuth();
-  // const [user, loading, error] = useAuthState(auth);
+  const [user, loading, error] = useAuthState(auth);
 
   const onEnter = (key) => {
     if (key === "Enter") {
@@ -91,7 +91,6 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
   };
 
   const createTask = async (creatorId, convertedDeadline, finalAssignees) => {
-    console.log(creatorId);
     if (!status) {
       displayError("Please select a status");
       setAssignees([]);
@@ -114,7 +113,6 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
     } else {
       displaySuccess("Successfully created task!");
     }
-    console.log(createTaskFetchResponse);
     dispatch(addTaskAction());
     closeFunction();
     setAssignees([]);
@@ -134,28 +132,13 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
     }
     try {
       const finalAssignees = [...assignees];
-      // if (finalAssignees.length === 0) {
-      //   finalAssignees.push(user.email);
-      //   setAssignees(finalAssignees);
-      // }
-      // createTask(user.uid, convertedDeadline, finalAssignees);
-      const auth = getAuth();
-      onAuthStateChanged(auth, (user) => {
-        // console.log("FOUND IT");
-        // console.log(user);
-        if (user) {
-          // User is signed in
-          localStorage.setItem("loggedIn", true);
-          if (finalAssignees.length === 0) {
-            finalAssignees.push(user.email);
-            setAssignees(finalAssignees);
-          }
-          createTask(user.uid, convertedDeadline, finalAssignees);
-        } else {
-          // User is signed out
-          localStorage.removeItem("loggedIn");
+      if (!loading && user) {
+        if (finalAssignees.length === 0) {
+          finalAssignees.push(user.email);
+          setAssignees(finalAssignees);
         }
-      });
+        createTask(user.uid, convertedDeadline, finalAssignees);
+      }
     } catch (error) {
       displayError(`${error.message}`);
     }
@@ -318,7 +301,9 @@ const CreateTaskModal = ({ isOpen, closeFunction, defaultStatus }) => {
                 <Box sx={createButtonBox}>
                   <CustomButton
                     text="Create"
-                    onClickFunction={createTaskButtonHandler}
+                    onClickFunction={() => {
+                      createTaskButtonHandler();
+                    }}
                   />
                 </Box>
               </Box>

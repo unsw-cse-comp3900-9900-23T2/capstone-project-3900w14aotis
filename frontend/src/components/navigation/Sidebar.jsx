@@ -47,7 +47,9 @@ const Sidebar = () => {
         <SidebarLink
           text={!matches && "Dashboard"}
           linkTo={"/otis/dashboard"}
-          onClickFunction={dashboardHandler}
+          onClickFunction={() => {
+            dashboardHandler();
+          }}
           icon={
             <Icon
               aria-label=""
@@ -61,7 +63,9 @@ const Sidebar = () => {
         <SidebarLink
           text={!matches && "Tasks"}
           linkTo={"/otis/project/tasks"}
-          onClickFunction={tasksHandler}
+          onClickFunction={() => {
+            tasksHandler();
+          }}
           icon={
             <Icon
               aria-label=""
@@ -86,13 +90,15 @@ const Sidebar = () => {
             !location.pathname.includes("dashboard") &&
             location.pathname.includes("board")
           }
-          onClickFunction={boardHandler}
+          onClickFunction={() => boardHandler()}
           linkTo={"/otis/project/board"}
         />
         <SidebarLink
           text={!matches && "Connections"}
           linkTo={"/otis/connections"}
-          onClickFunction={connectionsHandler}
+          onClickFunction={() => {
+            connectionsHandler();
+          }}
           icon={
             <Icon
               aria-label=""

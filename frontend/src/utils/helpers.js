@@ -60,7 +60,6 @@ export const sortTasksAscending = (tasksList) => {
 };
 
 export const sortTasksDescending = (tasksList) => {
-  console.log(tasksList);
   return tasksList.sort((a, b) => b.Title.localeCompare(a.Title));
 };
 

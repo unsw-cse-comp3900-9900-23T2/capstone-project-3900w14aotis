@@ -150,6 +150,14 @@ const UpdateProfileModal = () => {
   const dispatch = useDispatch();
 
   const profileUpdateButtonHandler = async () => {
+    if (
+      currPassword.length === 0 &&
+      password.length > 0 &&
+      confirmPassword.length > 0
+    ) {
+      displayError("Please enter a new password");
+      return;
+    }
     if (password !== confirmPassword) {
       displayError("Passwords do not match!");
     } else {
@@ -245,7 +253,6 @@ const UpdateProfileModal = () => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    // width: "60%",
     width: "100%",
   };
 

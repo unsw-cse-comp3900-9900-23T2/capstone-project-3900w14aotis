@@ -7,12 +7,13 @@ import styles from "../components/styles/Modal.module.css";
 import DeadlineBox from "../components/DeadlineBox";
 import TaskUsers from "../components/TaskUsers";
 import { addRatingFetch } from "../api/rating";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import TaskRatingIcon from "../components/tasks/TaskRatingIcon";
 import { taskDetailFetch } from "../api/task";
 import Loading from "../components/loaders/Loading";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import DeleteTaskConfirmation from "./DeleteTaskConfirmation";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 /**
  * This modal allows users to view a task. If viewing a task assigned to
@@ -34,11 +35,14 @@ const ViewTaskModal = ({
   ];
 
   const [details, setDetails] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loadingDetail, setLoading] = useState(true);
   const [userId, setUserId] = useState("");
   const [ratingUpdated, setRatingUpdated] = useState(0);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [deadline, setDeadline] = useState(new Date(0));
+
+  const auth = getAuth();
+  const [user, loading, error] = useAuthState(auth);
 
   const getTaskDetails = async () => {
     if (isOpen && taskId) {
@@ -51,14 +55,11 @@ const ViewTaskModal = ({
   };
 
   useEffect(() => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        setUserId(user.uid);
-        getTaskDetails();
-      }
-    });
+    if (!loading && user) {
+      // User is signed in
+      setUserId(user.uid);
+      getTaskDetails();
+    }
   }, [isOpen, ratingUpdated]);
 
   const deleteTaskHandler = async () => {
@@ -72,19 +73,15 @@ const ViewTaskModal = ({
       uid,
       mood
     );
-    console.log(addRatingResponse);
   };
 
   const addRatingHandler = async (mood) => {
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        const userId = user.uid;
-        ratingFetch(userId, mood);
-        setRatingUpdated(ratingUpdated + 1);
-      }
-    });
+    if (!loading && user) {
+      // User is signed in
+      const userId = user.uid;
+      ratingFetch(userId, mood);
+      setRatingUpdated(ratingUpdated + 1);
+    }
   };
 
   const handleClose = () => {
@@ -123,8 +120,6 @@ const ViewTaskModal = ({
 
   return (
     <div>
-      {/* {console.log("taskId: " + taskId)}
-      {console.log(details)} */}
       {isOpen && (
         <Modal
           aria-labelledby="transition-modal-title"
@@ -152,7 +147,7 @@ const ViewTaskModal = ({
                     className={styles.clickButton}
                   />
                 </Box>
-                {loading ? (
+                {loadingDetail ? (
                   <Loading />
                 ) : (
                   <>

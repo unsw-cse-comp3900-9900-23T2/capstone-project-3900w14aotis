@@ -130,7 +130,6 @@ const TasksPage = () => {
 
   const modalOpen = () => setOpen(true);
   const modalClose = () => {
-    // clickedTaskId("");
     setOpen(false);
   };
 
@@ -139,7 +138,6 @@ const TasksPage = () => {
   };
 
   const tasksSortHandler = (sortBy) => {
-    // let sortedTasks = [...allTasks];
     let sortedTasks = [...tasksAfterFilter];
     const taskList = sortedTasks.flat(1);
     if (sortBy === "Ascending") {

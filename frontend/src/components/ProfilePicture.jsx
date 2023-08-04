@@ -15,7 +15,6 @@ const ProfilePicture = ({ userDetails, imgWidth, imgHeight }) => {
   const navigate = useNavigate();
 
   const handleClick = (event) => {
-    console.log(`CLICKED ${uid}`);
     navigate(`/otis/profile/${uid}`);
   };
 

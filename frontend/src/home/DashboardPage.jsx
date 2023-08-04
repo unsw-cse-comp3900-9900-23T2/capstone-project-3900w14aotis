@@ -64,7 +64,6 @@ const DashboardPage = () => {
 
   const getAllAcheivements = async (uid) => {
     const userAcheivementsPromise = await profileAchievementsFetch(uid);
-    console.log(userAcheivementsPromise);
     if (userAcheivementsPromise.detail.code === 200) {
       const sortedAchievements = sortAchievementsByPercentage(
         userAcheivementsPromise.detail.message
@@ -102,7 +101,6 @@ const DashboardPage = () => {
           display: "flex",
           height: "calc(100vh - 70px - 5rem)",
           width: "100%",
-          // justifyContent: "center",
         }}
       >
         <Box
@@ -113,7 +111,6 @@ const DashboardPage = () => {
             alignItems: "center",
             flex: "1",
             gap: "50px",
-            // height: "100%",
           }}
         >
           <SummaryTaskCards

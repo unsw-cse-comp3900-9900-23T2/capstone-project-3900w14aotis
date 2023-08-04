@@ -36,7 +36,6 @@ const JoinProject = () => {
       );
 
       if (joinProjectFetchResponse.detail.code === 200) {
-        console.log(joinProjectFetchResponse);
         navigate(`/otis/${joinProjectFetchResponse.detail.message}/tasks`);
         displaySuccess(`Successfully joined project ${projectId}`);
       } else {
